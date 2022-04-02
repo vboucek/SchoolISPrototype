@@ -13,13 +13,4 @@ export class PrismaService extends PrismaClient {
             }
         });
     }
-
-    // Transaction will be executed accroding to the order
-    // Average wont since prisma may want to optimise
-    public cleanDb() {
-        this.$transaction([
-            this.bookMark.deleteMany(),
-            this.user.deleteMany()
-        ]);  
-    }
 }
