@@ -9,3 +9,153 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  firstName  String
+  lastName   String
+  email      String   @unique
+  passwdHash String
+  roles      String[]
+
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  coursesCreated Course[]
+
+  coursesSigned  UserCourseSigned[]
+  coursesTeaches UserCourseTeaches[]
+
+  seminarGroupSigned  UserSeminarGroupSigned[]
+  seminarGroupTeaches UserSeminarGroupTeaches[]
+
+  evaluationsGiven Evaluation[]
+}
+
+model Course {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  code        String
+
+  capacity Int
+  credits  Int
+
+  startSign DateTime
+  endSign   DateTime
+
+  lectureStartTime DateTime
+  lectureEndTime   DateTime
+
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  creatorId Int
+  creator   User @relation(fields: [creatorId], references: [id])
+
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+
+  students UserCourseSigned[]
+  teachers UserCourseTeaches[]
+
+  seminarGroups SeminarGroup[]
+}
+
+model Faculty {
+  id       Int    @id @default(autoincrement())
+  name     String
+  logoPath String
+
+  courses Course[]
+  people  User[]
+}
+
+model Semester {
+  id           Int    @id @default(autoincrement())
+  year         Int
+  semesterType String
+
+  courses Course[]
+  users   User[]
+}
+
+model SeminarGroup {
+  id        Int      @id @default(autoincrement())
+  startTime DateTime
+  endTime   DateTime
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  students UserSeminarGroupSigned[]
+  tutors   UserSeminarGroupTeaches[]
+}
+
+model Evaluation {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  markId Int
+  mark   Mark @relation(fields: [markId], references: [id])
+
+  teacherSubmittedId Int
+  teacher            User @relation(fields: [teacherSubmittedId], references: [id])
+}
+
+model Mark {
+  id               Int    @id @default(autoincrement())
+  charRepresent    String
+  numericRepresent Int
+
+  evaluations Evaluation[]
+}
+
+// Connection tables
+
+model UserCourseSigned {
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@id([studentId, courseId])
+}
+
+model UserCourseTeaches {
+  teacherId Int
+  teacher   User @relation(fields: [teacherId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@id([teacherId, courseId])
+}
+
+model UserSeminarGroupSigned {
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id])
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id])
+
+  @@id([studentId, seminarGroupId])
+}
+
+model UserSeminarGroupTeaches {
+  tutorId Int
+  tutor   User @relation(fields: [tutorId], references: [id])
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id])
+
+  @@id([tutorId, seminarGroupId])
+}
