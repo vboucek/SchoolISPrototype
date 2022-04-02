@@ -22,10 +22,10 @@ model User {
   roles      String[]
 
   facultyId Int
-  faculty   Faculty @relation(fields: [facultyId], references: [id])
+  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
 
   semesterId Int
-  semester   Semester @relation(fields: [semesterId], references: [id])
+  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
 
   coursesCreated Course[]
 
@@ -54,13 +54,13 @@ model Course {
   lectureEndTime   DateTime
 
   semesterId Int
-  semester   Semester @relation(fields: [semesterId], references: [id])
+  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
 
   creatorId Int
-  creator   User @relation(fields: [creatorId], references: [id])
+  creator   User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   facultyId Int
-  faculty   Faculty @relation(fields: [facultyId], references: [id])
+  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
 
   students UserCourseSigned[]
   teachers UserCourseTeaches[]
@@ -92,7 +92,7 @@ model SeminarGroup {
   endTime   DateTime
 
   courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   students UserSeminarGroupSigned[]
   tutors   UserSeminarGroupTeaches[]
@@ -103,11 +103,15 @@ model Evaluation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  markId Int
-  mark   Mark @relation(fields: [markId], references: [id])
+  markId Int?
+  mark   Mark? @relation(fields: [markId], references: [id], onDelete: SetNull)
 
-  teacherSubmittedId Int
-  teacher            User @relation(fields: [teacherSubmittedId], references: [id])
+  teacherSubmittedId Int?
+  teacher            User? @relation(fields: [teacherSubmittedId], references: [id], onDelete: SetNull)
+
+  userId     Int
+  courseId   Int
+  userCourse UserCourseSigned @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: Cascade)
 }
 
 model Mark {
@@ -119,43 +123,59 @@ model Mark {
 }
 
 // Connection tables
+// Courses
 
 model UserCourseSigned {
   studentId Int
-  student   User @relation(fields: [studentId], references: [id])
+  student   User @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  isFavourite Boolean  @default(false)
+  signedAt    DateTime @default(now())
+
+  evaluationId Int?
+  evaluation   Evaluation? @relation()
 
   @@id([studentId, courseId])
 }
 
 model UserCourseTeaches {
   teacherId Int
-  teacher   User @relation(fields: [teacherId], references: [id])
+  teacher   User @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  isHelper   Boolean
+  isTutor    Boolean
+  isLecturer Boolean
 
   @@id([teacherId, courseId])
 }
 
+// Seminar groups
+
 model UserSeminarGroupSigned {
   studentId Int
-  student   User @relation(fields: [studentId], references: [id])
+  student   User @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   seminarGroupId Int
-  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id])
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: Cascade)
+
+  courseId Int
 
   @@id([studentId, seminarGroupId])
+  @@unique([courseId])
 }
 
 model UserSeminarGroupTeaches {
   tutorId Int
-  tutor   User @relation(fields: [tutorId], references: [id])
+  tutor   User @relation(fields: [tutorId], references: [id], onDelete: Cascade)
 
   seminarGroupId Int
-  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id])
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: Cascade)
 
   @@id([tutorId, seminarGroupId])
 }
