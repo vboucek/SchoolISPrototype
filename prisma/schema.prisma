@@ -17,15 +17,15 @@ model User {
 
   firstName  String
   lastName   String
-  email      String   @unique
+  email      String     @unique
   passwdHash String
-  roles      String[]
+  roles      UserRole[]
 
-  facultyId Int
-  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  facultyId Int?
+  faculty   Faculty? @relation(fields: [facultyId], references: [id], onDelete: SetNull)
 
-  semesterId Int
-  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  semesterId Int?
+  semester   Semester? @relation(fields: [semesterId], references: [id], onDelete: SetNull)
 
   coursesCreated Course[]
 
@@ -50,17 +50,18 @@ model Course {
   startSign DateTime
   endSign   DateTime
 
-  lectureStartTime DateTime
-  lectureEndTime   DateTime
+  lectureDay          Day
+  lectureStartTimeMin Int
+  lectureDurationMin  Int
 
-  semesterId Int
-  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  semesterId Int?
+  semester   Semester? @relation(fields: [semesterId], references: [id], onDelete: SetNull)
 
-  creatorId Int
-  creator   User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId Int?
+  creator   User? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
-  facultyId Int
-  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  facultyId Int?
+  faculty   Faculty? @relation(fields: [facultyId], references: [id], onDelete: SetNull)
 
   students UserCourseSigned[]
   teachers UserCourseTeaches[]
@@ -70,29 +71,35 @@ model Course {
 
 model Faculty {
   id       Int    @id @default(autoincrement())
-  name     String
+  name     String 
   logoPath String
 
   courses Course[]
   people  User[]
+
+  @@unique([name])
 }
 
 model Semester {
-  id           Int    @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   year         Int
-  semesterType String
+  semesterType SemesterType
 
   courses Course[]
   users   User[]
+
+  @@unique([year, semesterType])
 }
 
 model SeminarGroup {
-  id        Int      @id @default(autoincrement())
-  startTime DateTime
-  endTime   DateTime
+  id Int @id @default(autoincrement())
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  seminarGroupDay                   Day
+  seminarGroupDurationStartTimeMins Int
+  seminarGroupDurationMins          Int
+
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   students UserSeminarGroupSigned[]
   tutors   UserSeminarGroupTeaches[]
@@ -109,28 +116,35 @@ model Evaluation {
   teacherSubmittedId Int?
   teacher            User? @relation(fields: [teacherSubmittedId], references: [id], onDelete: SetNull)
 
-  userId     Int
-  courseId   Int
-  userCourse UserCourseSigned @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: Cascade)
+  userId     Int?
+  courseId   Int?
+  userCourse UserCourseSigned? @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: SetNull)
+
+  @@unique([userId, courseId])
 }
 
 model Mark {
   id               Int    @id @default(autoincrement())
   charRepresent    String
-  numericRepresent Int
+  numericRepresent Float
 
   evaluations Evaluation[]
+
+  @@unique([charRepresent])
+  @@unique([numericRepresent])
 }
 
 // Connection tables
 // Courses
 
 model UserCourseSigned {
-  studentId Int
-  student   User @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentId Int?
+  student   User? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   isFavourite Boolean  @default(false)
   signedAt    DateTime @default(now())
@@ -138,44 +152,69 @@ model UserCourseSigned {
   evaluationId Int?
   evaluation   Evaluation? @relation()
 
-  @@id([studentId, courseId])
+  @@unique([studentId, courseId])
 }
 
 model UserCourseTeaches {
-  teacherId Int
-  teacher   User @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId Int?
+  teacher   User? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   isHelper   Boolean
-  isTutor    Boolean
   isLecturer Boolean
 
-  @@id([teacherId, courseId])
+  @@unique([teacherId, courseId])
 }
 
 // Seminar groups
 
 model UserSeminarGroupSigned {
-  studentId Int
-  student   User @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
 
-  seminarGroupId Int
-  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: Cascade)
+  studentId Int?
+  student   User? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  seminarGroupId Int?
+  seminarGroup   SeminarGroup? @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
 
   courseId Int
 
-  @@id([studentId, seminarGroupId])
-  @@unique([courseId])
+  @@unique([studentId, courseId])
 }
 
 model UserSeminarGroupTeaches {
-  tutorId Int
-  tutor   User @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
 
-  seminarGroupId Int
-  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: Cascade)
+  tutorId Int?
+  tutor   User? @relation(fields: [tutorId], references: [id], onDelete: SetNull)
 
-  @@id([tutorId, seminarGroupId])
+  seminarGroupId Int?
+  seminarGroup   SeminarGroup? @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
+
+  @@unique([tutorId, seminarGroupId])
+}
+
+enum SemesterType {
+  summer
+  winter
+}
+
+enum UserRole {
+  user
+  admin
+  teacher
+}
+
+enum Day {
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+  sunday
 }
