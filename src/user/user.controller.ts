@@ -15,7 +15,7 @@ export class UserController {
     @Get('me')
     @Roles(UserRole.user)
     @UseGuards(AuthenticatedGuard,RolesGuard)
-    public getMe(@GetUser('') user: User )
+    public getMe(@GetUser() user: User )
     { 
         console.log('Controller');
         console.log(user);

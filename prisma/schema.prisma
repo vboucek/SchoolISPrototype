@@ -71,7 +71,7 @@ model Course {
 
 model Faculty {
   id       Int    @id @default(autoincrement())
-  name     String
+  name     String 
   logoPath String
 
   courses Course[]
