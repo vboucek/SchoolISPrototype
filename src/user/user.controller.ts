@@ -1,10 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { DummyUser } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { Console } from 'console';
 import { GetUser } from 'src/auth/decorator';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { AuthenticatedGuard, RolesGuard } from 'src/auth/guard';
-import { Role } from 'src/auth/roles.enum';
+
 
 import { UserService } from './user.service';
 
@@ -13,9 +13,9 @@ export class UserController {
     constructor(userservice : UserService){}
 
     @Get('me')
-    @Roles(Role.User)
+    @Roles(UserRole.user)
     @UseGuards(AuthenticatedGuard,RolesGuard)
-    public getMe(@GetUser('') user: DummyUser )
+    public getMe(@GetUser('') user: User )
     { 
         console.log('Controller');
         console.log(user);
