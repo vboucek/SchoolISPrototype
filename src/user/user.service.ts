@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
+import { prisma, UserRole } from '@prisma/client';
 import * as argon from "argon2";
 import { instanceToInstance, plainToClass } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,12 +9,15 @@ import { UserDto } from './dto';
 export class UserService {
     constructor(private prismaService: PrismaService) { }
 
-    public async getUser(userId: number) {
-        return await this.prismaService.user.findFirst({
-            where: {
-                id: userId
-            }
-        });
+    public async getUserDto(userId: number) {
+        const user = await this.checkExistsOrThrowException(userId);
+
+        return plainToClass(UserDto, { ...user, password: "" }, { excludeExtraneousValues: true });
+    }
+
+    public async getAll() {
+        return (await this.prismaService.user.findMany()).map((user, index, arr) =>
+            plainToClass(UserDto, { ...user, password: "" }, { excludeExtraneousValues: true }));
     }
 
     public async updateUserHimself(userToUpdateId: number, updateDataDto: UserDto) {
@@ -76,12 +79,6 @@ export class UserService {
                 id: userToDeleteId
             }
         });
-    }
-
-    public async getUserDto(userId: number) {
-        const user = await this.checkExistsOrThrowException(userId);
-
-        return plainToClass(UserDto,{...user, password: ""},{ excludeExtraneousValues: true });
     }
 
     private async checkExistsOrThrowException(userToDeleteId: number) {

@@ -24,6 +24,13 @@ export class UserController {
         return await this.userservice.getUserDto(id);
     }
 
+    @Get("index")
+    @Roles(UserRole.admin)
+    @UseGuards(RolesGuard)
+    public async getAll(){
+        return await this.userservice.getAll();
+    }
+
     @Get("/edit/" + PARAMS_ONLY_ID)
     @Roles(UserRole.admin, UserRole.user)
     @UseGuards(RolesGuard)
@@ -83,6 +90,7 @@ export class UserController {
         }
         else if (user.roles.includes(UserRole.admin)) {
             await this.userservice.deleteUser(id);
+            
             return res.Redirect('/users/user/' + id.toString);
         }
         else {
