@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import * as argon from "argon2";
+import { instanceToInstance, plainToClass } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -16,7 +17,7 @@ export class UserService {
         });
     }
 
-    public async updateUserHimself(userToUpdateId: number, updateDataDto: UpdateUserDto) {
+    public async updateUserHimself(userToUpdateId: number, updateDataDto: UserDto) {
         await this.checkExistsOrThrowException(userToUpdateId);
 
         const hash = await argon.hash(updateDataDto.password);
@@ -40,7 +41,7 @@ export class UserService {
         });
     }
 
-    public async updateUserAdmin(userToUpdateId: number, updateDataDto: UpdateUserDto) {
+    public async updateUserAdmin(userToUpdateId: number, updateDataDto: UserDto) {
         await this.checkExistsOrThrowException(userToUpdateId);
 
         const hash = await argon.hash(updateDataDto.password);
@@ -77,6 +78,12 @@ export class UserService {
         });
     }
 
+    public async getUserDto(userId: number) {
+        const user = await this.checkExistsOrThrowException(userId);
+
+        return plainToClass(UserDto,{...user, password: ""},{ excludeExtraneousValues: true });
+    }
+
     private async checkExistsOrThrowException(userToDeleteId: number) {
         const user = await this.prismaService.user.findFirst({
             where: {
@@ -87,5 +94,7 @@ export class UserService {
         if (!user) {
             throw new NotFoundException('User not found');
         }
+
+        return user
     }
 }

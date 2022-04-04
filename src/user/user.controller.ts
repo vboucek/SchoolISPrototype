@@ -1,15 +1,12 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, SetMetadata, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Redirect, Req, Res, SetMetadata, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { User, UserRole } from '@prisma/client';
 import { Console } from 'console';
 import { GetUser } from 'src/auth/decorator';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { AuthenticatedGuard, RolesGuard } from 'src/auth/guard';
 import { PARAMS_ONLY_ID } from '../global-constants';
-
 import { ParseParamsId } from '../global-decorators';
-import { UpdateUserDto } from './dto/update-user.dto';
-
-
+import { UserDto } from './dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -19,44 +16,77 @@ export class UserController {
 
     @Get('me')
     public async getMe(@GetUser() user: User) {
-        return await this.userservice.getUser(user.id);
+        return await this.userservice.getUserDto(user.id);
     }
 
-    @Get(PARAMS_ONLY_ID)
+    @Get("/user/" + PARAMS_ONLY_ID)
     public async getById(@ParseParamsId() id: number) {
-        return await this.userservice.getUser(id);
+        return await this.userservice.getUserDto(id);
     }
 
-    @Get("/edit/"+PARAMS_ONLY_ID)
+    @Get("/edit/" + PARAMS_ONLY_ID)
     @Roles(UserRole.admin, UserRole.user)
     @UseGuards(RolesGuard)
-    public async updatePage(){
-
-    }
-
-    @Patch("/edit/"+PARAMS_ONLY_ID)
-    @Roles(UserRole.admin, UserRole.user)
-    @UseGuards(RolesGuard)
-    public async update(@ParseParamsId() id: number, @Body() updateUserDto: UpdateUserDto, @GetUser() user: User) {
+    public async updatePage(@ParseParamsId() id: number, @GetUser() user: User) {
         if (user.roles.includes(UserRole.admin)) {
-            await this.userservice.updateUserAdmin(id, updateUserDto);
+            return await this.userservice.getUserDto(id);
+        }
+        else if (id == user.id) {
+            return await this.userservice.getUserDto(id);
         }
         else {
-            await this.userservice.updateUserHimself(id, updateUserDto);
+            throw new UnauthorizedException();
         }
-        return;
     }
 
-    @Get("/delete/"+PARAMS_ONLY_ID)
-    public async deletePage(){
-        
-    }
-
-    @Delete("/delete/"+PARAMS_ONLY_ID)
-    @Roles(UserRole.admin)
+    @Patch("/edit/" + PARAMS_ONLY_ID)
+    @Roles(UserRole.admin, UserRole.user)
     @UseGuards(RolesGuard)
-    public async remove(@ParseParamsId() id: number) {
-        await this.userservice.deleteUser(id);
-        return;
+    public async update(@ParseParamsId() id: number, @Body() updateUserDto: UserDto,
+        @GetUser() user: User, @Res() res) {
+        if (user.roles.includes(UserRole.admin)) {
+            await this.userservice.updateUserAdmin(id, updateUserDto);
+            return res.Redirect('/users/user/' + id.toString);
+        }
+        else if (id == user.id) {
+            await this.userservice.updateUserHimself(id, updateUserDto);
+            return res.Redirect('/users/me');
+        }
+        else {
+            throw new UnauthorizedException();
+        }
+    }
+
+    @Get("/delete/" + PARAMS_ONLY_ID)
+    @Roles(UserRole.admin, UserRole.user)
+    @UseGuards(RolesGuard)
+    public async deletePage(@ParseParamsId() id: number, @GetUser() user: User, @Res() res) {
+        if (user.roles.includes(UserRole.admin)) {
+            return await this.userservice.getUserDto(id);
+        }
+        else if (id == user.id) {
+            return await this.userservice.getUserDto(id);
+        }
+        else {
+            throw new UnauthorizedException();
+        }
+    }
+
+    @Delete("/delete/" + PARAMS_ONLY_ID)
+    @Roles(UserRole.admin, UserRole.user)
+    @UseGuards(RolesGuard)
+    public async remove(@Req() req, @ParseParamsId() id: number, @GetUser() user: User, @Res() res) {
+        if (id == user.id) {
+            await this.userservice.deleteUser(id);
+            req.session.destroy();
+            return res.Redirect('/');
+        }
+        else if (user.roles.includes(UserRole.admin)) {
+            await this.userservice.deleteUser(id);
+            return res.Redirect('/users/user/' + id.toString);
+        }
+        else {
+            throw new UnauthorizedException();
+        }
     }
 }
