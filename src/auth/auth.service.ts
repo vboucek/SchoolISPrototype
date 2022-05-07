@@ -40,7 +40,8 @@ export class AuthService {
     public async validateUser(dto: AuthDto) {
         const user = await this.prismaServ.user.findFirst({
             where: {
-                email: dto.email
+                email: dto.email,
+                deletedAt: null
             }
         });
 

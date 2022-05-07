@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Request, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, Request, Response, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto";
 import { SignUpDto } from "./dto/signup.dto";
@@ -10,33 +10,21 @@ import { LocalAuthGuard, LocalAuthGuard as LoginAuthGuard } from "./guard";
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    @Get('signup')
-    public signupPage()
-    {
-
-    }
-
     @Post('signup')    
-    public async signup(@Body() dto: SignUpDto, @Res() res) { 
+    public async signup(@Body() dto: SignUpDto, @Response() response) { 
         await this.authService.signup(dto);
-        return res.Redirect('/auth/login');
-    }
-
-    @Get('login')
-    public loginPage()
-    {
-
+        return response.status(200).send();
     }
 
     @Post('login')
     @UseGuards(LocalAuthGuard)
-    public login(@Body() dto: AuthDto, @Res() res) {
-        return res.Redirect('/users/me');
+    public login(@Body() dto: AuthDto, @Response() response) {
+        return response.status(200).send();
     }
 
     @Post('logout')
-    public logout(@Req() req, @Res() res) {
+    public logout(@Req() req, @Response() response) {
         req.session.destroy();
-        return res.Redirect('/');
+        return response.status(200).send();
     }
 }
