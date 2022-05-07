@@ -31,21 +31,6 @@ export class UserController {
         return await this.userservice.getAll();
     }
 
-    @Get("/edit/" + PARAMS_ONLY_ID)
-    @Roles(UserRole.admin, UserRole.user)
-    @UseGuards(RolesGuard)
-    public async updatePage(@ParseParamsId() id: number, @GetUser() user: User) {
-        if (user.roles.includes(UserRole.admin)) {
-            return await this.userservice.getUserDto(id);
-        }
-        else if (id == user.id) {
-            return await this.userservice.getUserDto(id);
-        }
-        else {
-            throw new UnauthorizedException();
-        }
-    }
-
     @Patch("/edit/" + PARAMS_ONLY_ID)
     @Roles(UserRole.admin, UserRole.user)
     @UseGuards(RolesGuard)
@@ -58,21 +43,6 @@ export class UserController {
         else if (id == user.id) {
             await this.userservice.updateUserHimself(id, updateUserDto);
             return res.Redirect('/users/me');
-        }
-        else {
-            throw new UnauthorizedException();
-        }
-    }
-
-    @Get("/delete/" + PARAMS_ONLY_ID)
-    @Roles(UserRole.admin, UserRole.user)
-    @UseGuards(RolesGuard)
-    public async deletePage(@ParseParamsId() id: number, @GetUser() user: User, @Res() res) {
-        if (user.roles.includes(UserRole.admin)) {
-            return await this.userservice.getUserDto(id);
-        }
-        else if (id == user.id) {
-            return await this.userservice.getUserDto(id);
         }
         else {
             throw new UnauthorizedException();
