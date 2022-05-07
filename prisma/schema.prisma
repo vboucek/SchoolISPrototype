@@ -14,6 +14,7 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime? 
 
   firstName  String
   lastName   String
@@ -44,6 +45,8 @@ model Course {
   description String
   code        String
 
+  deletedAt DateTime? 
+
   capacity Int
   credits  Int
 
@@ -54,14 +57,14 @@ model Course {
   lectureStartTimeMin Int
   lectureDurationMin  Int
 
-  semesterId Int?
-  semester   Semester? @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
 
-  creatorId Int?
-  creator   User? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  creatorId Int
+  creator   User @relation(fields: [creatorId], references: [id])
 
-  facultyId Int?
-  faculty   Faculty? @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
 
   students UserCourseSigned[]
   teachers UserCourseTeaches[]
@@ -74,6 +77,8 @@ model Faculty {
   name     String 
   logoPath String
 
+  deletedAt DateTime? 
+
   courses Course[]
   people  User[]
 
@@ -84,6 +89,8 @@ model Semester {
   id           Int          @id @default(autoincrement())
   year         Int
   semesterType SemesterType
+
+  deletedAt DateTime? 
 
   courses Course[]
   users   User[]
@@ -98,8 +105,10 @@ model SeminarGroup {
   seminarGroupDurationStartTimeMins Int
   seminarGroupDurationMins          Int
 
-  courseId Int?
-  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  deletedAt DateTime? 
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
 
   students UserSeminarGroupSigned[]
   tutors   UserSeminarGroupTeaches[]
@@ -110,15 +119,17 @@ model Evaluation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? 
+
   markId Int?
   mark   Mark? @relation(fields: [markId], references: [id], onDelete: SetNull)
 
   teacherSubmittedId Int?
   teacher            User? @relation(fields: [teacherSubmittedId], references: [id], onDelete: SetNull)
 
-  userId     Int?
-  courseId   Int?
-  userCourse UserCourseSigned? @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: SetNull)
+  userId     Int
+  courseId   Int
+  userCourse UserCourseSigned @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: SetNull)
 
   @@unique([userId, courseId])
 }
@@ -127,6 +138,8 @@ model Mark {
   id               Int    @id @default(autoincrement())
   charRepresent    String
   numericRepresent Float
+
+  deletedAt DateTime? 
 
   evaluations Evaluation[]
 
@@ -140,11 +153,13 @@ model Mark {
 model UserCourseSigned {
   id Int @id @default(autoincrement())
 
-  studentId Int?
-  student   User? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  deletedAt DateTime? 
 
-  courseId Int?
-  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   isFavourite Boolean  @default(false)
   signedAt    DateTime @default(now())
@@ -158,11 +173,13 @@ model UserCourseSigned {
 model UserCourseTeaches {
   id Int @id @default(autoincrement())
 
-  teacherId Int?
-  teacher   User? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  deletedAt DateTime? 
 
-  courseId Int?
-  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  teacherId Int
+  teacher   User @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   isHelper   Boolean
   isLecturer Boolean
@@ -175,11 +192,13 @@ model UserCourseTeaches {
 model UserSeminarGroupSigned {
   id Int @id @default(autoincrement())
 
-  studentId Int?
-  student   User? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  deletedAt DateTime? 
 
-  seminarGroupId Int?
-  seminarGroup   SeminarGroup? @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
 
   courseId Int
 
@@ -189,11 +208,13 @@ model UserSeminarGroupSigned {
 model UserSeminarGroupTeaches {
   id Int @id @default(autoincrement())
 
-  tutorId Int?
-  tutor   User? @relation(fields: [tutorId], references: [id], onDelete: SetNull)
+  deletedAt DateTime? 
 
-  seminarGroupId Int?
-  seminarGroup   SeminarGroup? @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
+  tutorId Int
+  tutor   User @relation(fields: [tutorId], references: [id], onDelete: SetNull)
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
 
   @@unique([tutorId, seminarGroupId])
 }
