@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole } from '@prisma/client';
 import { Roles } from '../auth/decorator/roles.decorator';
-import { RolesGuard } from '../auth/guard';
+import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
 import { PARAMS_ONLY_ID } from '../global-constants';
 import { ParseParamsId } from '../global-decorators';
 import { FacultyDto } from './dto';
@@ -10,7 +10,7 @@ import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
 @Roles(UserRole.admin)
-@UseGuards(RolesGuard)
+@UseGuards(AuthenticatedGuard,RolesGuard)
 export class FacultiesController {
   constructor(private readonly facultiesService: FacultiesService) { }
 
