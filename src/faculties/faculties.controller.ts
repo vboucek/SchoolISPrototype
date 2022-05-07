@@ -10,14 +10,9 @@ import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
 @Roles(UserRole.admin)
-@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class FacultiesController {
   constructor(private readonly facultiesService: FacultiesService) { }
-
-  @Get('/create')
-  createPage() {
-
-  }
 
   @Post('/create')
   async create(@Body() facultyDto: FacultyDto) {
@@ -34,21 +29,11 @@ export class FacultiesController {
     return this.facultiesService.findOne(id);
   }
 
-  @Get('/edit/' + PARAMS_ONLY_ID)
-  updatePage(@ParseParamsId() id: number) {
-
-  }
-
   @Patch('/edit/' + PARAMS_ONLY_ID)
   async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyDto) {
     return this.facultiesService.update(id, facultyDto);
   }
-
-  @Get('/delete/' + PARAMS_ONLY_ID)
-  removePage(@ParseParamsId() id: number) {
-
-  }
-
+  
   @Delete('/delete/' + PARAMS_ONLY_ID)
   async remove(@ParseParamsId() id: number) {
     return this.facultiesService.remove(id);
