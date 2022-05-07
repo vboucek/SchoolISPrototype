@@ -17,7 +17,7 @@ export class AuthService {
             const hash = await argon.hash(dto.password);
 
             const user = await this.prismaServ.user.create({
-                data:{
+                data: {
                     email: dto.email,
                     passwdHash: hash,
 
@@ -27,9 +27,6 @@ export class AuthService {
                     roles: [UserRole.user]
                 }
             });
-            delete user.passwdHash;
-            return user;
-
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
@@ -53,8 +50,7 @@ export class AuthService {
 
         const pwMatches = await argon.verify(user.passwdHash, dto.password);
 
-        if (!pwMatches)
-        {
+        if (!pwMatches) {
             return null;
         }
 
