@@ -4,9 +4,9 @@ import { AuthModule } from "./auth/auth.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { UserModule } from "./user/user.module";
 import { FacultiesModule } from './faculties/faculties.module';
-
+import { SemesterModule } from './semester/semester.module';
 
 @Module({
-  imports: [PrismaModule, ConfigModule.forRoot({isGlobal: true}), AuthModule, UserModule, FacultiesModule],
+  imports: [PrismaModule, ConfigModule.forRoot({isGlobal: true}), AuthModule, UserModule, FacultiesModule, SemesterModule],
 })
 export class AppModule {}
