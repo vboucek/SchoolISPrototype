@@ -14,12 +14,6 @@ import { ParseParamsId } from '../global-decorators';
 export class SemesterController {
   constructor(private readonly semesterService: SemesterService) {}
 
-  @Get('/create')
-  public createPage()
-  {
-    
-  }
-
   @Post('/create')
   async create(@Body() semesterDto: SemesterDto, @Res() res) {
     const semesterId = await this.semesterService.create(semesterDto);
@@ -36,19 +30,9 @@ export class SemesterController {
     return await this.semesterService.findOne(id);
   }
 
-  @Get('/edit/'+PARAMS_ONLY_ID)
-  updatePage(){
-
-  }
-
   @Patch('/edit/'+PARAMS_ONLY_ID)
   async update(@ParseParamsId() id: number, @Body() semesterDto: SemesterDto) {
     await this.semesterService.update(id, semesterDto);
-  }
-
-  @Get('/delete/'+PARAMS_ONLY_ID)
-  removePage(){
-    
   }
 
   @Delete('/delete/'+PARAMS_ONLY_ID)
