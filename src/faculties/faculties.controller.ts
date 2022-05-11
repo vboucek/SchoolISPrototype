@@ -1,5 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UserRole } from '@prisma/client';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
@@ -10,9 +17,9 @@ import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
 @Roles(UserRole.admin)
-@UseGuards(AuthenticatedGuard,RolesGuard)
+@UseGuards(AuthenticatedGuard, RolesGuard)
 export class FacultiesController {
-  constructor(private readonly facultiesService: FacultiesService) { }
+  constructor(private readonly facultiesService: FacultiesService) {}
 
   @Post('/create')
   async create(@Body() facultyDto: FacultyDto) {
@@ -33,7 +40,7 @@ export class FacultiesController {
   async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyDto) {
     return this.facultiesService.update(id, facultyDto);
   }
-  
+
   @Delete('/delete/' + PARAMS_ONLY_ID)
   async remove(@ParseParamsId() id: number) {
     return this.facultiesService.remove(id);

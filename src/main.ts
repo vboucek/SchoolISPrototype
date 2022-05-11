@@ -1,11 +1,9 @@
-
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
-
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,8 +16,8 @@ async function bootstrap() {
       secret: configService.get('SESSION_SECRET'),
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 1000 * 60 * 30} // 30 minutes
-    })
+      cookie: { maxAge: 1000 * 60 * 30 }, // 30 minutes
+    }),
   );
 
   app.use(passport.initialize());
