@@ -182,15 +182,36 @@ export class CourseService {
         id: courseSignup.courseId,
         deletedAt: null,
       },
+      select: {
+        capacity: true,
+        id: true,
+        startSign: true,
+        endSign: true,
+      },
     });
-
     if (!course) {
       throw new NotFoundException('Course does not exist');
     }
 
+    const studentCount = await this.prismaService.user.count({
+      where: {
+        coursesSigned: {
+          some: {
+            id: course.id,
+          },
+        },
+      },
+    });
+
     const currentDate = new Date();
 
-    if (!(course.startSign <= currentDate && currentDate <= course.endSign)) {
+    if (
+      !(
+        course.startSign <= currentDate &&
+        currentDate <= course.endSign &&
+        studentCount < course.capacity
+      )
+    ) {
       throw new ForbiddenException('Can not signup this course');
     }
 
@@ -210,7 +231,7 @@ export class CourseService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code == 'P2002' || error.code == 'P2001') {
-          throw new ForbiddenException('Can not signup this course');
+          throw new ForbiddenException('Error while signing course');
         } else {
           throw new ForbiddenException();
         }
