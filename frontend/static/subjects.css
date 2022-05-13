@@ -1,0 +1,57 @@
+.subject {
+  width: var(--content-width);
+}
+
+.subject__header {
+  color: var(--dark-font-color);
+  font-size: var(--medium-font-size);
+}
+
+.subject__item {
+  font-size: var(--medium-font-size);
+  margin-top: 0.25rem;
+  background-color: var(--dark-backround-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.subject__item:hover {
+  color: var(--default-font-color-hover);
+}
+
+.subject__item:active {
+  color: var(--default-font-color-clicked);
+}
+
+.subject__left-container {
+  display: flex;
+  gap: 1rem;
+  width: 85%;
+}
+
+.subject__right-container {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+  width: 15%;
+}
+
+.subject__title {
+  width: 85%;
+}
+
+.subject__code {
+  width: 15%;
+}
+
+.subject__end-type {
+  text-align: end;
+  width: 10%;
+}
+
+.subject__credits {
+  text-align: end;
+  width: 90%;
+}

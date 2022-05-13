@@ -1,0 +1,176 @@
+:root {
+  --default-font-size: 16;
+  --medium-font-size: 2rem;
+  --large-font-size: 2.5rem;
+  --default-backround-color: white;
+  --dark-backround-color: black;
+  --gray-backround-color: lightgray;
+  --default-font-color: white;
+  --dark-font-color: black;
+  --default-font-color-hover: #FFCF00;
+  --dark-font-color-hover: lightgray;
+  --default-font-color-clicked: lightgray;
+  --dark-font-color-clicked: black;
+  --web-width: 85vw;
+  --content-width: 65vw;
+}
+
+@font-face {
+  font-family: PrimerPrint;
+  src: url(font/PrimerPrint.ttf);
+}
+
+@font-face {
+  font-family: PrimerPrint;
+  src: url(font/PrimerPrintBold.ttf);
+  font-weight: bold;
+}
+
+body {
+  font-family: PrimerPrint, sans-serif;
+  background: var(--default-backround-color);
+  font-size: 2.5rem;
+  color: var(--default-font-color);
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+html, body {
+  height: 100%;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+li {
+  list-style-type: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  width: var(--web-width);
+}
+
+.logo {
+  width: 20rem;
+  padding: 1.5rem;
+}
+
+.auth-navigation {
+  color: var(--dark-font-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navigation {
+  background-color: var(--dark-backround-color);
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  width: var(--web-width);
+  align-items: center;
+}
+
+.main-nav {
+  padding-left: 5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  margin-bottom: -2.5rem;
+}
+
+.nav-item {
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-item:hover {
+  color: var(--default-font-color-hover);
+}
+
+.nav-item:active {
+  color: var(--default-font-color-clicked);
+}
+
+.semester-nav {
+  padding-right: 2rem;
+}
+
+.semester-select {
+  border: none;
+  color: var(--default-font-color);
+  font-family: PrimerPrint, sans-serif;
+  font-size: 2rem;
+  outline: none;
+  background: none;
+}
+
+.semester-select:hover {
+  color: var(--default-font-color-hover);
+}
+
+.main-content {
+  padding-top: 6rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.main-content-container {
+  display: flex;
+  justify-content: space-between;
+  width: var(--content-width);
+}
+
+.footer {
+  margin-top: 2rem;
+  background-color: var(--gray-backround-color);
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-shrink: 0;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: end;
+  width: var(--web-width);
+}
+
+.copyright {
+  color: var(--dark-font-color);
+  padding-bottom: 1rem;
+  font-size: var(--medium-font-size);
+}
+
+.logo-small {
+  width: 10rem;
+  padding: 1rem 1rem 1rem 1.5rem;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Team project</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="subjects.css">
+</head>
+<body>
+  <div class="content">
+    <header class="header">
+      <div class="header-container">
+        <img class="logo" src="./assets/logo.svg" alt="logo"/>
+        <ul class="auth-navigation">
+          <li>Username</li>
+          <li>|</li>
+          <li>Sign out</li>
+        </ul>
+      </div>
+    </header>
+    <nav class="navigation">
+      <div class="nav-container">
+        <ul class="main-nav">
+          <li class="nav-item">
+            <span class="nav-item__title">Admin</span>
+            <img class="nav-item__logo" alt="admin icon" src="assets/icons/icon-01.png">
+          </li>
+          <li class="nav-item">
+            <span class="nav-item__title">Teacher</span>
+            <img class="nav-item__logo" alt="admin icon" src="assets/icons/icon-02.png">
+          </li>
+          <li class="nav-item">
+            <span class="nav-item__title">Timetable</span>
+            <img class="nav-item__logo" alt="admin icon" src="assets/icons/icon-03.png">
+          </li>
+          <li class="nav-item">
+            <span class="nav-item__title">Subjects</span>
+            <img class="nav-item__logo" alt="admin icon" src="assets/icons/icon-04.png">
+          </li>
+          <li class="nav-item">
+            <span class="nav-item__title">User</span>
+            <img class="nav-item__logo" alt="admin icon" src="assets/icons/icon-05.png">
+          </li>
+
+
+        </ul>
+        <div class="semester-nav">
+          <label for="semester">Semester:</label>
+          <select class="semester-select" name="semester" id="semester">
+            <option value="1">Spring 2022</option>
+            <option value="2">Autumn 2022</option>
+          </select>
+        </div>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="main-content-container">
+        <div class="subject">
+          <span class="subject__header">My subjects overview:</span>
+          <ul class="subject__list">
+            <li class="subject__item">
+              <div class="subject__left-container">
+                <span class="subject__code">PB138</span>
+                <span class="subject__title">Modern markup languages</span>
+              </div>
+              <div class="subject__right-container">
+                <span class="subject__credits">5kr.</span>
+                <span class="subject__end-type">zk</span>
+              </div>
+            </li>
+            <li class="subject__item">
+              <div class="subject__left-container">
+                <span class="subject__code">IB002</span>
+                <span class="subject__title">Algorithms and data structures I</span>
+              </div>
+              <div class="subject__right-container">
+                <span class="subject__credits">6kr.</span>
+                <span class="subject__end-type">zk</span>
+              </div>
+            </li>
+            <li class="subject__item">
+              <div class="subject__left-container">
+                <span class="subject__code">PV178</span>
+                <span class="subject__title">C# introduction</span>
+              </div>
+              <div class="subject__right-container">
+                <span class="subject__credits">4kr.</span>
+                <span class="subject__end-type">k</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="footer">
+    <div class="footer-container">
+      <img class="logo-small" src="./assets/logo.svg" alt="logo"/>
+      <span class="copyright">copyright 2022</span>
+    </div>
+  </footer>
+</body>
+</html>
