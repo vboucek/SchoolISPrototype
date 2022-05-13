@@ -1,14 +1,13 @@
 .subject {
   width: var(--content-width);
+  padding-top: 1rem;
 }
 
 .subject__header {
   color: var(--dark-font-color);
-  font-size: var(--medium-font-size);
 }
 
 .subject__item {
-  font-size: var(--medium-font-size);
   margin-top: 0.25rem;
   background-color: var(--dark-backround-color);
   padding: 1rem;
@@ -28,14 +27,14 @@
 .subject__left-container {
   display: flex;
   gap: 1rem;
-  width: 85%;
+  width: 75%;
 }
 
 .subject__right-container {
   display: flex;
   justify-content: end;
   gap: 1rem;
-  width: 15%;
+  width: 25%;
 }
 
 .subject__title {
