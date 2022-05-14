@@ -15,31 +15,6 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  public async signup(dto: SignUpDto) {
-    try {
-      const hash = await argon.hash(dto.password);
-
-      await this.prismaServ.user.create({
-        data: {
-          email: dto.email,
-          passwdHash: hash,
-
-          firstName: dto.firstName,
-          lastName: dto.lastName,
-
-          roles: [UserRole.user],
-        },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Credentials taken');
-        }
-      }
-      throw error;
-    }
-  }
-
   public async validateUser(dto: AuthDto) {
     const user = await this.prismaServ.user.findFirst({
       where: {

@@ -1,36 +1,25 @@
-import { UserRole } from '@prisma/client';
-import { Expose } from 'class-transformer';
-import {
-  IsOptional,
-  IsArray,
-  ArrayMinSize,
-  ArrayMaxSize,
-  IsEnum,
-  IsEmail,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { UserRole } from "@prisma/client";
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-export class UserDto {
+export class UserCreateDto {
   @IsString()
-  @Expose()
   @IsNotEmpty()
   firstName: string;
 
   @IsString()
-  @Expose()
   @IsNotEmpty()
   lastName: string;
 
   @IsString()
   @IsEmail()
-  @Expose()
   @IsNotEmpty()
   email: string;
 
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+  
   @IsArray()
-  @Expose()
   @ArrayMinSize(1)
   @ArrayMaxSize(3)
   @IsEnum(UserRole, { each: true })
@@ -38,12 +27,10 @@ export class UserDto {
   roles: UserRole[];
 
   @IsInt()
-  @Expose()
   @IsOptional()
   facultyId: number;
 
   @IsInt()
-  @Expose()
   @IsOptional()
   semesterId: number;
 }
