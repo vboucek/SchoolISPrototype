@@ -10,9 +10,15 @@ import {
   IsInt,
   IsNotEmpty,
   IsString,
+  IsNumber,
 } from 'class-validator';
 
 export class UserDto {
+  @IsNumber()
+  @Expose()
+  @IsNotEmpty()
+  id: number
+
   @IsString()
   @Expose()
   @IsNotEmpty()
@@ -28,11 +34,6 @@ export class UserDto {
   @Expose()
   @IsNotEmpty()
   email: string;
-
-  @IsString()
-  @Expose()
-  @IsNotEmpty()
-  password: string;
 
   @IsArray()
   @Expose()

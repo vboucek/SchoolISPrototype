@@ -16,32 +16,35 @@ import { FacultyDto } from './dto';
 import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
-@Roles(UserRole.admin)
+@Roles(UserRole.user)
 @UseGuards(AuthenticatedGuard, RolesGuard)
 export class FacultiesController {
   constructor(private readonly facultiesService: FacultiesService) {}
-
-  @Post('/create')
+  
+  @Post()
+  @Roles(UserRole.admin)
   async create(@Body() facultyDto: FacultyDto) {
     return await this.facultiesService.create(facultyDto);
   }
 
-  @Get('index')
+  @Get()
   async findAll() {
     return this.facultiesService.findAll();
   }
 
-  @Get('/faculty/' + PARAMS_ONLY_ID)
+  @Get(PARAMS_ONLY_ID)
   async findOne(@ParseParamsId() id: number) {
     return this.facultiesService.findOne(id);
   }
-
-  @Patch('/edit/' + PARAMS_ONLY_ID)
+  
+  @Patch(PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
   async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyDto) {
     return this.facultiesService.update(id, facultyDto);
   }
-
-  @Delete('/delete/' + PARAMS_ONLY_ID)
+  
+  @Delete(PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
   async remove(@ParseParamsId() id: number) {
     return this.facultiesService.remove(id);
   }

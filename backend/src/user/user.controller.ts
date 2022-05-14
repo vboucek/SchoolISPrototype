@@ -16,69 +16,62 @@ import { AuthenticatedGuard, RolesGuard } from 'src/auth/guard';
 import { PARAMS_ONLY_ID } from '../global-constants';
 import { ParseParamsId } from '../global-decorators';
 import { UserDto } from './dto';
+import { UserCreateDto } from './dto/user-create.dto';
+import { UserUpdateUserDto } from './dto/user-update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
-@UseGuards(AuthenticatedGuard)
+@Roles(UserRole.user)
+@UseGuards(AuthenticatedGuard, RolesGuard)
 export class UserController {
-  constructor(private userservice: UserService) {}
+  constructor(private userservice: UserService) { }
 
   @Get('me')
   public async getMe(@GetUser() user: User) {
     return await this.userservice.getUserDto(user.id);
   }
 
-  @Get('/user/' + PARAMS_ONLY_ID)
+  @Get(PARAMS_ONLY_ID)
   public async getById(@ParseParamsId() id: number) {
     return await this.userservice.getUserDto(id);
   }
 
-  @Get('index')
+  @Get()
   @Roles(UserRole.admin)
-  @UseGuards(RolesGuard)
   public async getAll() {
     return await this.userservice.getAll();
   }
 
-  @Patch('/edit/' + PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
+  public async create(
+    @Body() userCreateDto: UserCreateDto
+  ) {
+    return await this.userservice.create(userCreateDto);
+  }
+
+  @Patch(PARAMS_ONLY_ID)
   @Roles(UserRole.admin, UserRole.user)
-  @UseGuards(RolesGuard)
   public async update(
     @ParseParamsId() id: number,
-    @Body() updateUserDto: UserDto,
-    @GetUser() user: User,
-    @Res() res,
+    @Body() updateUserDto: UserUpdateUserDto | UserCreateDto,
+    @GetUser() user: User
   ) {
     if (user.roles.includes(UserRole.admin)) {
-      await this.userservice.updateUserAdmin(id, updateUserDto);
-      return res.Redirect('/users/user/' + id.toString);
+      await this.userservice.updateUserAdmin(id, updateUserDto as UserCreateDto);
+
     } else if (id == user.id) {
-      await this.userservice.updateUserHimself(id, updateUserDto);
-      return res.Redirect('/users/me');
+      await this.userservice.updateUserHimself(id, updateUserDto as UserUpdateUserDto);
+
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  @Delete('/delete/' + PARAMS_ONLY_ID)
-  @Roles(UserRole.admin, UserRole.user)
-  @UseGuards(RolesGuard)
+  @Delete(PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
   public async remove(
-    @Req() req,
-    @ParseParamsId() id: number,
-    @GetUser() user: User,
-    @Res() res,
+    @ParseParamsId() id: number
   ) {
-    if (id == user.id) {
-      await this.userservice.deleteUser(id);
-      req.session.destroy();
-      return res.Redirect('/');
-    } else if (user.roles.includes(UserRole.admin)) {
-      await this.userservice.deleteUser(id);
-
-      return res.Redirect('/users/user/' + id.toString);
-    } else {
-      throw new UnauthorizedException();
-    }
+    await this.userservice.deleteUser(id);
   }
 }
