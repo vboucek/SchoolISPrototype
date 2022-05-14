@@ -28,7 +28,7 @@ export class UserController {
     return await this.userservice.getUserDto(user.id);
   }
 
-  @Get('/user/' + PARAMS_ONLY_ID)
+  @Get(PARAMS_ONLY_ID)
   public async getById(@ParseParamsId() id: number) {
     return await this.userservice.getUserDto(id);
   }
@@ -40,7 +40,7 @@ export class UserController {
     return await this.userservice.getAll();
   }
 
-  @Patch('/edit/' + PARAMS_ONLY_ID)
+  @Patch(PARAMS_ONLY_ID)
   @Roles(UserRole.admin, UserRole.user)
   @UseGuards(RolesGuard)
   public async update(
@@ -60,7 +60,7 @@ export class UserController {
     }
   }
 
-  @Delete('/delete/' + PARAMS_ONLY_ID)
+  @Delete(PARAMS_ONLY_ID)
   @Roles(UserRole.admin, UserRole.user)
   @UseGuards(RolesGuard)
   public async remove(

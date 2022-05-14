@@ -17,12 +17,13 @@ import { SemesterDto } from './dto';
 import { ParseParamsId } from '../global-decorators';
 
 @Controller('semesters')
-@Roles(UserRole.admin)
-@UseGuards(AuthenticatedGuard, RolesGuard)
+@UseGuards(AuthenticatedGuard)
 export class SemesterController {
   constructor(private readonly semesterService: SemesterService) {}
 
-  @Post('/create')
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Post()
   async create(@Body() semesterDto: SemesterDto, @Res() res) {
     const semesterId = await this.semesterService.create(semesterDto);
     return res.Redirect('/semesters/semester/' + semesterId.toString);
@@ -33,17 +34,21 @@ export class SemesterController {
     return this.semesterService.findAll();
   }
 
-  @Get('/semester/' + PARAMS_ONLY_ID)
+  @Get(PARAMS_ONLY_ID)
   async findOne(@ParseParamsId() id: number) {
     return await this.semesterService.findOne(id);
   }
 
-  @Patch('/edit/' + PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Patch(PARAMS_ONLY_ID)
   async update(@ParseParamsId() id: number, @Body() semesterDto: SemesterDto) {
     await this.semesterService.update(id, semesterDto);
   }
 
-  @Delete('/delete/' + PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Delete(PARAMS_ONLY_ID)
   async remove(@ParseParamsId() id: number) {
     await this.semesterService.remove(id);
   }

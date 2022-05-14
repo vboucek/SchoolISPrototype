@@ -16,12 +16,13 @@ import { FacultyDto } from './dto';
 import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
-@Roles(UserRole.admin)
-@UseGuards(AuthenticatedGuard, RolesGuard)
+@UseGuards(AuthenticatedGuard)
 export class FacultiesController {
   constructor(private readonly facultiesService: FacultiesService) {}
 
-  @Post('/create')
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Post()
   async create(@Body() facultyDto: FacultyDto) {
     return await this.facultiesService.create(facultyDto);
   }
@@ -31,17 +32,21 @@ export class FacultiesController {
     return this.facultiesService.findAll();
   }
 
-  @Get('/faculty/' + PARAMS_ONLY_ID)
+  @Get(PARAMS_ONLY_ID)
   async findOne(@ParseParamsId() id: number) {
     return this.facultiesService.findOne(id);
   }
 
-  @Patch('/edit/' + PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Patch(PARAMS_ONLY_ID)
   async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyDto) {
     return this.facultiesService.update(id, facultyDto);
   }
 
-  @Delete('/delete/' + PARAMS_ONLY_ID)
+  @Roles(UserRole.admin)
+  @UseGuards(RolesGuard)
+  @Delete(PARAMS_ONLY_ID)
   async remove(@ParseParamsId() id: number) {
     return this.facultiesService.remove(id);
   }
