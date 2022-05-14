@@ -1,9 +1,11 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
+import { plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
+import { UserDto } from '../user/dto';
 
 import { AuthDto } from './dto';
 import { SignUpDto } from './dto/signup.dto';
@@ -35,5 +37,24 @@ export class AuthService {
 
     delete user.passwdHash;
     return user;
+  }
+
+  public async getUserDto(email: string) {
+    const user = await this.prismaServ.user.findFirst({
+      where: {
+        email: email,
+        deletedAt: null
+      },
+    });
+
+    if (!user) {
+      return new NotFoundException('User not found');
+    }
+
+    return plainToInstance<UserDto, User>(
+      UserDto,
+      { ...user },
+      { excludeExtraneousValues: true },
+    );
   }
 }

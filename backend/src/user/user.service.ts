@@ -141,7 +141,7 @@ export class UserService {
       if (!user) {
         return new NotFoundException();
       }
-      
+
       const hash = await argon.hash(updateDataDto.password);
 
       updateDataDto.roles = Array.from(new Set([...updateDataDto.roles, UserRole.user]));

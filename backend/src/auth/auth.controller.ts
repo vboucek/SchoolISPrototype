@@ -6,6 +6,7 @@ import {
   Response,
   UseGuards,
 } from '@nestjs/common';
+import { Console } from 'console';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { SignUpDto } from './dto/signup.dto';
@@ -17,8 +18,8 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  public login(@Body() dto: AuthDto, @Response() response) {
-    return response.status(200).send();
+  public async login(@Body() dto: AuthDto) {
+    return await this.authService.getUserDto(dto.email);
   }
 
   @Post('logout')

@@ -10,9 +10,15 @@ import {
   IsInt,
   IsNotEmpty,
   IsString,
+  IsNumber,
 } from 'class-validator';
 
 export class UserDto {
+  @IsNumber()
+  @Expose()
+  @IsNotEmpty()
+  id: number
+
   @IsString()
   @Expose()
   @IsNotEmpty()
