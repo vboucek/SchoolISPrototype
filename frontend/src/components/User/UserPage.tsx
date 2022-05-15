@@ -1,14 +1,29 @@
-import { useState } from "react"
+import axios from "axios";
+import { useEffect, useState } from "react"
 import "../../styles/tailwindStyles.css"
 import { IUserDto, UserRole } from "../../types/User.dto"
 
 import SubjectPreview from "../SubjectPreview/SubjectPreview"
 
 export interface IUserPageProps {
-    user: IUserDto;
+    userId: number;
 }
 
-export const UserPage = ({ user }: IUserPageProps) => {
+export const UserPage = ({ userId }: IUserPageProps) => {
+    const [user, setUser] = useState<IUserDto>();
+    
+    useEffect(() => {
+        axios.get<IUserDto>(`users/${userId}`)
+          .then(response => {
+            setUser(response.data);
+          })
+      }, []);
+
+    if (!user)
+    {
+        return (<div></div>);
+    }
+
     return (
         <div className="text-black laptop:mt-20 laptop:mx-20 phone:mt-0 phone:mx-2">
             {/* User card */}

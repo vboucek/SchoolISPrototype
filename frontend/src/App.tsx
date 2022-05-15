@@ -12,33 +12,9 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserAtom } from './state/atoms';
 
 const App = () => {
-  const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
-  console.log("data");
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL=`${import.meta.env.VITE_BASE_URL}`;
 
-  useEffect(() => {
-    const dataGod : IAuthDto = {
-      email : "god@gmail.com",
-      password : "password123"
-    };
-
-    const dataUser : IAuthDto = {
-      email : "speed.demon@gmail.com",
-      password : "C#isSuperiorToJS"
-    };
-
-    axios.defaults.withCredentials = true;
-    console.log("Useeffect");
-    axios.post<IUserDto>(`http://localhost:4000/auth/login`, dataUser)
-      .then(response => {
-        console.log("Odpoved");
-        console.log(response.data);
-        setLoggedInUser(response.data);
-      })
-      .catch(error => {
-        console.log("error");
-      });
-  }, []);
-  
   return (
     <BrowserRouter>
       <div className="content">
