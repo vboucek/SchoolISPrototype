@@ -98,7 +98,8 @@ ul {
 }
 
 .navigation {
-  background-color: var(--dark-backround-color);
+  background-image: url(/assets/background_space.png);
+  background-size:cover;
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -177,14 +178,13 @@ ul {
 
 .footer-container {
   display: flex;
-  justify-content: flex-start;
-  align-items: end;
+  justify-content: space-between;
+  align-items: center;
   width: var(--web-width);
 }
 
 .copyright {
   color: var(--dark-font-color);
-  padding-bottom: 1rem;
 }
 
 .logo-small {
@@ -236,7 +236,7 @@ ul {
     padding: 1rem 0 0 0;
     width: 100%;
     justify-content: center;
-    background: var(--dark-backround-color);
+    background-image: url(/assets/background_space.png);
   }
 
   .nav-item__logo {
