@@ -14,5 +14,5 @@ export class FacultyDto {
 
   @IsNumber()
   @Expose()
-  id: number
+  id: number;
 }

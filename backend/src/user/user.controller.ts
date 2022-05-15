@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Patch,
+  Post,
   Req,
   Res,
   UnauthorizedException,
@@ -42,6 +43,7 @@ export class UserController {
     return await this.userservice.getAll();
   }
 
+  @Post()
   @Roles(UserRole.admin)
   public async create(
     @Body() userCreateDto: UserCreateDto

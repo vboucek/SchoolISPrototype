@@ -1,5 +1,5 @@
 import { UserRole } from "@prisma/client";
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsEmail, IsEnum, IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from "class-validator";
 
 export class UserCreateDto {
   @IsString()
@@ -27,10 +27,10 @@ export class UserCreateDto {
   roles: UserRole[];
 
   @IsInt()
-  @IsOptional()
+  @IsNotEmpty()
   facultyId: number;
 
   @IsInt()
-  @IsOptional()
+  @IsNotEmpty()
   semesterId: number;
 }

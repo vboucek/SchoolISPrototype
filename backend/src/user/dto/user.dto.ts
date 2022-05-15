@@ -11,6 +11,7 @@ import {
   IsNotEmpty,
   IsString,
   IsNumber,
+  IsNumberString,
 } from 'class-validator';
 
 export class UserDto {
@@ -45,11 +46,11 @@ export class UserDto {
 
   @IsInt()
   @Expose()
-  @IsOptional()
+  @IsNotEmpty()
   facultyId: number;
 
   @IsInt()
   @Expose()
-  @IsOptional()
+  @IsNotEmpty()
   semesterId: number;
 }

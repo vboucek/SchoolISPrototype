@@ -22,11 +22,11 @@ model User {
   passwdHash String
   roles      UserRole[]
 
-  facultyId Int?
-  faculty   Faculty? @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: SetNull)
 
-  semesterId Int?
-  semester   Semester? @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: SetNull)
 
   coursesCreated Course[]
 
