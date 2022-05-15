@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import "../../styles/tailwindStyles.css"
-import { IUserDto, UserRole } from "../../types/User.dto"
+import { IUserDto } from "../../types/User.dto"
 
 import SubjectPreview from "../SubjectPreview/SubjectPreview"
 
@@ -16,7 +16,7 @@ export const UserPage = ({ userId }: IUserPageProps) => {
         axios.get<IUserDto>(`users/${userId}`)
           .then(response => {
             setUser(response.data);
-          })
+          });
       }, []);
 
     if (!user)

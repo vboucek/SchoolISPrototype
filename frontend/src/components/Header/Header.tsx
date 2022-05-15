@@ -20,9 +20,10 @@ const Header = () => {
   useEffect(() => {
     axios.get<IUserDto>(`users/${userId}`)
       .then(response => {
+        console.log(response.data);
         setUser(response.data);
       })
-  }, []);
+  }, [userId]);
 
   return (
     <header className="header">
@@ -38,11 +39,11 @@ const Header = () => {
         </Link>
         <ul className="auth-navigation">
           <li className="auth-navigation__item">
-            {userId ? <span>{`${user?.firstName} ${user?.lastName}`}</span> : <span>Unauth</span>}
+            {(userId) ? <span>{`${user?.firstName} ${user?.lastName}`}</span> : <span>Unauth</span>}
           </li>
           <li>|</li>
           <li className="auth-navigation__item">
-            {userId ? <Link className='text-black' to={"/logout"}>Log out</Link> : <Link className="text-black" to={"/login"}>Sign in</Link>}
+            {(userId) ? <Link className='text-black' to={"/logout"}>Log out</Link> : <Link className="text-black" to={"/login"}>Sign in</Link>}
             </li>
         </ul>
       </div>

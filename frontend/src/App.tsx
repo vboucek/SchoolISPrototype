@@ -7,13 +7,23 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
 import { IUserDto } from './types/User.dto';
-import { IAuthDto } from './types/Auth.dto';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserAtom } from './state/atoms';
 
 const App = () => {
+  const setUser = useSetRecoilState(loggedInUserAtom);
   axios.defaults.withCredentials = true;
   axios.defaults.baseURL=`${import.meta.env.VITE_BASE_URL}`;
+
+  useEffect(() => {
+    axios.get<IUserDto>(`users/me`)
+      .then(response => {
+        setUser(response.data.id);
+      })
+      .catch(error => {
+        setUser(null);
+      });
+  }, []);
 
   return (
     <BrowserRouter>

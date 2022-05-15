@@ -7,8 +7,6 @@ import { IAuthDto } from "../../types/Auth.dto";
 import { IUserDto } from "../../types/User.dto";
 import { isValidEmail } from "../../utils/FormConstraints";
 
-
-
 export const Login = () => {
   const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
   const navigate = useNavigate();

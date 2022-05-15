@@ -4,3 +4,4 @@ export const isValidEmail = (email: string) =>
     email
   );
 
+export const isOnlyText = (input: string) => /^[a-zA-Z ]*$/.test(input);
