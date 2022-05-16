@@ -5,26 +5,15 @@ import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInUserAtom } from '../../state/atoms';
 import "../../styles/tailwindStyles.css"
-import axios from 'axios';
-import { IUserDto } from '../../types/User.dto';
 
 const Header = () => {
-  const userId = useRecoilValue(loggedInUserAtom);
-  const [user, setUser] = useState<IUserDto>()
+  const userVal = useRecoilValue(loggedInUserAtom);
   const [logo, setLogo] = useState(logoNormal);
   
   function changeHover() {
     setLogo(logo === logoNormal ? logoActive : logoNormal);
   }
-
-  useEffect(() => {
-    axios.get<IUserDto>(`users/${userId}`)
-      .then(response => {
-        console.log(response.data);
-        setUser(response.data);
-      })
-  }, [userId]);
-
+  
   return (
     <header className="header">
       <div className="header-container">
@@ -39,11 +28,11 @@ const Header = () => {
         </Link>
         <ul className="auth-navigation">
           <li className="auth-navigation__item">
-            {(userId) ? <span>{`${user?.firstName} ${user?.lastName}`}</span> : <span>Unauth</span>}
+            {(userVal) ? <span>{`${userVal.firstName} ${userVal.lastName}`}</span> : <span>Unauth</span>}
           </li>
           <li>|</li>
           <li className="auth-navigation__item">
-            {(userId) ? <Link className='text-black' to={"/logout"}>Log out</Link> : <Link className="text-black" to={"/login"}>Sign in</Link>}
+            {(userVal) ? <Link className='text-black' to={"/logout"}>Log out</Link> : <Link className="text-black" to={"/login"}>Sign in</Link>}
             </li>
         </ul>
       </div>

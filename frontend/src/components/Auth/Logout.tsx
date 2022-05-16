@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { loggedInUserAtom } from "../../state/atoms";
@@ -9,7 +9,7 @@ export const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    axios.post(`auth/logout`)
+    axios.post<null,AxiosResponse<null,null>,null>(`auth/logout`)
       .then(response => {
         setLoggedInUser(null);
         navigate("/login");

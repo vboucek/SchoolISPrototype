@@ -3,7 +3,7 @@ import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
 import Footer from './components/Footer/Footer';
 import Pages from './components/Pages';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
 import { IUserDto } from './types/User.dto';
@@ -18,10 +18,11 @@ const App = () => {
   useEffect(() => {
     axios.get<IUserDto>(`users/me`)
       .then(response => {
-        setUser(response.data.id);
+        setUser(response.data);
       })
       .catch(error => {
         setUser(null);
+
       });
   }, []);
 

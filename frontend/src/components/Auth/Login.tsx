@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -17,12 +17,12 @@ export const Login = () => {
     handleSubmit,
   } = useForm<IAuthDto>();
   const onSubmit: SubmitHandler<IAuthDto> = (dataAuth) => {
-    axios.post<IUserDto>(`auth/login`, dataAuth)
+    axios.post<IUserDto,AxiosResponse<IUserDto,IAuthDto>,IAuthDto>(`auth/login`, dataAuth)
       .then(response => {
         console.log(response);
-        setLoggedInUser(response.data.id);
+        setLoggedInUser(response.data);
+        navigate(`/user/${response.data.id}`)
       });
-    navigate("/user")
   };
 
   return (

@@ -5,3 +5,5 @@ export const isValidEmail = (email: string) =>
   );
 
 export const isOnlyText = (input: string) => /^[a-zA-Z ]*$/.test(input);
+
+export const isOnlyNumber = (input: string) => /^[1-9][0-9]*$/.test(input);

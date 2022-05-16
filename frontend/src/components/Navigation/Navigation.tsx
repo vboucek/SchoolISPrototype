@@ -1,16 +1,20 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { loggedInUserAtom } from '../../state/atoms';
 import NavigationItem from './NavigationItem';
 
 const Navigation = () => {
+  const user = useRecoilValue(loggedInUserAtom);
+
   return (
     <nav className="navigation">
       <div className="nav-container">
         <ul className="main-nav">
-          <NavigationItem title={'Admin'} />
-          <NavigationItem title={'Teacher'} />
-          <NavigationItem title={'Timetable'} />
-          <NavigationItem title={'Subjects'} />
-          <NavigationItem title={'User'} />
+          <NavigationItem title={'Admin'} path={'admin'}/>
+          <NavigationItem title={'Teacher'} path={'teacher'}/>
+          <NavigationItem title={'Timetable'} path={'timetable'}/>
+          <NavigationItem title={'Subjects'} path={'subjects'}/>
+          <NavigationItem title={'User'} path={`user/${user?.id}`}/>
         </ul>
         <div className="semester-nav">
           <label htmlFor="semester">Semester:</label>
