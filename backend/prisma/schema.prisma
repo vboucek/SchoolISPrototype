@@ -23,10 +23,10 @@ model User {
   roles      UserRole[]
 
   facultyId Int
-  faculty   Faculty @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
 
   semesterId Int
-  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  semester   Semester @relation(fields: [semesterId], references: [id])
 
   coursesCreated Course[]
 

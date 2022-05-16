@@ -55,14 +55,14 @@ export class UserController {
   @Roles(UserRole.admin, UserRole.user)
   public async update(
     @ParseParamsId() id: number,
-    @Body() updateUserDto: UserUpdateUserDto | UserCreateDto,
+    @Body() updateUserDto: UserCreateDto,
     @GetUser() user: User
   ) {
     if (user.roles.includes(UserRole.admin)) {
-      await this.userservice.updateUserAdmin(id, updateUserDto as UserCreateDto);
+      return await this.userservice.updateUserAdmin(id, updateUserDto as UserCreateDto);
 
     } else if (id == user.id) {
-      await this.userservice.updateUserHimself(id, updateUserDto as UserUpdateUserDto);
+      return await this.userservice.updateUserHimself(id, updateUserDto as UserUpdateUserDto);
 
     } else {
       throw new UnauthorizedException();
@@ -74,6 +74,7 @@ export class UserController {
   public async remove(
     @ParseParamsId() id: number
   ) {
-    await this.userservice.deleteUser(id);
+    console.log("Delete");
+    return await this.userservice.deleteUser(id);
   }
 }

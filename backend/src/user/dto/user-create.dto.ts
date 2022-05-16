@@ -20,7 +20,7 @@ export class UserCreateDto {
   password: string;
   
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(0)
   @ArrayMaxSize(3)
   @IsEnum(UserRole, { each: true })
   @IsNotEmpty()
