@@ -10,11 +10,11 @@ const Navigation = () => {
     <nav className="navigation">
       <div className="nav-container">
         <ul className="main-nav">
-          <NavigationItem title={'Admin'} path={'admin'}/>
-          <NavigationItem title={'Teacher'} path={'teacher'}/>
-          <NavigationItem title={'Timetable'} path={'timetable'}/>
-          <NavigationItem title={'Subjects'} path={'subjects'}/>
-          <NavigationItem title={'User'} path={`user/${user?.id}`}/>
+          <NavigationItem title={'Admin'} path={'admin'} />
+          <NavigationItem title={'Teacher'} path={'teacher'} />
+          <NavigationItem title={'Timetable'} path={'timetable'} />
+          <NavigationItem title={'Subjects'} path={'subjects'} />
+          <NavigationItem title={'User'} path={`user/${user?.id}`} />
         </ul>
         <div className="semester-nav">
           <label htmlFor="semester">Semester:</label>
