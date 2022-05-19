@@ -17,6 +17,7 @@ import { ParseParamsId } from '../global-decorators';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateUserDto } from './dto/user-update-user.dto';
 import { UserService } from './user.service';
+import { UserSubjectsDto } from './dto/user-subjects.dto';
 
 @Controller('users')
 @Roles(UserRole.user)
@@ -74,9 +75,15 @@ export class UserController {
     return await this.userservice.deleteUser(id);
   }
 
-  @Get(PARAMS_ONLY_ID + '/subjects')
+  @Post(PARAMS_ONLY_ID + '/subjects')
   @Roles(UserRole.user)
-  public async getSubjects(@ParseParamsId() id: number) {
-    return await this.userservice.getUserSubjects(id);
+  public async getSubjects(
+    @ParseParamsId() id: number,
+    @Body() userSubjectsDto: UserSubjectsDto,
+  ) {
+    return await this.userservice.getUserSubjects(
+      id,
+      userSubjectsDto.semesterId,
+    );
   }
 }

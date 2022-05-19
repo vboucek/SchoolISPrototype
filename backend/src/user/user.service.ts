@@ -210,10 +210,11 @@ export class UserService {
     }
   }
 
-  public async getUserSubjects(userId: number) {
+  public async getUserSubjects(userId: number, semesterId: number) {
     return await this.prismaService.course.findMany({
       where: {
         deletedAt: null,
+        semesterId: semesterId,
         students: {
           some: {
             id: userId,
