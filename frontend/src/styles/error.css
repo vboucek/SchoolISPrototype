@@ -1,0 +1,5 @@
+.error {
+  color: var(--dark-font-color);
+  font-size: var(--large-font-size);
+  padding: 1rem;
+}
