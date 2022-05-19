@@ -6,7 +6,7 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { Day } from '@prisma/client';
+import { Day, EndType } from '@prisma/client';
 import { Type } from 'class-transformer';
 
 export class CourseDto {
@@ -21,6 +21,10 @@ export class CourseDto {
   @IsNotEmpty()
   @IsString()
   code: string;
+
+  @IsNotEmpty()
+  @IsEnum(EndType)
+  endType: EndType;
 
   @IsNotEmpty()
   @Type(() => Number)

@@ -1,4 +1,10 @@
-import { PrismaClient, SemesterType, UserRole, Day } from '@prisma/client';
+import {
+  PrismaClient,
+  SemesterType,
+  UserRole,
+  Day,
+  EndType,
+} from '@prisma/client';
 import * as argon from 'argon2';
 
 const prisma = new PrismaClient();
@@ -211,6 +217,7 @@ async function main() {
 
       capacity: 150,
       credits: 69,
+      endType: EndType.zk,
 
       startSign: new Date(2022, 2, 18, 17, 0),
       endSign: new Date(2022, 3, 18, 17, 0),
@@ -233,6 +240,7 @@ async function main() {
 
       capacity: 175,
       credits: 42,
+      endType: EndType.k,
 
       startSign: new Date(2022, 2, 19, 9, 0),
       endSign: new Date(2022, 3, 19, 9, 0),
@@ -255,6 +263,7 @@ async function main() {
 
       capacity: 420,
       credits: 5,
+      endType: EndType.zk,
 
       startSign: new Date(2022, 3, 19, 9, 0),
       endSign: new Date(2022, 4, 25, 9, 0),
@@ -278,6 +287,7 @@ async function main() {
 
       capacity: 150,
       credits: 69,
+      endType: EndType.z,
 
       startSign: new Date(2022, 2, 18, 17, 0),
       endSign: new Date(2022, 3, 18, 17, 0),

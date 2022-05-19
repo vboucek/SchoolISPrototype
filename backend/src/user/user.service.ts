@@ -6,7 +6,7 @@ import {
 import { User, UserRole } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
 import { UserCreateDto } from './dto/user-create.dto';
@@ -14,13 +14,13 @@ import { UserUpdateUserDto } from './dto/user-update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
   public async getUserDto(userId: number) {
     const user = await this.prismaService.user.findFirst({
       where: {
         id: userId,
-        deletedAt: null
+        deletedAt: null,
       },
     });
 
@@ -38,8 +38,8 @@ export class UserService {
   public async getAll() {
     const users = await this.prismaService.user.findMany({
       where: {
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     });
 
     return users.map((user) =>
@@ -55,7 +55,9 @@ export class UserService {
     try {
       const hash = await argon.hash(createUserDto.password);
 
-      const roles = Array.from(new Set([...createUserDto.roles, UserRole.user]));
+      const roles = Array.from(
+        new Set([...createUserDto.roles, UserRole.user]),
+      );
 
       const createdUser = await this.prismaService.user.create({
         data: {
@@ -68,7 +70,7 @@ export class UserService {
           roles: roles,
 
           semesterId: createUserDto.semesterId,
-          facultyId: createUserDto.facultyId
+          facultyId: createUserDto.facultyId,
         },
       });
 
@@ -95,8 +97,8 @@ export class UserService {
       const user = await this.prismaService.user.findFirst({
         where: {
           id: userToUpdateId,
-          deletedAt: null
-        }
+          deletedAt: null,
+        },
       });
 
       if (!user) {
@@ -129,13 +131,16 @@ export class UserService {
     }
   }
 
-  public async updateUserAdmin(userToUpdateId: number, updateDataDto: UserCreateDto) {
+  public async updateUserAdmin(
+    userToUpdateId: number,
+    updateDataDto: UserCreateDto,
+  ) {
     try {
       const user = await this.prismaService.user.findFirst({
         where: {
           id: userToUpdateId,
-          deletedAt: null
-        }
+          deletedAt: null,
+        },
       });
 
       if (!user) {
@@ -144,7 +149,9 @@ export class UserService {
 
       const hash = await argon.hash(updateDataDto.password);
 
-      updateDataDto.roles = Array.from(new Set([...updateDataDto.roles, UserRole.user]));
+      updateDataDto.roles = Array.from(
+        new Set([...updateDataDto.roles, UserRole.user]),
+      );
 
       const updatedUser = await this.prismaService.user.update({
         where: {
@@ -174,32 +181,50 @@ export class UserService {
   }
 
   public async deleteUser(userToDeleteId: number) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userToDeleteId,
+        deletedAt: null,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
     try {
-      const user = await this.prismaService.user.findFirst(
-        {
-          where: {
-            id: userToDeleteId,
-            deletedAt: null
-          }
-        }
-      )
-
-      if (!user) {
-        throw new NotFoundException();
-      }
-
       await this.prismaService.user.update({
         where: {
           id: userToDeleteId,
         },
         data: {
-          deletedAt: null
-        }
+          deletedAt: null,
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw new ForbiddenException();
       }
     }
+  }
+
+  public async getUserSubjects(userId: number) {
+    return await this.prismaService.course.findMany({
+      where: {
+        deletedAt: null,
+        students: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        code: true,
+        credits: true,
+        endType: true,
+      },
+    });
   }
 }

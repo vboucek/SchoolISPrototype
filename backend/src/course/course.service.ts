@@ -55,6 +55,7 @@ export class CourseService {
         code: true,
         title: true,
         credits: true,
+        endType: true,
         faculty: {
           select: {
             name: true,
@@ -82,6 +83,7 @@ export class CourseService {
         title: true,
         startSign: true,
         endSign: true,
+        endType: true,
         credits: true,
         description: true,
         capacity: true,

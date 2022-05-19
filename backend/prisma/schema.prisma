@@ -44,6 +44,7 @@ model Course {
   title       String
   description String
   code        String
+  endType     EndType
 
   deletedAt DateTime? 
 
@@ -238,4 +239,10 @@ enum Day {
   friday
   saturday
   sunday
+}
+
+enum EndType {
+  z
+  k
+  zk
 }
