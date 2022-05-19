@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import logoNormal from '/assets/logo.svg';
 import logoActive from '/assets/logo-active.svg';
 import { Link } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loggedInUserAtom } from '../../state/atoms';
-import "../../styles/tailwindStyles.css"
+import axios from 'axios';
 
 const Header = () => {
-  const userVal = useRecoilValue(loggedInUserAtom);
+  const [user, setUser] = useRecoilState(loggedInUserAtom);
   const [logo, setLogo] = useState(logoNormal);
-  
+
   function changeHover() {
     setLogo(logo === logoNormal ? logoActive : logoNormal);
   }
-  
+
+  function logOut() {
+    axios.post(`http://localhost:4000/auth/logout`).then(() => {
+      setUser(null);
+    });
+  }
+
   return (
     <header className="header">
       <div className="header-container">
@@ -27,13 +33,21 @@ const Header = () => {
           />
         </Link>
         <ul className="auth-navigation">
-          <li className="auth-navigation__item">
-            {(userVal) ? <span>{`${userVal.firstName} ${userVal.lastName}`}</span> : <span>Unauth</span>}
-          </li>
-          <li>|</li>
-          <li className="auth-navigation__item">
-            {(userVal) ? <Link className='text-black' to={"/logout"}>Log out</Link> : <Link className="text-black" to={"/login"}>Sign in</Link>}
+          <Link className="navigation-link" to={`user/${user?.id}`}>
+            <li className="auth-navigation__item">
+              {user && (
+                <span>
+                  {user.firstName} {user.lastName}
+                </span>
+              )}
             </li>
+          </Link>
+          <li>|</li>
+          <Link className="navigation-link" to={'/'}>
+            <li onClick={logOut} className="auth-navigation__item">
+              Sign out
+            </li>
+          </Link>
         </ul>
       </div>
     </header>

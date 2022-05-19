@@ -4,6 +4,7 @@
   --medium-font-size: 2.5rem;
   --large-font-size: 3rem;
   --default-backround-color: white;
+  --error-color: red;
   --dark-backround-color: black;
   --gray-backround-color: lightgray;
   --default-font-color: white;
@@ -44,6 +45,10 @@ html, body {
 a {
   text-decoration: none;
   color: var(--default-font-color);
+}
+
+.navigation-link {
+  color: var(--dark-font-color);
 }
 
 .wrapper {
