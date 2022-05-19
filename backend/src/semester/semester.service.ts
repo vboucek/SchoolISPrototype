@@ -8,12 +8,13 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
 import { SemesterDto } from './dto';
+import { SemesterCreateDto } from './dto/semester-create.dto';
 
 @Injectable()
 export class SemesterService {
   constructor(private prismaService: PrismaService) { }
 
-  public async create(semesterDto: SemesterDto) {
+  public async create(semesterDto: SemesterCreateDto) {
     try {
       const newSemester = await this.prismaService.semester.create({
         data: {
@@ -73,7 +74,7 @@ export class SemesterService {
     );
   }
 
-  public async update(id: number, updateSemesterDto: SemesterDto) {
+  public async update(id: number, updateSemesterDto: SemesterCreateDto) {
     try {
       const semester = await this.prismaService.semester.findFirst({
         where: {

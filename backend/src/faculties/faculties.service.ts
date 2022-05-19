@@ -8,12 +8,13 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
 import { FacultyDto } from './dto';
+import { FacultyCreateDto } from './dto/facutly-create.dto';
 
 @Injectable()
 export class FacultiesService {
   constructor(private prismaService: PrismaService) { }
 
-  public async create(facultyDto: FacultyDto) {
+  public async create(facultyDto: FacultyCreateDto) {
     try {
       const newFaculty = await this.prismaService.faculty.create({
         data: {
@@ -71,7 +72,7 @@ export class FacultiesService {
       { excludeExtraneousValues: true });
   }
 
-  public async update(id: number, facultyDto: FacultyDto) {
+  public async update(id: number, facultyDto: FacultyCreateDto) {
     try {
       const faculty = this.prismaService.faculty.findFirst({
         where:

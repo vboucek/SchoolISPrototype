@@ -13,6 +13,7 @@ import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
 import { PARAMS_ONLY_ID } from '../global-constants';
 import { ParseParamsId } from '../global-decorators';
 import { FacultyDto } from './dto';
+import { FacultyCreateDto } from './dto/facutly-create.dto';
 import { FacultiesService } from './faculties.service';
 
 @Controller('faculties')
@@ -23,7 +24,7 @@ export class FacultiesController {
   
   @Post()
   @Roles(UserRole.admin)
-  async create(@Body() facultyDto: FacultyDto) {
+  async create(@Body() facultyDto: FacultyCreateDto) {
     return await this.facultiesService.create(facultyDto);
   }
 
@@ -39,7 +40,7 @@ export class FacultiesController {
   
   @Patch(PARAMS_ONLY_ID)
   @Roles(UserRole.admin)
-  async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyDto) {
+  async update(@ParseParamsId() id: number, @Body() facultyDto: FacultyCreateDto) {
     return this.facultiesService.update(id, facultyDto);
   }
   

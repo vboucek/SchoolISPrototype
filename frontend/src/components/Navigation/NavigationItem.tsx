@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 
 export interface NavigationItemProps {
   title: string;
+  path: string;
 }
 
-const NavigationItem = ({ title }: NavigationItemProps) => {
+const NavigationItem = ({ title, path }: NavigationItemProps) => {
   const titleLowerCase = title.toLowerCase();
   const [icon, setIcon] = useState(`icon-${titleLowerCase}.png`);
 
@@ -18,7 +19,7 @@ const NavigationItem = ({ title }: NavigationItemProps) => {
   };
 
   return (
-    <Link to={`/${titleLowerCase}`}>
+    <Link to={path}>
       <li
         className="nav-item"
         onMouseEnter={changeIcon}

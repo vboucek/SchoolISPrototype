@@ -15,6 +15,7 @@ import { UserRole } from '@prisma/client';
 import { PARAMS_ONLY_ID } from '../global-constants';
 import { SemesterDto } from './dto';
 import { ParseParamsId } from '../global-decorators';
+import { SemesterCreateDto } from './dto/semester-create.dto';
 
 @Controller('semesters')
 @Roles(UserRole.user)
@@ -26,7 +27,7 @@ export class SemesterController {
   @Post()
   @Roles(UserRole.admin)
   @UseGuards(RolesGuard)
-  async create(@Body() semesterDto: SemesterDto, @Res() res) {
+  async create(@Body() semesterDto: SemesterCreateDto) {
     return await this.semesterService.create(semesterDto);
   }
 
@@ -43,7 +44,7 @@ export class SemesterController {
   @Patch(PARAMS_ONLY_ID)
   @Roles(UserRole.admin)
   @UseGuards(RolesGuard)
-  async update(@ParseParamsId() id: number, @Body() semesterDto: SemesterDto) {
+  async update(@ParseParamsId() id: number, @Body() semesterDto: SemesterCreateDto) {
     return await this.semesterService.update(id, semesterDto);
   }
   

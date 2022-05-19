@@ -1,18 +1,12 @@
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class FacultyDto {
+export class FacultyCreateDto {
   @IsString()
   @IsNotEmpty()
-  @Expose()
   name: string;
 
   @IsString()
   @IsNotEmpty()
-  @Expose()
   logoPath: string;
-
-  @IsNumber()
-  @Expose()
-  id: number;
 }

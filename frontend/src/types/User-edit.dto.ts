@@ -1,11 +1,12 @@
 import { UserRole } from "./UserRole";
 
-export interface IUserDto {
-  id : number;
+export interface IUserEditDto {
   firstName: string;
   lastName: string;
   email: string;
-  roles: UserRole[];
+  password: string;
+  isAdmin: boolean;
+  isTeacher: boolean;
   facultyId: number;
   semesterId: number;
 }

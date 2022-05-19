@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Patch,
+  Post,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -39,6 +40,7 @@ export class UserController {
     return await this.userservice.getAll();
   }
 
+  @Post()
   @Roles(UserRole.admin)
   public async create(@Body() userCreateDto: UserCreateDto) {
     return await this.userservice.create(userCreateDto);
@@ -48,16 +50,16 @@ export class UserController {
   @Roles(UserRole.admin, UserRole.user)
   public async update(
     @ParseParamsId() id: number,
-    @Body() updateUserDto: UserUpdateUserDto | UserCreateDto,
+    @Body() updateUserDto: UserCreateDto,
     @GetUser() user: User,
   ) {
     if (user.roles.includes(UserRole.admin)) {
-      await this.userservice.updateUserAdmin(
+      return await this.userservice.updateUserAdmin(id, updateUserDto as UserCreateDto);
         id,
         updateUserDto as UserCreateDto,
       );
     } else if (id == user.id) {
-      await this.userservice.updateUserHimself(
+      return await this.userservice.updateUserHimself(id, updateUserDto as UserUpdateUserDto);
         id,
         updateUserDto as UserUpdateUserDto,
       );
@@ -69,7 +71,7 @@ export class UserController {
   @Delete(PARAMS_ONLY_ID)
   @Roles(UserRole.admin)
   public async remove(@ParseParamsId() id: number) {
-    await this.userservice.deleteUser(id);
+    return await this.userservice.deleteUser(id);
   }
 
   @Get(PARAMS_ONLY_ID + '/subjects')

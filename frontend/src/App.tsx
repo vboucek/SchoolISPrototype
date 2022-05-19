@@ -3,42 +3,29 @@ import Header from './components/Header/Header';
 import Navigation from './components/Navigation/Navigation';
 import Footer from './components/Footer/Footer';
 import Pages from './components/Pages';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
 import { IUserDto } from './types/User.dto';
-import { IAuthDto } from './types/Auth.dto';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loggedInUserAtom } from './state/atoms';
 
 const App = () => {
-  const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
-  console.log("data");
+  const setUser = useSetRecoilState(loggedInUserAtom);
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL=`${import.meta.env.VITE_BASE_URL}`;
 
   useEffect(() => {
-    const dataGod : IAuthDto = {
-      email : "god@gmail.com",
-      password : "password123"
-    };
-
-    const dataUser : IAuthDto = {
-      email : "speed.demon@gmail.com",
-      password : "C#isSuperiorToJS"
-    };
-
-    axios.defaults.withCredentials = true;
-    console.log("Useeffect");
-    axios.post<IUserDto>(`http://localhost:4000/auth/login`, dataUser)
+    axios.get<IUserDto>(`users/me`)
       .then(response => {
-        console.log("Odpoved");
-        console.log(response.data);
-        setLoggedInUser(response.data);
+        setUser(response.data);
       })
       .catch(error => {
-        console.log("error");
+        setUser(null);
+
       });
   }, []);
-  
+
   return (
     <BrowserRouter>
       <div className="content">
