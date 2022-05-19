@@ -54,12 +54,12 @@ export class UserController {
     @GetUser() user: User,
   ) {
     if (user.roles.includes(UserRole.admin)) {
-      return await this.userservice.updateUserAdmin(id, updateUserDto as UserCreateDto);
+      return await this.userservice.updateUserAdmin(
         id,
         updateUserDto as UserCreateDto,
       );
     } else if (id == user.id) {
-      return await this.userservice.updateUserHimself(id, updateUserDto as UserUpdateUserDto);
+      return await this.userservice.updateUserHimself(
         id,
         updateUserDto as UserUpdateUserDto,
       );

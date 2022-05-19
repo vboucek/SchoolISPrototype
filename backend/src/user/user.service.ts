@@ -143,17 +143,17 @@ export class UserService {
           deletedAt: null,
         },
       });
-      
+
       if (!user) {
         return new NotFoundException();
       }
-      
+
       const hash = await argon.hash(updateDataDto.password);
 
       updateDataDto.roles = Array.from(
         new Set([...updateDataDto.roles, UserRole.user]),
       );
-      
+
       const updatedUser = await this.prismaService.user.update({
         where: {
           id: userToUpdateId,
@@ -164,8 +164,8 @@ export class UserService {
           email: updateDataDto.email,
           passwdHash: hash,
           roles: updateDataDto.roles,
-          facultyId: (updateDataDto.facultyId as number),
-          semesterId: (updateDataDto.semesterId as number)
+          facultyId: updateDataDto.facultyId as number,
+          semesterId: updateDataDto.semesterId as number,
         },
       });
       return plainToInstance<UserDto, User>(
@@ -188,15 +188,6 @@ export class UserService {
         deletedAt: null,
       },
     });
-    try {
-      const user = await this.prismaService.user.findFirst(
-        {
-          where: {
-            id: userToDeleteId,
-            deletedAt: null
-          }
-        }
-      )
 
     if (!user) {
       throw new NotFoundException();
@@ -208,7 +199,7 @@ export class UserService {
           id: userToDeleteId,
         },
         data: {
-          deletedAt: new Date()
+          deletedAt: new Date(),
         },
       });
     } catch (error) {
