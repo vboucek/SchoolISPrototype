@@ -47,11 +47,11 @@
 }
 
 .subject-filter__submit:hover {
-  color: var(--dark-font-color-hover);
+  color: var(--default-font-color-hover);
 }
 
 .subject-filter__submit:active {
-  color: var(--default-font-color)
+  color: var(--default-font-color-clicked);
 }
 
 @media only screen and (max-width: 1200px) {

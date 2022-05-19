@@ -153,7 +153,7 @@ async function main() {
       lastName: 'God',
       email: 'god@gmail.com',
       passwdHash: await argon.hash('password123'),
-      roles: [UserRole.user, UserRole.admin],
+      roles: [UserRole.admin, UserRole.user],
       facultyId: facultyFI.id,
       semesterId: semesterS2022.id,
     },

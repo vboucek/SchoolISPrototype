@@ -1,11 +1,12 @@
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
+  currentSemesterIdAtom,
   loggedInUserAtom,
   semestersAtom,
-  currentSemesterIdAtom,
 } from '../../state/atoms';
 import NavigationItem from './NavigationItem';
+import { UserRole } from '../../types/UserRole';
 
 const Navigation = () => {
   const user = useRecoilValue(loggedInUserAtom);
@@ -20,8 +21,12 @@ const Navigation = () => {
     <nav className="navigation">
       <div className="nav-container">
         <ul className="main-nav">
-          <NavigationItem title={'Admin'} path={'admin'} />
-          <NavigationItem title={'Teacher'} path={'teacher'} />
+          {user?.roles.includes(UserRole.admin) && (
+            <NavigationItem title={'Admin'} path={'admin'} />
+          )}
+          {user?.roles.includes(UserRole.teacher) && (
+            <NavigationItem title={'Teacher'} path={'teacher'} />
+          )}
           <NavigationItem title={'Timetable'} path={'timetable'} />
           <NavigationItem title={'Subjects'} path={'subject'} />
           <NavigationItem title={'User'} path={`user/${user?.id}`} />

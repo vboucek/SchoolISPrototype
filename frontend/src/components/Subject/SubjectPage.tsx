@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SubjectPreviewList from '../SubjectPreview/SubjectPreviewList';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { SubjectPreviewProps } from '../SubjectPreview/SubjectPreview';
 import { useRecoilValue } from 'recoil';
 import { facultiesAtom, semestersAtom } from '../../state/atoms';
 import '../../styles/subjectsFilter.css';
-import { currentSemesterSelector } from '../../state/selectors';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IUserDto } from '../../types/User.dto';
-import { LoginFormInput } from '../Login/LoginPage';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
 
