@@ -42,6 +42,10 @@ html, body {
   height: 100%;
 }
 
+select {
+  text-transform: capitalize;
+}
+
 a {
   text-decoration: none;
   color: var(--default-font-color);
@@ -168,6 +172,7 @@ ul {
 
 .main-content-container {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   width: var(--content-width);
 }

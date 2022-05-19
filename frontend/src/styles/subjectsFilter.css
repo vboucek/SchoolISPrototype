@@ -1,0 +1,70 @@
+.subject-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: var(--small-font-size);
+}
+
+.subject-filter {
+  display: flex;
+  flex-direction: row;
+  color: var(--dark-font-color);
+  width: 100%;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.subject-filter__input-container {
+  width: 100%;
+}
+
+.subject-filter__select {
+  width: 100%;
+  padding: 0.5rem;
+  height: 2.5rem;
+  background-color: var(--gray-backround-color);
+}
+
+.subject-filter__field {
+  width: 100%;
+  padding-left: 0.5rem;
+  height: 2.5rem;
+  background-color: var(--gray-backround-color);
+}
+
+.subject-filter__submit {
+  border: solid var(--dark-font-color);
+  align-self: end;
+  height: 2.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.subject-filter__submit {
+  justify-self: start;
+  background-color: var(--dark-backround-color);
+  padding: 0 1rem 0 1rem;
+}
+
+.subject-filter__submit:hover {
+  color: var(--dark-font-color-hover);
+}
+
+.subject-filter__submit:active {
+  color: var(--default-font-color)
+}
+
+@media only screen and (max-width: 1200px) {
+  .subject-filter {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-field-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .subject-filter__submit {
+    width: 100%;
+  }
+}
