@@ -17,7 +17,7 @@ import { CourseFilterDto } from './dto/course.filter.dto';
 import { GetUser } from '../auth/decorator';
 import { CourseDto } from './dto/course.dto';
 
-@Controller('course')
+@Controller('subjects')
 @Roles(UserRole.user)
 @UseGuards(AuthenticatedGuard, RolesGuard)
 export class CourseController {
@@ -29,7 +29,7 @@ export class CourseController {
     return await this.courseService.create(courseDto, user.id);
   }
 
-  @Get()
+  @Post('/previews')
   async findAll(@Body() filter: CourseFilterDto) {
     return this.courseService.getCoursePreviews(filter);
   }

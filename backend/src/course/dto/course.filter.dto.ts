@@ -25,10 +25,12 @@ export class CourseFilterDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(0)
   semesterId: number;
 
   @IsOptional()
   @Type(() => Number)
   @IsInt()
+  @Min(0)
   facultyId: number;
 }

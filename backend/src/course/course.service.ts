@@ -38,17 +38,17 @@ export class CourseService {
       where: {
         deletedAt: null,
         credits: {
-          gte: filter.creditsMin,
-          lte: filter.creditsMax,
+          gte: filter.creditsMin ?? undefined,
+          lte: filter.creditsMax ?? undefined,
         },
         code: {
-          contains: filter.code,
+          contains: filter.code ?? undefined,
         },
         title: {
-          contains: filter.title,
+          contains: filter.title ?? undefined,
         },
-        facultyId: filter.facultyId,
-        semesterId: filter.semesterId,
+        facultyId: filter.facultyId ?? undefined,
+        semesterId: filter.semesterId ?? undefined,
       },
       select: {
         id: true,
