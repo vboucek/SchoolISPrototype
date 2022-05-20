@@ -6,6 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { IUserDto } from '../../types/User.dto';
 import { useSetRecoilState } from 'recoil';
 import { loggedInUserAtom } from '../../state/atoms';
+import { useNavigate } from 'react-router-dom';
 
 export interface LoginFormInput {
   email: string;
@@ -15,6 +16,7 @@ export interface LoginFormInput {
 const LoginPage = () => {
   const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
   const [loginError, setLoginError] = useState<AxiosError>();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -28,6 +30,7 @@ const LoginPage = () => {
       .post<IUserDto>('auth/login', data)
       .then((response) => {
         setLoggedInUser(response.data);
+        navigate('/');
       })
       .catch((_error) => {
         setLoginError(_error);
