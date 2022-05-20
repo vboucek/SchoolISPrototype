@@ -12,4 +12,14 @@ const convertLength = (minutes: number | undefined): string => {
   return `${minutes / 60.0}h`;
 };
 
-export { convertTime, convertLength };
+const getMinFromString = (time: string): number => {
+  const split = time.split(':');
+
+  if (split.length < 2) {
+    return -1;
+  }
+
+  return Number(split[0]) * 60 + Number(split[1]);
+};
+
+export { convertTime, convertLength, getMinFromString };
