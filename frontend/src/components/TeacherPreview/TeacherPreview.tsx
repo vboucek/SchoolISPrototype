@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export interface TeacherPreviewProps {
-  id: number;
   teacher: {
+    id: number;
     firstName: string;
     lastName: string;
   };
@@ -12,13 +12,12 @@ export interface TeacherPreviewProps {
 }
 
 const TeacherPreview = ({
-  id,
   teacher,
   isLecturer,
   isHelper,
 }: TeacherPreviewProps) => {
   return (
-    <Link to={`/user/${id}`}>
+    <Link to={`/user/${teacher?.id}`}>
       <li className="teacher__item">
         <div className="teacher__name">
           {teacher.firstName} {teacher.lastName}

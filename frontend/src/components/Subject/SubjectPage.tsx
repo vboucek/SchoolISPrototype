@@ -30,7 +30,6 @@ const SubjectPage = () => {
     data: SubjectFilterFormInput,
   ) => {
     setLoading(true);
-    console.log(data);
     axios
       .post(`subjects/previews`, {
         ...data,

@@ -4,7 +4,7 @@ import '../../styles/subjectDetail.css';
 import { format } from 'date-fns';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import TeacherPreviewList from '../TeacherPreview/TeacherPreviewList';
 import SemGroupPreviewList from '../SemGroupPreview/SemGroupPreviewList';
 import { SemGroupPreviewProps } from '../SemGroupPreview/SemGroupPreview';
@@ -15,6 +15,7 @@ import { convertTime } from '../../utils/TimeUtils';
 import { IUserDto } from '../../types/User.dto';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInUserAtom, userSubjectsAtom } from '../../state/atoms';
+import { UserRole } from '../../types/UserRole';
 
 export interface SubjectDetailProps {
   id: number;
@@ -42,12 +43,13 @@ export interface SubjectDetailProps {
 const SubjectDetailPage = () => {
   const [error, setError] = useState<AxiosError>();
   const [signError, setSignError] = useState<AxiosError>();
+  const [deleteError, setDeleteError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState<SubjectDetailProps>();
   const { id } = useParams();
   const [subjects, setSubjects] = useRecoilState(userSubjectsAtom);
   const user = useRecoilValue(loggedInUserAtom);
-
+  const navigate = useNavigate();
   const [signedUp, setSignedUp] = useState<boolean>(false);
   const [isCreator, setIsCreator] = useState<boolean>(false);
 
@@ -64,7 +66,6 @@ const SubjectDetailPage = () => {
       .get(`subjects/${id}`)
       .then((response: AxiosResponse) => {
         const subject: SubjectDetailProps = response.data;
-        console.log(subject);
         setSubject(subject);
         setLoading(false);
       })
@@ -79,12 +80,25 @@ const SubjectDetailPage = () => {
         userId: user?.id,
       })
       .then((response: AxiosResponse) => {
-        if (response.status == 201 && subject) {
+        if (response.status === 201 && subject) {
           setSubjects([...subjects, subject]);
         }
       })
       .catch((signError_) => {
         setSignError(signError_);
+      });
+  }
+
+  function removeCourse() {
+    axios
+      .delete(`subjects/${id}`)
+      .then((response: AxiosResponse) => {
+        if (response.status === 200) {
+          navigate('/subject');
+        }
+      })
+      .catch((deleteError_) => {
+        setDeleteError(deleteError_);
       });
   }
 
@@ -122,7 +136,7 @@ const SubjectDetailPage = () => {
                 <div className="subject-info__detail-row">
                   <div className="subject-info__label">Supervisor:</div>
                   <div className="subject-info__supervisor">
-                    {subject?.creator.firstName} {subject?.creator.firstName}
+                    {subject?.creator.firstName} {subject?.creator.lastName}
                   </div>
                 </div>
                 <div className="subject-info__detail-row">
@@ -175,11 +189,27 @@ const SubjectDetailPage = () => {
                   {signedUp ? 'Signed Up' : 'Sign Up'}
                 </button>
               )}
-              <button className="subject-controls__button">Delete</button>
-              <button className="subject-controls__button">Edit</button>
+              {(isCreator || user?.roles.includes(UserRole.admin)) && (
+                <button
+                  onClick={removeCourse}
+                  className="subject-controls__button"
+                >
+                  Delete
+                </button>
+              )}
+              <Link to="/subject/create">
+                <button className="subject-controls__button">Edit</button>
+              </Link>
             </div>
             {signError && (
-              <div className="sign-error">You cannot sign this course now!</div>
+              <div className="subject-info__error">
+                You cannot sign this course now!
+              </div>
+            )}
+            {deleteError && (
+              <div className="subject-info__error">
+                Error while deleting course.
+              </div>
             )}
             {subject && (
               <TeacherPreviewList

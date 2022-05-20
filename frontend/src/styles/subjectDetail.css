@@ -14,7 +14,7 @@
   text-transform: capitalize;
 }
 
-.sign-error {
+.subject-info__error {
   padding-top: 0.5rem;
   color: var(--error-color);
 }
