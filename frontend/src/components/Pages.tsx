@@ -20,6 +20,8 @@ import { UserPage } from './User/UserPage';
 import MainPage from './MainPage/MainPage';
 import SubjectPage from './Subject/SubjectPage';
 import SubjectDetailPage from './Subject/SubjectDetailPage';
+import { UserRole } from '../types/UserRole';
+import SubjectFormPage from './Subject/SubjectFormPage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -48,6 +50,12 @@ export const Pages = () => {
       <Route
         path="/subject/:id"
         element={loggedInUser && <SubjectDetailPage />}
+      />
+      <Route
+        path="/subject/create"
+        element={
+          loggedInUser?.roles.includes(UserRole.teacher) && <SubjectFormPage />
+        }
       />
     </Routes>
   );
