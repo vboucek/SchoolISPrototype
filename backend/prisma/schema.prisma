@@ -45,6 +45,7 @@ model Course {
   description String
   code        String
   endType     EndType
+  room        String
 
   deletedAt DateTime? 
 
@@ -105,6 +106,7 @@ model SeminarGroup {
   seminarGroupDay                   Day
   seminarGroupDurationStartTimeMins Int
   seminarGroupDurationMins          Int
+  room                              String
 
   deletedAt DateTime? 
 

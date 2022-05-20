@@ -86,6 +86,7 @@ export class CourseService {
         endType: true,
         credits: true,
         description: true,
+        room: true,
         capacity: true,
         lectureDay: true,
         lectureDurationMin: true,
@@ -96,6 +97,7 @@ export class CourseService {
             seminarGroupDay: true,
             seminarGroupDurationStartTimeMins: true,
             seminarGroupDurationMins: true,
+            room: true,
           },
         },
         teachers: {

@@ -218,6 +218,7 @@ async function main() {
       capacity: 150,
       credits: 69,
       endType: EndType.zk,
+      room: 'D1',
 
       startSign: new Date(2022, 2, 18, 17, 0),
       endSign: new Date(2022, 3, 18, 17, 0),
@@ -241,6 +242,7 @@ async function main() {
       capacity: 175,
       credits: 42,
       endType: EndType.k,
+      room: 'D3',
 
       startSign: new Date(2022, 2, 19, 9, 0),
       endSign: new Date(2022, 3, 19, 9, 0),
@@ -264,6 +266,7 @@ async function main() {
       capacity: 420,
       credits: 5,
       endType: EndType.zk,
+      room: 'D1',
 
       startSign: new Date(2022, 3, 19, 9, 0),
       endSign: new Date(2022, 4, 25, 9, 0),
@@ -288,6 +291,7 @@ async function main() {
       capacity: 150,
       credits: 69,
       endType: EndType.z,
+      room: 'D1',
 
       startSign: new Date(2022, 2, 18, 17, 0),
       endSign: new Date(2022, 3, 18, 17, 0),
@@ -308,6 +312,7 @@ async function main() {
       seminarGroupDay: Day.monday,
       seminarGroupDurationStartTimeMins: 300,
       seminarGroupDurationMins: 120,
+      room: 'A217',
 
       courseId: coursePB138.id,
     },
@@ -318,6 +323,7 @@ async function main() {
       seminarGroupDay: Day.tuesday,
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 120,
+      room: 'A320',
 
       courseId: coursePB138.id,
     },
@@ -328,6 +334,7 @@ async function main() {
       seminarGroupDay: Day.tuesday,
       seminarGroupDurationStartTimeMins: 1080,
       seminarGroupDurationMins: 180,
+      room: 'A310',
 
       courseId: coursePV178.id,
     },
@@ -338,6 +345,7 @@ async function main() {
       seminarGroupDay: Day.monday,
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 180,
+      room: 'A210',
 
       courseId: coursePV178.id,
     },
@@ -348,6 +356,7 @@ async function main() {
       seminarGroupDay: Day.wednesday,
       seminarGroupDurationStartTimeMins: 480,
       seminarGroupDurationMins: 180,
+      room: 'A210',
 
       courseId: coursePV178.id,
     },
@@ -359,6 +368,7 @@ async function main() {
       seminarGroupDay: Day.wednesday,
       seminarGroupDurationStartTimeMins: 840,
       seminarGroupDurationMins: 180,
+      room: 'A290',
 
       courseId: courseOldPB138.id,
     },
@@ -369,6 +379,7 @@ async function main() {
       seminarGroupDay: Day.friday,
       seminarGroupDurationStartTimeMins: 600,
       seminarGroupDurationMins: 180,
+      room: 'A410',
 
       courseId: courseOldPB138.id,
     },

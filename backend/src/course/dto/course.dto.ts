@@ -20,6 +20,10 @@ export class CourseDto {
 
   @IsNotEmpty()
   @IsString()
+  room: string;
+
+  @IsNotEmpty()
+  @IsString()
   code: string;
 
   @IsNotEmpty()
