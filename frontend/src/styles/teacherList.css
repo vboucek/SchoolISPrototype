@@ -1,0 +1,32 @@
+.teacher {
+  width: var(--content-width);
+  padding-top: 2rem;
+}
+
+.teacher__header {
+  color: var(--dark-font-color);
+}
+
+.teacher__item {
+  margin-top: 0.25rem;
+  background-color: var(--dark-backround-color);
+  padding: 0 1rem 0 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.teacher__item:hover {
+  color: var(--default-font-color-hover);
+}
+
+.teacher__item:active {
+  color: var(--default-font-color-clicked);
+}
+
+@media only screen and (max-width: 1200px) {
+  .teacher__item {
+    height: 3rem;
+  }
+}
