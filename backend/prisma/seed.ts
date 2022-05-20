@@ -221,7 +221,7 @@ async function main() {
       room: 'D1',
 
       startSign: new Date(2022, 2, 18, 17, 0),
-      endSign: new Date(2022, 3, 18, 17, 0),
+      endSign: new Date(2022, 7, 18, 17, 0),
 
       lectureDay: Day.monday,
       lectureStartTimeMin: 960,
