@@ -6,7 +6,10 @@
   --default-backround-color: white;
   --error-color: red;
   --dark-backround-color: black;
-  --gray-backround-color: lightgray;
+  --light-gray-backround-color: #EDEDED;
+  --gray-backround-color: #D7D7D7;
+  --dark-gray-backround-color: #B4B4B4;
+  --success-green-color: #95CD41;
   --default-font-color: white;
   --dark-font-color: black;
   --default-font-color-hover: #FFCF00;
@@ -49,6 +52,11 @@ select {
 a {
   text-decoration: none;
   color: var(--default-font-color);
+}
+
+hr {
+  background-color: var(--dark-font-color);
+  height: 0.1rem;
 }
 
 .navigation-link {
@@ -214,6 +222,7 @@ ul {
     --content-width: 100%;
     --small-font-size: 1.25rem;
     --default-font-size: 1.5rem;
+    --medium-font-size: 2rem;
   }
 
   body {
