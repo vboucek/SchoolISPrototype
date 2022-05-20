@@ -19,6 +19,7 @@ import { UserInspect } from './User/UserInspect';
 import { UserPage } from './User/UserPage';
 import MainPage from './MainPage/MainPage';
 import SubjectPage from './Subject/SubjectPage';
+import SubjectDetailPage from './Subject/SubjectDetailPage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -44,6 +45,10 @@ export const Pages = () => {
         <Route path="/user/:id/delete" element={<UserDelete />} />
       </Route>
       <Route path="/subject" element={loggedInUser && <SubjectPage />} />
+      <Route
+        path="/subject/:id"
+        element={loggedInUser && <SubjectDetailPage />}
+      />
     </Routes>
   );
 };
