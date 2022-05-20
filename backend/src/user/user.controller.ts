@@ -75,15 +75,9 @@ export class UserController {
     return await this.userservice.deleteUser(id);
   }
 
-  @Post(PARAMS_ONLY_ID + '/subjects')
+  @Get(PARAMS_ONLY_ID + '/subjects')
   @Roles(UserRole.user)
-  public async getSubjects(
-    @ParseParamsId() id: number,
-    @Body() userSubjectsDto: UserSubjectsDto,
-  ) {
-    return await this.userservice.getUserSubjects(
-      id,
-      userSubjectsDto.semesterId,
-    );
+  public async getSubjects(@ParseParamsId() id: number) {
+    return await this.userservice.getUserSubjects(id);
   }
 }

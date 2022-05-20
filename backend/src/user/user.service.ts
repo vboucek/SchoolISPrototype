@@ -7,7 +7,6 @@ import { User, UserRole } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
 import { plainToInstance } from 'class-transformer';
-import console from 'console';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
 import { UserCreateDto } from './dto/user-create.dto';
@@ -210,14 +209,13 @@ export class UserService {
     }
   }
 
-  public async getUserSubjects(userId: number, semesterId: number) {
+  public async getUserSubjects(userId: number) {
     return await this.prismaService.course.findMany({
       where: {
         deletedAt: null,
-        semesterId: semesterId,
         students: {
           some: {
-            id: userId,
+            studentId: userId,
           },
         },
       },
@@ -227,6 +225,7 @@ export class UserService {
         code: true,
         credits: true,
         endType: true,
+        semesterId: true,
       },
     });
   }

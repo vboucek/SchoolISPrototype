@@ -86,12 +86,16 @@ export class CourseService {
         endType: true,
         credits: true,
         description: true,
+        creator: true,
         room: true,
         capacity: true,
         lectureDay: true,
         lectureDurationMin: true,
         lectureStartTimeMin: true,
         seminarGroups: {
+          where: {
+            deletedAt: null,
+          },
           select: {
             id: true,
             seminarGroupDay: true,
@@ -101,7 +105,12 @@ export class CourseService {
           },
         },
         teachers: {
+          where: {
+            deletedAt: null,
+          },
           select: {
+            isLecturer: true,
+            isHelper: true,
             teacher: {
               select: {
                 id: true,
@@ -112,18 +121,9 @@ export class CourseService {
           },
         },
         facultyId: true,
-        faculty: {
-          select: {
-            name: true,
-          },
-        },
+        faculty: true,
         semesterId: true,
-        semester: {
-          select: {
-            semesterType: true,
-            year: true,
-          },
-        },
+        semester: true,
       },
     });
 
@@ -180,10 +180,10 @@ export class CourseService {
     }
   }
 
-  public async signUp(user: User, courseSignup: CourseSignupDto) {
+  public async signUp(id: number, user: User, courseSignup: CourseSignupDto) {
     const course = await this.prismaService.course.findFirst({
       where: {
-        id: courseSignup.courseId,
+        id: id,
         deletedAt: null,
       },
       select: {
@@ -191,11 +191,19 @@ export class CourseService {
         id: true,
         startSign: true,
         endSign: true,
+        creatorId: true,
       },
     });
     if (!course) {
       throw new NotFoundException('Course does not exist');
     }
+
+    const signed = await this.prismaService.userCourseSigned.findFirst({
+      where: {
+        courseId: id,
+        studentId: courseSignup.userId,
+      },
+    });
 
     const studentCount = await this.prismaService.user.count({
       where: {
@@ -211,25 +219,21 @@ export class CourseService {
 
     if (
       !(
+        signed == null &&
         course.startSign <= currentDate &&
         currentDate <= course.endSign &&
-        studentCount < course.capacity
+        studentCount < course.capacity &&
+        course.creatorId != user.id
       )
     ) {
       throw new ForbiddenException('Can not signup this course');
     }
 
     try {
-      await this.prismaService.course.update({
-        where: {
-          id: courseSignup.courseId,
-        },
+      await this.prismaService.userCourseSigned.create({
         data: {
-          students: {
-            connect: {
-              id: courseSignup.userId,
-            },
-          },
+          courseId: id,
+          studentId: courseSignup.userId,
         },
       });
     } catch (error) {

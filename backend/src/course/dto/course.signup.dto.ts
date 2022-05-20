@@ -6,9 +6,4 @@ export class CourseSignupDto {
   @Type(() => Number)
   @IsInt()
   userId: number;
-
-  @IsNotEmpty()
-  @Type(() => Number)
-  @IsInt()
-  courseId: number;
 }

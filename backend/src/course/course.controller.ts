@@ -16,6 +16,7 @@ import { CourseService } from './course.service';
 import { CourseFilterDto } from './dto/course.filter.dto';
 import { GetUser } from '../auth/decorator';
 import { CourseDto } from './dto/course.dto';
+import { CourseSignupDto } from './dto/course.signup.dto';
 
 @Controller('subjects')
 @Roles(UserRole.user)
@@ -53,5 +54,15 @@ export class CourseController {
   @Roles(UserRole.admin, UserRole.teacher)
   async remove(@ParseParamsId() id: number, @GetUser() user: User) {
     return this.courseService.remove(user, id);
+  }
+
+  @Post(PARAMS_ONLY_ID + '/signup')
+  @Roles(UserRole.user)
+  async signUp(
+    @ParseParamsId() id: number,
+    @Body() signUp: CourseSignupDto,
+    @GetUser() user: User,
+  ) {
+    return this.courseService.signUp(id, user, signUp);
   }
 }
