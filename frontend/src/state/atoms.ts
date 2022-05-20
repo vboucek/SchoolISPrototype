@@ -3,10 +3,16 @@ import { atom } from 'recoil';
 import { ISemesterDto } from '../types/Semester.dto';
 import { IFacultyDto } from '../types/Faculty.dto';
 import { FacultyDbEffect, SemesterDbEffect } from './effects';
+import { SubjectPreviewProps } from '../components/SubjectPreview/SubjectPreview';
 
 export const loggedInUserAtom = atom<IUserDto | null>({
   key: 'loggedInUser',
   default: null,
+});
+
+export const userSubjectsAtom = atom<SubjectPreviewProps[]>({
+  key: 'subjects',
+  default: [],
 });
 
 export const semestersAtom = atom<ISemesterDto[]>({

@@ -1,5 +1,9 @@
 import { selector } from 'recoil';
-import { semestersAtom, currentSemesterIdAtom } from './atoms';
+import {
+  semestersAtom,
+  currentSemesterIdAtom,
+  userSubjectsAtom,
+} from './atoms';
 
 export const currentSemesterSelector = selector({
   key: 'currentSemester',
@@ -18,5 +22,15 @@ export const currentSemesterSelector = selector({
     }
 
     return currentSemester;
+  },
+});
+
+export const subjectsInSemesterSelector = selector({
+  key: 'subjectsInSemester',
+  get: ({ get }) => {
+    const currentSemester = get(currentSemesterSelector);
+    const subjects = get(userSubjectsAtom);
+
+    return subjects.filter((s) => s.semesterId == currentSemester?.id);
   },
 });

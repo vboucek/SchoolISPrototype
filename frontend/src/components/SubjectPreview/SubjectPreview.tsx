@@ -7,6 +7,7 @@ export interface SubjectPreviewProps {
   title: string;
   credits: number;
   endType: string;
+  semesterId: number;
 }
 
 const SubjectPreview = ({

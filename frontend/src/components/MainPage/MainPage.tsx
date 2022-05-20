@@ -2,30 +2,23 @@ import React, { useEffect, useState } from 'react';
 import SubjectPreviewList from '../SubjectPreview/SubjectPreviewList';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { SubjectPreviewProps } from '../SubjectPreview/SubjectPreview';
-import { useRecoilValue } from 'recoil';
-import { facultiesAtom, loggedInUserAtom } from '../../state/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { loggedInUserAtom, userSubjectsAtom } from '../../state/atoms';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
-import { currentSemesterSelector } from '../../state/selectors';
+import { subjectsInSemesterSelector } from '../../state/selectors';
 
 const MainPage = () => {
   const [error, setError] = useState<AxiosError>();
   const [loading, setLoading] = useState(true);
   const user = useRecoilValue(loggedInUserAtom);
-  const currentSemester = useRecoilValue(currentSemesterSelector);
-
-  const [subjects, setSubjects] = useState<SubjectPreviewProps[]>([]);
+  const setSubjects = useSetRecoilState(userSubjectsAtom);
+  const currentSubjects = useRecoilValue(subjectsInSemesterSelector);
 
   useEffect(() => {
-    if (currentSemester == null) {
-      return;
-    }
     setLoading(true);
-
     axios
-      .post(`users/${user?.id}/subjects`, {
-        semesterId: currentSemester.id,
-      })
+      .get(`users/${user?.id}/subjects`)
       .then((response: AxiosResponse<SubjectPreviewProps[]>) => {
         const subjects: SubjectPreviewProps[] = response.data;
         setSubjects(subjects);
@@ -34,7 +27,7 @@ const MainPage = () => {
       .catch((error_) => {
         setError(error_);
       });
-  }, [user, currentSemester]);
+  }, [user]);
 
   return (
     <main className="main-content">
@@ -44,7 +37,7 @@ const MainPage = () => {
         {!loading && !error && (
           <SubjectPreviewList
             title={'My subjects overview:'}
-            subjects={subjects}
+            subjects={currentSubjects}
           />
         )}
       </div>

@@ -21,7 +21,11 @@ const App = () => {
   }, [loggedInUser]);
 
   if (!logged) {
-    return <LoginPage />;
+    return (
+      <BrowserRouter>
+        <LoginPage />;
+      </BrowserRouter>
+    );
   }
 
   return (
