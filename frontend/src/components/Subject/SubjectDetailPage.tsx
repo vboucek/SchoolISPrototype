@@ -13,6 +13,8 @@ import { IFacultyDto } from '../../types/Faculty.dto';
 import { ISemesterDto } from '../../types/Semester.dto';
 import { convertTime } from '../../utils/TimeUtils';
 import { IUserDto } from '../../types/User.dto';
+import add from '../../../public/assets/add.svg';
+import hoverAdd from '../../../public/assets/add-hover.svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInUserAtom, userSubjectsAtom } from '../../state/atoms';
 import { UserRole } from '../../types/UserRole';
@@ -52,14 +54,21 @@ const SubjectDetailPage = () => {
   const navigate = useNavigate();
   const [signedUp, setSignedUp] = useState<boolean>(false);
   const [isCreator, setIsCreator] = useState<boolean>(false);
+  const [studentCount, setStudentCount] = useState(0);
+  const [seminarAddLogo, setSeminarAddLogo] = useState(add);
+  const [teacherAddLogo, setTeacherAddLogo] = useState(add);
 
   useEffect(() => {
     setSignedUp(subjects.find((s) => s.id === Number(id)) != null);
   }, [subjects]);
 
-  useEffect(() => {
-    setIsCreator(user?.id === subject?.creator.id);
-  }, [user]);
+  function seminarAddHover() {
+    setSeminarAddLogo(seminarAddLogo === add ? hoverAdd : add);
+  }
+
+  function teacherAddHover() {
+    setTeacherAddLogo(teacherAddLogo === add ? hoverAdd : add);
+  }
 
   useEffect(() => {
     axios
@@ -67,7 +76,17 @@ const SubjectDetailPage = () => {
       .then((response: AxiosResponse) => {
         const subject: SubjectDetailProps = response.data;
         setSubject(subject);
+        setIsCreator(user?.id === subject?.creator.id);
         setLoading(false);
+      })
+      .catch((error_) => {
+        setError(error_);
+      });
+
+    axios
+      .get(`subjects/${id}/count`)
+      .then((response: AxiosResponse) => {
+        setStudentCount(response.data);
       })
       .catch((error_) => {
         setError(error_);
@@ -118,7 +137,7 @@ const SubjectDetailPage = () => {
                 </div>
                 <div className="subject-info__main-header">
                   <div className="subject-info__row">
-                    <span className="subject-info__code">PB138</span>
+                    <span className="subject-info__code">{subject?.code}</span>
                     <h1 className="subject-info__title">{subject?.title}</h1>
                   </div>
                   <div className="subject-info__row">
@@ -156,6 +175,12 @@ const SubjectDetailPage = () => {
                 <div className="subject-info__detail-row">
                   <div className="subject-info__label">Room:</div>
                   <div className="subject-info__room">{subject?.room}</div>
+                </div>
+                <div className="subject-info__detail-row">
+                  <div className="subject-info__label">Capacity:</div>
+                  <div className="subject-info__room">
+                    {studentCount}/{subject?.capacity}
+                  </div>
                 </div>
                 <div className="subject-info__detail-row">
                   <div className="subject-info__label">Sign:</div>
@@ -197,9 +222,14 @@ const SubjectDetailPage = () => {
                   Delete
                 </button>
               )}
-              <Link to="/subject/create">
-                <button className="subject-controls__button">Edit</button>
-              </Link>
+              {(isCreator || user?.roles.includes(UserRole.admin)) && (
+                <Link
+                  className="subject-controls__button"
+                  to={`/subject/${id}/edit`}
+                >
+                  <button className="subject-controls__button">Edit</button>
+                </Link>
+              )}
             </div>
             {signError && (
               <div className="subject-info__error">
@@ -215,13 +245,40 @@ const SubjectDetailPage = () => {
               <TeacherPreviewList
                 title="Teachers:"
                 teachers={subject.teachers}
+                canEdit={isCreator || user?.roles.includes(UserRole.admin)}
               />
+            )}
+            {subject && (isCreator || user?.roles.includes(UserRole.admin)) && (
+              <Link
+                onMouseEnter={teacherAddHover}
+                onMouseLeave={teacherAddHover}
+                className="add"
+                to={`/subject/${id}/teachers/add`}
+              >
+                <img className="add__logo" src={teacherAddLogo} alt="add" />
+                <button type="button" className="add__button">
+                  Add teacher
+                </button>
+              </Link>
             )}
             {subject && (
               <SemGroupPreviewList
                 title={'Seminar groups:'}
                 seminarGroups={subject.seminarGroups}
               />
+            )}
+            {subject && (isCreator || user?.roles.includes(UserRole.admin)) && (
+              <Link
+                onMouseEnter={seminarAddHover}
+                onMouseLeave={seminarAddHover}
+                className="add"
+                to="/seminar/create"
+              >
+                <img className="add__logo" src={seminarAddLogo} alt="add" />
+                <button type="button" className="add__button">
+                  Add seminar
+                </button>
+              </Link>
             )}
           </>
         )}
