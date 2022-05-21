@@ -132,9 +132,7 @@ model Evaluation {
 
   userId     Int
   courseId   Int
-  userCourse UserCourseSigned @relation(fields: [userId, courseId], references: [studentId, courseId], onDelete: SetNull)
-
-  @@unique([userId, courseId])
+  userCourse UserCourseSigned @relation(fields: [id], references: [id], onDelete: SetNull)
 }
 
 model Mark {
@@ -169,8 +167,6 @@ model UserCourseSigned {
 
   evaluationId Int?
   evaluation   Evaluation? @relation()
-
-  @@unique([studentId, courseId])
 }
 
 model UserCourseTeaches {
@@ -186,8 +182,6 @@ model UserCourseTeaches {
 
   isHelper   Boolean
   isLecturer Boolean
-
-  @@unique([teacherId, courseId])
 }
 
 // Seminar groups
@@ -204,8 +198,6 @@ model UserSeminarGroupSigned {
   seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
 
   courseId Int
-
-  @@unique([studentId, courseId])
 }
 
 model UserSeminarGroupTeaches {
@@ -218,8 +210,6 @@ model UserSeminarGroupTeaches {
 
   seminarGroupId Int
   seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
-
-  @@unique([tutorId, seminarGroupId])
 }
 
 enum SemesterType {
