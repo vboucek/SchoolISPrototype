@@ -5,7 +5,11 @@ const convertTime = (minutes: number | undefined): string => {
   return `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`;
 };
 
-const getMinFromString = (time: string): number => {
+const getMinFromForm = (time: string | number): number => {
+  if (typeof time === 'number') {
+    return time;
+  }
+
   const split = time.split(':');
 
   if (split.length < 2) {
@@ -15,4 +19,13 @@ const getMinFromString = (time: string): number => {
   return Number(split[0]) * 60 + Number(split[1]);
 };
 
-export { convertTime, getMinFromString };
+const convertToLocalDatetime = (date: Date | undefined): string => {
+  if (date == undefined) {
+    return '';
+  }
+
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  return date.toISOString().slice(0, -8);
+};
+
+export { convertTime, getMinFromForm, convertToLocalDatetime };
