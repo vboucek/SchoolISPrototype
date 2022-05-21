@@ -9,6 +9,9 @@ import { CourseFilterDto } from './dto/course.filter.dto';
 import { CourseSignupDto } from './dto/course.signup.dto';
 import { User, UserRole } from '@prisma/client';
 import { CourseDto } from './dto/course.dto';
+import { CourseNewTeacherDto } from './dto/course.new.teacher.dto';
+import { CourseRemoveTeacherDto } from './dto/course.remove.teacher.dto';
+import { TeacherFilterDto } from './dto/teacher.filter.dto';
 
 @Injectable()
 export class CourseService {
@@ -68,6 +71,7 @@ export class CourseService {
           },
         },
       },
+      orderBy: [{ id: 'asc' }],
     });
   }
 
@@ -85,6 +89,7 @@ export class CourseService {
         endSign: true,
         endType: true,
         credits: true,
+        creatorId: true,
         description: true,
         creator: true,
         room: true,
@@ -132,6 +137,15 @@ export class CourseService {
     }
 
     return course;
+  }
+
+  public async countCapacity(id: number) {
+    return await this.prismaService.userCourseSigned.count({
+      where: {
+        deletedAt: null,
+        courseId: id,
+      },
+    });
   }
 
   public async update(
@@ -254,7 +268,7 @@ export class CourseService {
         deletedAt: null,
       },
       select: {
-        teachers: true,
+        creatorId: true,
       },
     });
 
@@ -262,11 +276,89 @@ export class CourseService {
       throw new NotFoundException('Course does not exist');
     }
 
-    if (
-      !user.roles.includes(UserRole.admin) &&
-      !course.teachers.some((x) => x.teacherId == user.id)
-    ) {
-      throw new ForbiddenException('Curren user can not update this course');
+    if (!user.roles.includes(UserRole.admin) && course.creatorId != user.id) {
+      throw new ForbiddenException('Current user cannot update this course');
     }
+  }
+
+  public async removeTeacherFromCourse(
+    user: User,
+    id: number,
+    teacher: CourseRemoveTeacherDto,
+  ) {
+    await this.checkUser(user, id);
+
+    const teaches = await this.prismaService.userCourseTeaches.findFirst({
+      where: {
+        deletedAt: null,
+        teacherId: teacher.teacherId,
+        courseId: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    try {
+      await this.prismaService.userCourseTeaches.update({
+        where: {
+          id: teaches.id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException("Can't remove teacher");
+      }
+    }
+  }
+
+  public async addTeacherInCourse(
+    user: User,
+    id: number,
+    newTeacher: CourseNewTeacherDto,
+  ) {
+    await this.checkUser(user, id);
+
+    try {
+      await this.prismaService.userCourseTeaches.create({
+        data: {
+          courseId: id,
+          ...newTeacher,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException("Can't add this user as teacher");
+      }
+    }
+  }
+
+  public async getAvailableTeachers(id: number, filter: TeacherFilterDto) {
+    return await this.prismaService.user.findMany({
+      where: {
+        deletedAt: null,
+        coursesTeaches: {
+          none: {
+            deletedAt: null,
+            courseId: id,
+          },
+        },
+        firstName: {
+          contains: filter.firstName ?? undefined,
+        },
+        lastName: {
+          contains: filter.lastName ?? undefined,
+        },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+      },
+      orderBy: [{ id: 'asc' }],
+    });
   }
 }

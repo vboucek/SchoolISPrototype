@@ -17,6 +17,9 @@ import { CourseFilterDto } from './dto/course.filter.dto';
 import { GetUser } from '../auth/decorator';
 import { CourseDto } from './dto/course.dto';
 import { CourseSignupDto } from './dto/course.signup.dto';
+import { CourseRemoveTeacherDto } from './dto/course.remove.teacher.dto';
+import { CourseNewTeacherDto } from './dto/course.new.teacher.dto';
+import { TeacherFilterDto } from './dto/teacher.filter.dto';
 
 @Controller('subjects')
 @Roles(UserRole.user)
@@ -40,6 +43,11 @@ export class CourseController {
     return this.courseService.findOne(id);
   }
 
+  @Get(PARAMS_ONLY_ID + '/count')
+  async countCapacity(@ParseParamsId() id: number) {
+    return this.courseService.countCapacity(id);
+  }
+
   @Patch(PARAMS_ONLY_ID)
   @Roles(UserRole.admin, UserRole.teacher)
   async update(
@@ -54,6 +62,35 @@ export class CourseController {
   @Roles(UserRole.admin, UserRole.teacher)
   async remove(@ParseParamsId() id: number, @GetUser() user: User) {
     return this.courseService.remove(user, id);
+  }
+
+  @Delete(PARAMS_ONLY_ID + '/teacher')
+  @Roles(UserRole.admin, UserRole.teacher)
+  async removeTeacher(
+    @ParseParamsId() id: number,
+    @GetUser() user: User,
+    @Body() teacherDto: CourseRemoveTeacherDto,
+  ) {
+    return this.courseService.removeTeacherFromCourse(user, id, teacherDto);
+  }
+
+  @Post(PARAMS_ONLY_ID + '/teacher')
+  @Roles(UserRole.admin, UserRole.teacher)
+  async addTeacher(
+    @ParseParamsId() id: number,
+    @Body() newTeacherDto: CourseNewTeacherDto,
+    @GetUser() user: User,
+  ) {
+    return this.courseService.addTeacherInCourse(user, id, newTeacherDto);
+  }
+
+  @Post(PARAMS_ONLY_ID + '/teachers')
+  @Roles(UserRole.admin, UserRole.teacher)
+  async getAvailableTeachers(
+    @ParseParamsId() id: number,
+    @Body() teacherFilterDto: TeacherFilterDto,
+  ) {
+    return this.courseService.getAvailableTeachers(id, teacherFilterDto);
   }
 
   @Post(PARAMS_ONLY_ID + '/signup')
