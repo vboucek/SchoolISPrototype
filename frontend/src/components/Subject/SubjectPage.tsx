@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { SubjectPreviewProps } from '../SubjectPreview/SubjectPreview';
 import { useRecoilValue } from 'recoil';
 import { facultiesAtom, semestersAtom } from '../../state/atoms';
-import '../../styles/subjectsFilter.css';
+import '../../styles/filter.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
@@ -47,14 +47,11 @@ const SubjectPage = () => {
   return (
     <main className="main-content">
       <div className="main-content-container">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="subject-filter-container"
-        >
-          <div className="subject-filter">
-            <div className="subject-filter__input-container">
+        <form onSubmit={handleSubmit(onSubmit)} className="filter-container">
+          <div className="filter">
+            <div className="filter__input-container">
               <select
-                className="subject-filter__select"
+                className="filter__select"
                 placeholder="Faculty"
                 id="facultyId"
                 {...register('facultyId', {
@@ -70,9 +67,9 @@ const SubjectPage = () => {
                 ))}
               </select>
             </div>
-            <div className="subject-filter__input-container">
+            <div className="filter__input-container">
               <select
-                className="subject-filter__select"
+                className="filter__select"
                 placeholder="Semester"
                 id="facultyId"
                 {...register('semesterId', {
@@ -88,9 +85,9 @@ const SubjectPage = () => {
                 ))}
               </select>
             </div>
-            <div className="subject-filter__input-container">
+            <div className="filter__input-container">
               <input
-                className="subject-filter__field"
+                className="filter__field"
                 placeholder="Subject Code"
                 type="text"
                 {...register('code', {
@@ -98,9 +95,9 @@ const SubjectPage = () => {
                 })}
               />
             </div>
-            <div className="subject-filter__input-container">
+            <div className="filter__input-container">
               <input
-                className="subject-filter__field"
+                className="filter__field"
                 placeholder="Subject Name"
                 type="text"
                 {...register('title', {
@@ -108,9 +105,9 @@ const SubjectPage = () => {
                 })}
               />
             </div>
-            <div className="subject-filter__input-container">
+            <div className="filter__input-container">
               <input
-                className="subject-filter__field"
+                className="filter__field"
                 placeholder="Min Credits"
                 type="number"
                 {...register('creditsMin', {
@@ -119,9 +116,9 @@ const SubjectPage = () => {
                 })}
               />
             </div>
-            <div className="subject-filter__input-container">
+            <div className="filter__input-container">
               <input
-                className="subject-filter__field"
+                className="filter__field"
                 placeholder="Max Credits"
                 type="number"
                 {...register('creditsMax', {
@@ -131,7 +128,7 @@ const SubjectPage = () => {
               />
             </div>
           </div>
-          <button className="subject-filter__submit" type="submit">
+          <button className="filter__submit" type="submit">
             Filter
           </button>
         </form>
