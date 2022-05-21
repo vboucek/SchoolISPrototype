@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRecoilValue } from 'recoil';
 import {
@@ -10,8 +10,13 @@ import '../../styles/form.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { EndType } from '../../types/EndType';
 import { Day } from '../../types/Day';
-import { getMinFromString } from '../../utils/TimeUtils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { SubjectDto } from '../../types/Subject.dto';
+import {
+  convertDtoToInput,
+  convertInputToDto,
+} from '../../utils/SubjectFormHelpMappers';
+import NoConnection from '../NoConnection/NoConnection';
 
 export interface SubjectFormInput {
   title: string;
@@ -21,40 +26,65 @@ export interface SubjectFormInput {
   room: string;
   capacity: number;
   credits: number;
-  startSign: Date;
-  endSign: Date;
+  startSign: string;
+  endSign: string;
   lectureDay: Day;
-  lectureStartTimeMin: number;
-  lectureEndTimeMin: number;
-  lectureDurationMin: number;
+  lectureStartTimeMin: string;
+  lectureEndTimeMin: string;
   semesterId: number;
   creatorId: number;
   facultyId: number;
 }
 
-const SubjectFormPage = () => {
+export interface SubjectFormProps {
+  edit: boolean;
+}
+
+const SubjectFormPage = ({ edit }: SubjectFormProps) => {
   const faculties = useRecoilValue(facultiesAtom);
   const semesters = useRecoilValue(semestersAtom);
   const user = useRecoilValue(loggedInUserAtom);
   const navigate = useNavigate();
   const [requestError, setRequestError] = useState<AxiosError>();
+  const [defaultValues, setDefaultValues] = useState<SubjectFormInput>();
+  const [creatorId, setCreatorId] = useState<number>();
+
+  const { id } = useParams();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<SubjectFormInput>();
+  } = useForm<SubjectFormInput>({
+    defaultValues: defaultValues,
+  });
 
-  const onSubmit: SubmitHandler<SubjectFormInput> = (
+  useEffect(() => {
+    if (edit) {
+      axios
+        .get(`subjects/${id}`)
+        .then((response: AxiosResponse) => {
+          const subject: SubjectDto = response.data;
+          const inputValues = convertDtoToInput(subject);
+          setCreatorId(subject.creatorId);
+          setDefaultValues(inputValues);
+          reset(inputValues);
+        })
+        .catch((error_) => {
+          setRequestError(error_);
+        });
+    }
+  }, []);
+
+  const onCreate: SubmitHandler<SubjectFormInput> = (
     data: SubjectFormInput,
   ) => {
     if (user != null) {
-      data.lectureDurationMin =
-        data.lectureEndTimeMin - data.lectureStartTimeMin;
-      data.creatorId = user.id;
+      const subject = convertInputToDto(user.id, data);
       axios
         .post(`subjects`, {
-          ...data,
+          ...subject,
         })
         .then((response: AxiosResponse<number>) => {
           if (response.status === 201) {
@@ -67,11 +97,32 @@ const SubjectFormPage = () => {
     }
   };
 
+  const onEdit: SubmitHandler<SubjectFormInput> = (data: SubjectFormInput) => {
+    if (user != null && creatorId != null) {
+      const subject = convertInputToDto(creatorId, data);
+      axios
+        .patch(`subjects/${id}`, {
+          ...subject,
+        })
+        .then((response: AxiosResponse<number>) => {
+          if (response.status === 200) {
+            navigate(`/subject/${id}`);
+          }
+        })
+        .catch((error_) => {
+          setRequestError(error_);
+        });
+    }
+  };
+
   return (
     <main className="main-content">
       <div className="main-content-container">
-        <h1 className="form-header">New subject:</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="form">
+        <h1 className="form-header">{edit ? 'Edit' : 'New'} subject:</h1>
+        <form
+          onSubmit={handleSubmit(edit ? onEdit : onCreate)}
+          className="form"
+        >
           <div className="form__row-container">
             <div className="form__small-container">
               <label htmlFor="code">Code:</label>
@@ -250,8 +301,6 @@ const SubjectFormPage = () => {
                 }`}
                 {...register('startSign', {
                   required: true,
-                  valueAsDate: true,
-                  validate: (value) => !isNaN(value.getTime()),
                 })}
               />
             </div>
@@ -263,9 +312,7 @@ const SubjectFormPage = () => {
                   errors.endSign && ' form__input-error'
                 }`}
                 {...register('endSign', {
-                  validate: (value) => !isNaN(value.getTime()),
                   required: true,
-                  valueAsDate: true,
                 })}
               />
             </div>
@@ -309,8 +356,6 @@ const SubjectFormPage = () => {
                   type="time"
                   {...register('lectureStartTimeMin', {
                     required: true,
-                    validate: (value) => value != -1,
-                    setValueAs: (value) => getMinFromString(value),
                   })}
                 />
               </div>
@@ -323,8 +368,6 @@ const SubjectFormPage = () => {
                   type="time"
                   {...register('lectureEndTimeMin', {
                     required: true,
-                    validate: (value) => value != -1,
-                    setValueAs: (value) => getMinFromString(value),
                   })}
                 />
               </div>
@@ -340,12 +383,10 @@ const SubjectFormPage = () => {
             <div className="form__error">Lecture end is required</div>
           )}
           <button className="form__submit-button" type="submit">
-            Create subject
+            {edit ? 'Edit' : 'Subject'} subject
           </button>
         </form>
-        {requestError && (
-          <div className="form__error">Error while creating course</div>
-        )}
+        {requestError && <NoConnection />}
       </div>
     </main>
   );
