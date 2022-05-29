@@ -47,6 +47,9 @@ const SubjectDetailPage = () => {
   const [signError, setSignError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState<SubjectDetailProps>();
+  const [seminarGroups, setSeminarGroups] = useState<SemGroupPreviewProps[]>(
+    [],
+  );
   const { id } = useParams();
   const [subjects, setSubjects] = useRecoilState(userSubjectsAtom);
   const user = useRecoilValue(loggedInUserAtom);
@@ -85,6 +88,16 @@ const SubjectDetailPage = () => {
       .get(`subjects/${id}/count`)
       .then((response: AxiosResponse) => {
         setStudentCount(response.data);
+      })
+      .catch((error_) => {
+        setError(error_);
+      });
+
+    axios
+      .get(`subjects/${id}/seminar-group`)
+      .then((response: AxiosResponse) => {
+        const seminarGroups: SemGroupPreviewProps[] = response.data;
+        setSeminarGroups(seminarGroups);
       })
       .catch((error_) => {
         setError(error_);
@@ -243,7 +256,7 @@ const SubjectDetailPage = () => {
             {subject && (
               <SemGroupPreviewList
                 title={'Seminar groups:'}
-                seminarGroups={subject.seminarGroups}
+                seminarGroups={seminarGroups}
               />
             )}
             {subject && (isCreator || user?.roles.includes(UserRole.admin)) && (

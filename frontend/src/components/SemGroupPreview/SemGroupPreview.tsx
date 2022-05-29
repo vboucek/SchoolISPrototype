@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TeacherPreviewProps } from '../TeacherPreview/TeacherPreview';
+import { convertTime } from '../../utils/TimeUtils';
 
 export interface SemGroupPreviewProps {
   id: number;
   index: number;
   seminarGroupDay: string;
   seminarGroupDurationStartTimeMins: number;
-  seminarGroupDurationMins: number;
-  tutors: TeacherPreviewProps[];
+  room: string;
+  tutors: string[];
 }
 
 const SemGroupPreview = ({
@@ -16,7 +16,7 @@ const SemGroupPreview = ({
   index,
   seminarGroupDay,
   seminarGroupDurationStartTimeMins,
-  seminarGroupDurationMins,
+  room,
   tutors,
 }: SemGroupPreviewProps) => {
   return (
@@ -24,11 +24,14 @@ const SemGroupPreview = ({
       <li className="seminar__item">
         <div className="seminar__title">Group #{index + 1}</div>
         <ul className="seminar__tutors">
-          <li className="seminar__tutor">Plakinger</li>
-          <li className="seminar__tutor">Sedlácek</li>
+          {tutors.map((tutor) => (
+            <li className="seminar__tutor">{tutor}</li>
+          ))}
         </ul>
-        <div className="seminar__room">A218</div>
-        <div className="seminar__time">Tuesday 18:00</div>
+        <div className="seminar__room">{room}</div>
+        <div className="seminar__time">
+          {seminarGroupDay} {convertTime(seminarGroupDurationStartTimeMins)}
+        </div>
       </li>
     </Link>
   );
