@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { SeminarGroupService } from './seminar-group.service';
 import { ParseParamsId } from '../global-decorators';
 import { User, UserRole } from '@prisma/client';
@@ -9,6 +17,7 @@ import { Roles } from '../auth/decorator/roles.decorator';
 import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
+import { TutorFilterDto } from './dto/tutor.filter.dto';
 
 @Controller('/seminar-group')
 @Roles(UserRole.user)
@@ -53,5 +62,14 @@ export class SeminarGroupController {
       id,
       studentDto,
     );
+  }
+
+  @Get(PARAMS_ONLY_ID + '/tutor')
+  @Roles(UserRole.admin, UserRole.teacher)
+  async getAvailableTutors(
+    @ParseParamsId() id: number,
+    @Query() tutorFilterDto: TutorFilterDto,
+  ) {
+    return this.seminarGroupService.getAvailableTutors(id, tutorFilterDto);
   }
 }

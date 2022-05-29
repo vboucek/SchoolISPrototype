@@ -9,6 +9,7 @@ import { User, UserRole } from '@prisma/client';
 import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto';
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
+import { TutorFilterDto } from './dto/tutor.filter.dto';
 
 interface ValidateOptions {
   allowAdmin?: boolean;
@@ -198,6 +199,32 @@ export class SeminarGroupService {
         seminarGroupId: id,
         tutorId: tutor.tutorId,
       },
+    });
+  }
+
+  public async getAvailableTutors(id: number, filter: TutorFilterDto) {
+    return await this.prismaService.user.findMany({
+      where: {
+        deletedAt: null,
+        seminarGroupTeaches: {
+          none: {
+            deletedAt: null,
+            seminarGroupId: id,
+          },
+        },
+        firstName: {
+          contains: filter.firstName ?? undefined,
+        },
+        lastName: {
+          contains: filter.lastName ?? undefined,
+        },
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+      },
+      orderBy: [{ id: 'asc' }],
     });
   }
 }
