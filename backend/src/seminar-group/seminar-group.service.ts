@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -7,11 +8,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole } from '@prisma/client';
 import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto';
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
+import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 
 interface ValidateOptions {
   allowAdmin?: boolean;
   allowCourseCreator?: boolean;
-  allowHimself?: boolean;
+  allowAffectedUser?: boolean;
 }
 
 @Injectable()
@@ -21,7 +23,7 @@ export class SeminarGroupService {
   private async validateUser(
     user: User,
     groupId: number,
-    deletedId: number,
+    affectedId: number,
     options?: ValidateOptions,
   ) {
     const group = await this.prismaService.seminarGroup.findFirst({
@@ -43,7 +45,7 @@ export class SeminarGroupService {
     }
 
     if (options.allowAdmin && user.roles.includes(UserRole.admin)) return;
-    if (options.allowHimself && user.id === deletedId) return;
+    if (options.allowAffectedUser && user.id === affectedId) return;
     if (options.allowCourseCreator && user.id === group.course.creatorId)
       return;
 
@@ -147,7 +149,7 @@ export class SeminarGroupService {
     await this.validateUser(user, id, student.studentId, {
       allowAdmin: true,
       allowCourseCreator: true,
-      allowHimself: true,
+      allowAffectedUser: true,
     });
 
     const studies = await this.prismaService.userSeminarGroupSigned.findFirst({
@@ -168,6 +170,33 @@ export class SeminarGroupService {
       },
       data: {
         deletedAt: new Date(),
+      },
+    });
+  }
+
+  public async addTutorToSemGroup(
+    user: User,
+    id: number,
+    tutor: SeminarGroupNewTutorDto,
+  ) {
+    await this.validateUser(user, id, tutor.tutorId, {
+      allowAdmin: true,
+      allowCourseCreator: true,
+    });
+
+    const teaches = await this.prismaService.userSeminarGroupTeaches.findFirst({
+      where: {
+        deletedAt: null,
+        seminarGroupId: id,
+        tutorId: tutor.tutorId,
+      },
+    });
+
+    if (teaches) throw new BadRequestException();
+    await this.prismaService.userSeminarGroupTeaches.create({
+      data: {
+        seminarGroupId: id,
+        tutorId: tutor.tutorId,
       },
     });
   }
