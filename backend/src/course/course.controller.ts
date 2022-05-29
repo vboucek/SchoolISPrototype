@@ -21,6 +21,7 @@ import { CourseSignupDto } from './dto/course.signup.dto';
 import { CourseRemoveTeacherDto } from './dto/course.remove.teacher.dto';
 import { CourseNewTeacherDto } from './dto/course.new.teacher.dto';
 import { TeacherFilterDto } from './dto/teacher.filter.dto';
+import { SeminarGroupPreviewDto } from './dto/seminar-group.preview.dto';
 
 @Controller('subjects')
 @Roles(UserRole.user)
@@ -102,5 +103,12 @@ export class CourseController {
     @GetUser() user: User,
   ) {
     return this.courseService.signUp(id, user, signUp);
+  }
+
+  @Get(PARAMS_ONLY_ID + '/seminar-groups')
+  async getCourseSemGroups(
+    @ParseParamsId() id: number,
+  ): Promise<SeminarGroupPreviewDto[]> {
+    return this.courseService.getCourseSemGroups(id);
   }
 }

@@ -94,7 +94,7 @@ const SubjectDetailPage = () => {
       });
 
     axios
-      .get(`subjects/${id}/seminar-group`)
+      .get(`subjects/${id}/seminar-groups`)
       .then((response: AxiosResponse) => {
         const seminarGroups: SemGroupPreviewProps[] = response.data;
         setSeminarGroups(seminarGroups);

@@ -12,6 +12,7 @@ import { CourseDto } from './dto/course.dto';
 import { CourseNewTeacherDto } from './dto/course.new.teacher.dto';
 import { CourseRemoveTeacherDto } from './dto/course.remove.teacher.dto';
 import { TeacherFilterDto } from './dto/teacher.filter.dto';
+import { SeminarGroupPreviewDto } from './dto/seminar-group.preview.dto';
 
 @Injectable()
 export class CourseService {
@@ -373,6 +374,37 @@ export class CourseService {
         lastName: true,
       },
       orderBy: [{ id: 'asc' }],
+    });
+  }
+
+  public async getCourseSemGroups(
+    id: number,
+  ): Promise<SeminarGroupPreviewDto[]> {
+    const groups = await this.prismaService.seminarGroup.findMany({
+      where: {
+        deletedAt: null,
+        courseId: id,
+      },
+      select: {
+        id: true,
+        seminarGroupDay: true,
+        seminarGroupDurationStartTimeMins: true,
+        room: true,
+        tutors: {
+          select: {
+            tutor: {
+              select: {
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return groups.map((group) => {
+      const { tutors, ...rest } = group;
+      return { ...rest, tutors: tutors.map((tutor) => tutor.tutor.lastName) };
     });
   }
 }
