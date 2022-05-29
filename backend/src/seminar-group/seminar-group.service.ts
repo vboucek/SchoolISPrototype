@@ -3,8 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateSeminarGroupDto } from './dto/create-seminar-group.dto';
-import { UpdateSeminarGroupDto } from './dto/update-seminar-group.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole } from '@prisma/client';
 import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto';
@@ -50,10 +48,6 @@ export class SeminarGroupService {
       return;
 
     throw new ForbiddenException();
-  }
-
-  create(createSeminarGroupDto: CreateSeminarGroupDto) {
-    return 'This action adds a new seminarGroup';
   }
 
   findOne(id: number) {
@@ -111,14 +105,6 @@ export class SeminarGroupService {
 
     if (group == null) throw new NotFoundException();
     return group;
-  }
-
-  update(id: number, updateSeminarGroupDto: UpdateSeminarGroupDto) {
-    return `This action updates a #${id} seminarGroup`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} seminarGroup`;
   }
 
   public async removeTutorFromSemGroup(
