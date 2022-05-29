@@ -14,7 +14,7 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   firstName  String
   lastName   String
@@ -48,7 +48,7 @@ model Course {
   endType     EndType
   room        String
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   capacity Int
   credits  Int
@@ -79,7 +79,7 @@ model Faculty {
   id       Int    @id @default(autoincrement())
   name     String
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   courses Course[]
   people  User[]
@@ -90,7 +90,7 @@ model Semester {
   year         Int
   semesterType SemesterType
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   courses Course[]
   users   User[]
@@ -103,8 +103,9 @@ model SeminarGroup {
   seminarGroupDurationStartTimeMins Int
   seminarGroupDurationMins          Int
   room                              String
+  capacity                          Int
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
@@ -118,7 +119,7 @@ model Evaluation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   markId Int?
   mark   Mark? @relation(fields: [markId], references: [id], onDelete: SetNull)
@@ -136,7 +137,7 @@ model Mark {
   charRepresent    String
   numericRepresent Float
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   evaluations Evaluation[]
 
@@ -150,7 +151,7 @@ model Mark {
 model UserCourseSigned {
   id Int @id @default(autoincrement())
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   studentId Int
   student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
@@ -168,7 +169,7 @@ model UserCourseSigned {
 model UserCourseTeaches {
   id Int @id @default(autoincrement())
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   teacherId Int
   teacher   User @relation(fields: [teacherId], references: [id], onDelete: SetNull)
@@ -185,7 +186,7 @@ model UserCourseTeaches {
 model UserSeminarGroupSigned {
   id Int @id @default(autoincrement())
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   studentId Int
   student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
@@ -199,7 +200,7 @@ model UserSeminarGroupSigned {
 model UserSeminarGroupTeaches {
   id Int @id @default(autoincrement())
 
-  deletedAt DateTime? 
+  deletedAt DateTime?
 
   tutorId Int
   tutor   User @relation(fields: [tutorId], references: [id], onDelete: SetNull)

@@ -311,6 +311,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 300,
       seminarGroupDurationMins: 120,
       room: 'A217',
+      capacity: 20,
 
       courseId: coursePB138.id,
     },
@@ -322,6 +323,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 120,
       room: 'A320',
+      capacity: 15,
 
       courseId: coursePB138.id,
     },
@@ -333,6 +335,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 1080,
       seminarGroupDurationMins: 180,
       room: 'A310',
+      capacity: 15,
 
       courseId: coursePV178.id,
     },
@@ -344,6 +347,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 180,
       room: 'A210',
+      capacity: 20,
 
       courseId: coursePV178.id,
     },
@@ -355,6 +359,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 480,
       seminarGroupDurationMins: 180,
       room: 'A210',
+      capacity: 15,
 
       courseId: coursePV178.id,
     },
@@ -367,6 +372,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 840,
       seminarGroupDurationMins: 180,
       room: 'A290',
+      capacity: 15,
 
       courseId: courseOldPB138.id,
     },
@@ -378,6 +384,7 @@ async function main() {
       seminarGroupDurationStartTimeMins: 600,
       seminarGroupDurationMins: 180,
       room: 'A410',
+      capacity: 15,
 
       courseId: courseOldPB138.id,
     },
