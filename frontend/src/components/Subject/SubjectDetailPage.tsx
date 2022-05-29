@@ -185,12 +185,12 @@ const SubjectDetailPage = () => {
                   <div className="subject-info__sign">
                     {format(
                       new Date(subject ? subject.startSign : new Date()),
-                      'dd.MM.yyyy HH:mm',
+                      'dd. MM. yyyy HH:mm',
                     )}
                     -
                     {format(
                       new Date(subject ? subject.endSign : new Date()),
-                      'dd.MM.yyyy HH:mm',
+                      'dd. MM. yyyy HH:mm',
                     )}
                   </div>
                 </div>
