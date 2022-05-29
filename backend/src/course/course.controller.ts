@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '../auth/decorator/roles.decorator';
@@ -33,8 +34,8 @@ export class CourseController {
     return await this.courseService.create(courseDto, user.id);
   }
 
-  @Post('/previews')
-  async findAll(@Body() filter: CourseFilterDto) {
+  @Get('/previews')
+  async findAll(@Query() filter: CourseFilterDto) {
     return this.courseService.getCoursePreviews(filter);
   }
 
@@ -84,11 +85,11 @@ export class CourseController {
     return this.courseService.addTeacherInCourse(user, id, newTeacherDto);
   }
 
-  @Post(PARAMS_ONLY_ID + '/teachers')
+  @Get(PARAMS_ONLY_ID + '/teacher')
   @Roles(UserRole.admin, UserRole.teacher)
   async getAvailableTeachers(
     @ParseParamsId() id: number,
-    @Body() teacherFilterDto: TeacherFilterDto,
+    @Query() teacherFilterDto: TeacherFilterDto,
   ) {
     return this.courseService.getAvailableTeachers(id, teacherFilterDto);
   }

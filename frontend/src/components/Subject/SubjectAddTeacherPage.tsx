@@ -25,8 +25,10 @@ const SubjectAddTeacherPage = () => {
   ) => {
     setLoading(true);
     axios
-      .post(`subjects/${id}/teachers`, {
-        ...data,
+      .get(`subjects/${id}/teacher`, {
+        params: {
+          ...data,
+        },
       })
       .then((response: AxiosResponse<UserPreviewProps[]>) => {
         const teachers: UserPreviewProps[] = response.data;

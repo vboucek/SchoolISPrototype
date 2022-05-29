@@ -10,12 +10,12 @@ import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
 
 export interface SubjectFilterFormInput {
-  facultyId: number;
-  semesterId: number;
+  facultyId: string;
+  semesterId: string;
   code: string;
   title: string;
-  creditsMin: number;
-  creditsMax: number;
+  creditsMin: string;
+  creditsMax: string;
 }
 
 const SubjectPage = () => {
@@ -31,8 +31,15 @@ const SubjectPage = () => {
   ) => {
     setLoading(true);
     axios
-      .post(`subjects/previews`, {
-        ...data,
+      .get(`subjects/previews`, {
+        params: {
+          title: data.title === '' ? undefined : data.title,
+          facultyId: data.facultyId === '' ? undefined : data.facultyId,
+          semesterId: data.semesterId === '' ? undefined : data.semesterId,
+          code: data.code === '' ? undefined : data.code,
+          creditsMin: data.creditsMin === '' ? undefined : data.creditsMin,
+          creditsMax: data.creditsMax === '' ? undefined : data.creditsMax,
+        },
       })
       .then((response: AxiosResponse<SubjectPreviewProps[]>) => {
         const subjects: SubjectPreviewProps[] = response.data;
@@ -40,6 +47,7 @@ const SubjectPage = () => {
         setLoading(false);
       })
       .catch((error_) => {
+        setLoading(false);
         setError(error_);
       });
   };
@@ -56,10 +64,9 @@ const SubjectPage = () => {
                 id="facultyId"
                 {...register('facultyId', {
                   required: false,
-                  valueAsNumber: true,
                 })}
               >
-                <option value={undefined}>Faculty</option>
+                <option value="">Faculty</option>
                 {faculties.map((f) => (
                   <option key={f.id} value={f.id}>
                     {f.name}
@@ -71,13 +78,12 @@ const SubjectPage = () => {
               <select
                 className="filter__select"
                 placeholder="Semester"
-                id="facultyId"
+                id="semesterId"
                 {...register('semesterId', {
                   required: false,
-                  valueAsNumber: true,
                 })}
               >
-                <option value={undefined}>Semester</option>
+                <option value="">Semester</option>
                 {semesters.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.semesterType} {s.year}
@@ -112,7 +118,6 @@ const SubjectPage = () => {
                 type="number"
                 {...register('creditsMin', {
                   required: false,
-                  valueAsNumber: true,
                 })}
               />
             </div>
@@ -123,7 +128,6 @@ const SubjectPage = () => {
                 type="number"
                 {...register('creditsMax', {
                   required: false,
-                  valueAsNumber: true,
                 })}
               />
             </div>

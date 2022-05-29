@@ -41,17 +41,17 @@ export class CourseService {
       where: {
         deletedAt: null,
         credits: {
-          gte: filter.creditsMin ?? undefined,
-          lte: filter.creditsMax ?? undefined,
+          gte: filter.creditsMin,
+          lte: filter.creditsMax,
         },
         code: {
-          contains: filter.code ?? undefined,
+          contains: filter.code,
         },
         title: {
-          contains: filter.title ?? undefined,
+          contains: filter.title,
         },
-        facultyId: filter.facultyId ?? undefined,
-        semesterId: filter.semesterId ?? undefined,
+        facultyId: filter.facultyId,
+        semesterId: filter.semesterId,
       },
       select: {
         id: true,
@@ -322,6 +322,20 @@ export class CourseService {
   ) {
     await this.checkUser(user, id);
 
+    const courseTeaches = await this.prismaService.userCourseTeaches.findFirst({
+      where: {
+        courseId: id,
+        teacherId: newTeacher.teacherId,
+        deletedAt: {
+          not: null,
+        },
+      },
+    });
+
+    if (courseTeaches != null) {
+      throw new ForbiddenException('This teacher already teaches this course');
+    }
+
     try {
       await this.prismaService.userCourseTeaches.create({
         data: {
@@ -347,10 +361,10 @@ export class CourseService {
           },
         },
         firstName: {
-          contains: filter.firstName ?? undefined,
+          contains: filter.firstName,
         },
         lastName: {
-          contains: filter.lastName ?? undefined,
+          contains: filter.lastName,
         },
       },
       select: {
