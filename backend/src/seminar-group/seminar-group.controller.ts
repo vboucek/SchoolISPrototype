@@ -30,8 +30,8 @@ export class SeminarGroupController {
     return this.seminarGroupService.create(createSeminarGroupDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(PARAMS_ONLY_ID)
+  findOne(@ParseParamsId() id: number) {
     return this.seminarGroupService.findOne(+id);
   }
 

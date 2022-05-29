@@ -45,7 +45,60 @@ export class SeminarGroupService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} seminarGroup`;
+    const group = this.prismaService.seminarGroup.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        seminarGroupDay: true,
+        seminarGroupDurationStartTimeMins: true,
+        seminarGroupDurationMins: true,
+        capacity: true,
+        room: true,
+        course: {
+          select: {
+            creatorId: true,
+            code: true,
+            credits: true,
+            endType: true,
+            startSign: true,
+            endSign: true,
+            faculty: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        tutors: {
+          select: {
+            tutor: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        students: {
+          select: {
+            student: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (group == null) throw new NotFoundException();
+    return group;
   }
 
   update(id: number, updateSeminarGroupDto: UpdateSeminarGroupDto) {
