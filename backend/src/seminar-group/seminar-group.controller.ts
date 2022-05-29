@@ -18,6 +18,7 @@ import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto
 import { PARAMS_ONLY_ID } from '../global-constants';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
+import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 
 @Controller('/seminar-group')
 @Roles(UserRole.user)
@@ -56,5 +57,19 @@ export class SeminarGroupController {
     @Body() tutorDto: SeminarGroupRemoveTutorDto,
   ) {
     return this.seminarGroupService.removeTutorFromSemGroup(user, id, tutorDto);
+  }
+
+  @Delete(PARAMS_ONLY_ID + '/student')
+  @Roles(UserRole.admin, UserRole.teacher, UserRole.user)
+  async removeStudent(
+    @ParseParamsId() id: number,
+    @GetUser() user: User,
+    @Body() studentDto: SeminarGroupRemoveStudentDto,
+  ) {
+    return this.seminarGroupService.removeStudentFromSemGroup(
+      user,
+      id,
+      studentDto,
+    );
   }
 }
