@@ -158,7 +158,7 @@ const SubjectFormPage = ({ edit }: SubjectFormProps) => {
                 className={`form__select ${
                   errors.semesterId && ' form__input-error'
                 }`}
-                id="facultyId"
+                id="semesterId"
                 {...register('semesterId', {
                   required: true,
                   validate: (value) => !isNaN(value),
@@ -383,7 +383,7 @@ const SubjectFormPage = ({ edit }: SubjectFormProps) => {
             <div className="form__error">Lecture end is required</div>
           )}
           <button className="form__submit-button" type="submit">
-            {edit ? 'Edit' : 'Subject'} subject
+            {edit ? 'Edit' : 'Create'} subject
           </button>
         </form>
         {requestError && <NoConnection />}
