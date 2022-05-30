@@ -398,6 +398,9 @@ export class CourseService {
               },
             },
           },
+          where: {
+            deletedAt: null,
+          },
         },
       },
     });

@@ -91,6 +91,9 @@ export class SeminarGroupService {
               },
             },
           },
+          where: {
+            deletedAt: null,
+          },
         },
         students: {
           select: {
@@ -101,6 +104,9 @@ export class SeminarGroupService {
                 lastName: true,
               },
             },
+          },
+          where: {
+            deletedAt: null,
           },
         },
       },
