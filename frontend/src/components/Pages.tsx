@@ -12,17 +12,16 @@ import { FacultyEdit } from './Faculty/FacultyEdit';
 import { SemesterCreate } from './Semester/SemesterCreate';
 import { SemesterDelete } from './Semester/SemesterDelete';
 import { SemesterEdit } from './Semester/SemesterEdit';
-import { UserCreate } from './User/UserCreate';
-import { UserDelete } from './User/UserDelete';
-import { UserEdit } from './User/UserEdit';
-import { UserInspect } from './User/UserInspect';
-import { UserPage } from './User/UserPage';
+import { UserDeletePage } from './User/UserDeletePage';
+import { UserDetailPage } from './User/UserDetailPage';
 import MainPage from './MainPage/MainPage';
 import SubjectPage from './Subject/SubjectPage';
 import SubjectDetailPage from './Subject/SubjectDetailPage';
 import { UserRole } from '../types/UserRole';
 import SubjectFormPage from './Subject/SubjectFormPage';
 import SubjectAddTeacherPage from './Subject/SubjectAddTeacherPage';
+import UserFormPage from './User/UserFormPage';
+import { SubjectDeletePage } from './Subject/SubjectDeletePage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -34,7 +33,6 @@ export const Pages = () => {
       <Route path="/logout" element={loggedInUser && <Logout />} />
       <Route path="/admin" element={loggedInUser && <AdminPage />}>
         <Route index element={<AdminPageOverview />} />
-        <Route path="/admin/createUser" element={<UserCreate />} />
         <Route path="/admin/createSemester" element={<SemesterCreate />} />
         <Route path="/admin/createFaculty" element={<FacultyCreate />} />
         <Route path="/admin/semester/:id/delete" element={<SemesterDelete />} />
@@ -42,11 +40,23 @@ export const Pages = () => {
         <Route path="/admin/faculty/:id/delete" element={<FacultyDelete />} />
         <Route path="/admin/faculty/:id/edit" element={<FacultyEdit />} />
       </Route>
-      <Route path="/user/:id" element={<UserPage />}>
-        <Route index element={<UserInspect />} />
-        <Route path="/user/:id/edit" element={<UserEdit />} />
-        <Route path="/user/:id/delete" element={<UserDelete />} />
-      </Route>
+      <Route path="/user/:id" element={<UserDetailPage />} />
+      <Route path="/user/:id/edit" element={<UserFormPage edit={true} />} />
+      <Route
+        path="/user/create"
+        element={
+          loggedInUser?.roles.includes(UserRole.admin) && (
+            <UserFormPage edit={false} />
+          )
+        }
+      />
+      <Route
+        path="/user/:id/delete"
+        element={
+          loggedInUser?.roles.includes(UserRole.admin) && <UserDeletePage />
+        }
+      />
+
       <Route path="/subject" element={loggedInUser && <SubjectPage />} />
       <Route
         path="/subject/:id"
@@ -66,6 +76,15 @@ export const Pages = () => {
           (loggedInUser?.roles.includes(UserRole.teacher) ||
             loggedInUser?.roles.includes(UserRole.admin)) && (
             <SubjectFormPage edit={true} />
+          )
+        }
+      />
+      <Route
+        path="/subject/:id/delete"
+        element={
+          (loggedInUser?.roles.includes(UserRole.teacher) ||
+            loggedInUser?.roles.includes(UserRole.admin)) && (
+            <SubjectDeletePage />
           )
         }
       />
