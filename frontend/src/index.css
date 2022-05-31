@@ -168,6 +168,13 @@ ul {
   font-size: 2rem;
   outline: none;
   background: none;
+  padding-left: 0.1em;
+}
+
+@media screen and (min-width: 1201px) {
+  .semester-select {
+    background: black;
+  }
 }
 
 .semester-select:hover {
