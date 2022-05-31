@@ -1,0 +1,41 @@
+.confirm-container {
+  align-self: center;
+  color: var(--dark-font-color);
+  width: 50%;
+  background-color: var(--light-gray-backround-color);
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.confirm__error {
+  color: var(--error-color);
+}
+
+.confirm__controls {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.confirm__button {
+  background-color: var(--gray-backround-color);
+  width: 50%;
+  height: 3rem;
+}
+
+.confirm__button:hover {
+  background-color: var(--dark-gray-backround-color)
+}
+
+.confirm__button:active {
+  background-color: var(--gray-backround-color);
+}
+
+@media only screen and (max-width: 1200px) {
+  .confirm-container {
+    width: 100%;
+  }
+}
