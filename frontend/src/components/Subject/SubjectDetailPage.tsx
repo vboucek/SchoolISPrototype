@@ -4,7 +4,7 @@ import '../../styles/subjectDetail.css';
 import { format } from 'date-fns';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import TeacherPreviewList from '../TeacherPreview/TeacherPreviewList';
 import SemGroupPreviewList from '../SemGroupPreview/SemGroupPreviewList';
 import { SemGroupPreviewProps } from '../SemGroupPreview/SemGroupPreview';
@@ -45,13 +45,11 @@ export interface SubjectDetailProps {
 const SubjectDetailPage = () => {
   const [error, setError] = useState<AxiosError>();
   const [signError, setSignError] = useState<AxiosError>();
-  const [deleteError, setDeleteError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState<SubjectDetailProps>();
   const { id } = useParams();
   const [subjects, setSubjects] = useRecoilState(userSubjectsAtom);
   const user = useRecoilValue(loggedInUserAtom);
-  const navigate = useNavigate();
   const [signedUp, setSignedUp] = useState<boolean>(false);
   const [isCreator, setIsCreator] = useState<boolean>(false);
   const [studentCount, setStudentCount] = useState(0);
@@ -105,19 +103,6 @@ const SubjectDetailPage = () => {
       })
       .catch((signError_) => {
         setSignError(signError_);
-      });
-  }
-
-  function removeCourse() {
-    axios
-      .delete(`subjects/${id}`)
-      .then((response: AxiosResponse) => {
-        if (response.status === 200) {
-          navigate('/subject');
-        }
-      })
-      .catch((deleteError_) => {
-        setDeleteError(deleteError_);
       });
   }
 
@@ -215,12 +200,9 @@ const SubjectDetailPage = () => {
                 </button>
               )}
               {(isCreator || user?.roles.includes(UserRole.admin)) && (
-                <button
-                  onClick={removeCourse}
-                  className="subject-controls__button"
-                >
-                  Delete
-                </button>
+                <Link to={`delete`}>
+                  <button className="subject-controls__button">Delete</button>
+                </Link>
               )}
               {(isCreator || user?.roles.includes(UserRole.admin)) && (
                 <Link
@@ -234,11 +216,6 @@ const SubjectDetailPage = () => {
             {signError && (
               <div className="subject-info__error">
                 You cannot sign this course now!
-              </div>
-            )}
-            {deleteError && (
-              <div className="subject-info__error">
-                Error while deleting course.
               </div>
             )}
             {subject && (
