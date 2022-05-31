@@ -5,8 +5,12 @@ import {
   Get,
   Patch,
   Post,
+  Query,
+  Res,
   UnauthorizedException,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { User, UserRole } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator';
@@ -17,7 +21,14 @@ import { ParseParamsId } from '../global-decorators';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateUserDto } from './dto/user-update-user.dto';
 import { UserService } from './user.service';
-import { UserSubjectsDto } from './dto/user-subjects.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
+import path = require('path');
+import { join } from 'path';
+import { of } from 'rxjs';
+import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
+import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 
 @Controller('users')
 @Roles(UserRole.user)
@@ -51,13 +62,13 @@ export class UserController {
   @Roles(UserRole.admin, UserRole.user)
   public async update(
     @ParseParamsId() id: number,
-    @Body() updateUserDto: UserCreateDto,
+    @Body() updateUserDto: AdminUpdateUserDto,
     @GetUser() user: User,
   ) {
     if (user.roles.includes(UserRole.admin)) {
       return await this.userservice.updateUserAdmin(
         id,
-        updateUserDto as UserCreateDto,
+        updateUserDto as AdminUpdateUserDto,
       );
     } else if (id == user.id) {
       return await this.userservice.updateUserHimself(
@@ -76,8 +87,58 @@ export class UserController {
   }
 
   @Get(PARAMS_ONLY_ID + '/subjects')
-  @Roles(UserRole.user)
-  public async getSubjects(@ParseParamsId() id: number) {
-    return await this.userservice.getUserSubjects(id);
+  public async getSubjects(
+    @ParseParamsId() id: number,
+    @Query() filter: UserSubjectsFilterDto,
+  ) {
+    return await this.userservice.getUserSubjects(id, filter);
+  }
+
+  @Get(PARAMS_ONLY_ID + '/teacher/subjects')
+  public async getTaughtSubjects(
+    @ParseParamsId() id: number,
+    @Query() filter: UserSubjectsFilterDto,
+  ) {
+    return await this.userservice.getUserTaughtSubjects(id, filter);
+  }
+
+  @Post(PARAMS_ONLY_ID + '/picture')
+  @Roles(UserRole.admin, UserRole.user)
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      storage: diskStorage({
+        destination: './uploads/profileimages',
+        filename: (req, file, cb) => {
+          const filename: string =
+            path.parse(file.originalname).name.replace(/\s/g, '') + uuid();
+          const extension: string = path.parse(file.originalname).ext;
+
+          cb(null, `${filename}${extension}`);
+        },
+      }),
+    }),
+  )
+  public async uploadProfilePicture(
+    @ParseParamsId() id: number,
+    @GetUser() user: User,
+    @UploadedFile() file,
+  ) {
+    if (user.roles.includes(UserRole.admin) || id === user.id) {
+      await this.userservice.setUserProfilePicture(id, file.filename);
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
+
+  @Get(PARAMS_ONLY_ID + '/picture')
+  public async getProfilePicture(@ParseParamsId() id: number, @Res() res) {
+    const profilePicture =
+      (await this.userservice.getProfilePicture(id)) ?? 'generic.jpg';
+
+    return of(
+      res.sendFile(
+        join(process.cwd(), 'uploads/profileimages/' + profilePicture),
+      ),
+    );
   }
 }

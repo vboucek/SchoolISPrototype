@@ -11,6 +11,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateUserDto } from './dto/user-update-user.dto';
+import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
+import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -133,7 +135,7 @@ export class UserService {
 
   public async updateUserAdmin(
     userToUpdateId: number,
-    updateDataDto: UserCreateDto,
+    updateDataDto: AdminUpdateUserDto,
   ) {
     try {
       const user = await this.prismaService.user.findFirst({
@@ -147,7 +149,9 @@ export class UserService {
         return new NotFoundException();
       }
 
-      const hash = await argon.hash(updateDataDto.password);
+      const hash = updateDataDto.password
+        ? await argon.hash(updateDataDto.password)
+        : user.passwdHash;
 
       updateDataDto.roles = Array.from(
         new Set([...updateDataDto.roles, UserRole.user]),
@@ -209,10 +213,11 @@ export class UserService {
     }
   }
 
-  public async getUserSubjects(userId: number) {
+  public async getUserSubjects(userId: number, filter: UserSubjectsFilterDto) {
     return await this.prismaService.course.findMany({
       where: {
         deletedAt: null,
+        semesterId: filter.semesterId,
         students: {
           some: {
             studentId: userId,
@@ -228,5 +233,54 @@ export class UserService {
         semesterId: true,
       },
     });
+  }
+
+  public async getUserTaughtSubjects(
+    userId: number,
+    filter: UserSubjectsFilterDto,
+  ) {
+    return await this.prismaService.course.findMany({
+      where: {
+        deletedAt: null,
+        semesterId: filter.semesterId,
+        teachers: {
+          some: {
+            teacherId: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        code: true,
+        credits: true,
+        endType: true,
+        semesterId: true,
+      },
+    });
+  }
+
+  public async setUserProfilePicture(userId: number, path: string) {
+    await this.prismaService.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profilePicture: path,
+      },
+    });
+  }
+
+  public async getProfilePicture(userId: number) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      select: {
+        profilePicture: true,
+      },
+    });
+
+    return user.profilePicture;
   }
 }
