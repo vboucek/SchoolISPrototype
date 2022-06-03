@@ -11,6 +11,12 @@
 
 }
 
+.info {
+  background: var(--light-gray-backround-color);
+  padding-left: 1rem;
+  color: var(--dark-font-color);
+}
+
 .user__item {
   margin-top: 0.25rem;
   background-color: var(--dark-backround-color);

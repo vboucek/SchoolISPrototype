@@ -11,6 +11,7 @@ export interface UserPreviewListProps {
   users: UserPreviewProps[];
   selectedLetter: string | undefined;
   setSelectedLetter: React.Dispatch<React.SetStateAction<string | undefined>>;
+  foundUsers: boolean;
 }
 
 const UserPreviewList = ({
@@ -18,6 +19,7 @@ const UserPreviewList = ({
   users,
   selectedLetter,
   setSelectedLetter,
+  foundUsers,
 }: UserPreviewListProps) => {
   const [userAddLogo, setUserAddLogo] = useState(add);
 
@@ -38,11 +40,16 @@ const UserPreviewList = ({
           />
         ))}
       </div>
-      <ul className="user__list">
-        {users.map((u) => (
-          <UserPreview key={u.id} {...u} />
-        ))}
-      </ul>
+      {!foundUsers && (
+        <div className="info">No users beginning with this letter found.</div>
+      )}
+      {foundUsers && (
+        <ul className="user__list">
+          {users.map((u) => (
+            <UserPreview key={u.id} {...u} />
+          ))}
+        </ul>
+      )}
       <div className="add">
         <Link
           onMouseEnter={userAddHover}

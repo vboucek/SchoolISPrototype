@@ -16,6 +16,7 @@ export const AdminPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AxiosError>();
   const [selectedLetter, setSelectedLetter] = useState<string>();
+  const [foundUsers, setFoundUsers] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedLetter != undefined) {
@@ -28,8 +29,8 @@ export const AdminPage = () => {
         })
         .then((response: AxiosResponse<UserPreviewProps[]>) => {
           const users: UserPreviewProps[] = response.data;
-          console.log(users);
           setUsers(users);
+          setFoundUsers(users.length > 0);
           setLoading(false);
         })
         .catch((error_) => {
@@ -53,6 +54,7 @@ export const AdminPage = () => {
           users={users}
           selectedLetter={selectedLetter}
           setSelectedLetter={setSelectedLetter}
+          foundUsers={foundUsers}
         />
         {loading && <Loading />}
       </div>
