@@ -37,9 +37,9 @@ const SemGroupTutorPreviewList = ({
   }
 
   return (
-    <div className="user">
-      <span className="user__header">{title}</span>
-      <ul className="user__list">
+    <div className="tutor">
+      <span className="tutor__header">{title}</span>
+      <ul className="tutor__list">
         {tutorList.map((u) => (
           <SemGroupUserPreview key={u.id} {...u} addUser={onAddTutor} />
         ))}

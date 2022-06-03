@@ -18,19 +18,19 @@ const UserPreview = ({
   const [addUserIcon, setAddUserIcon] = useState<string>(add);
 
   return (
-    <li className="user__item">
-      <div className="user__name">
+    <li className="tutor__item">
+      <div className="tutor__name">
         {firstName} {lastName}
       </div>
 
-      <div className="user__form">
-        <button className="user__add-button" onClick={() => addUser(id)}>
+      <div className="tutor__form">
+        <button className="tutor__add-button" onClick={() => addUser(id)}>
           <img
             onMouseEnter={() => setAddUserIcon(hoverAdd)}
             onMouseLeave={() => setAddUserIcon(add)}
             src={addUserIcon}
             alt="add"
-            className="user__add-icon"
+            className="tutor__add-icon"
           />
         </button>
       </div>
