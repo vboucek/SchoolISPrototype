@@ -9,7 +9,6 @@
 
 .semester__list {
   max-height: 10.5rem;
-  overflow: scroll;
 }
 
 .semester__select {
