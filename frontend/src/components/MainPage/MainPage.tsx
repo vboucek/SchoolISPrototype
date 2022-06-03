@@ -14,6 +14,11 @@ const MainPage = () => {
   const user = useRecoilValue(loggedInUserAtom);
   const setSubjects = useSetRecoilState(userSubjectsAtom);
   const currentSubjects = useRecoilValue(subjectsInSemesterSelector);
+  const [hasSubjects, setHasSubjects] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasSubjects(currentSubjects.length > 0);
+  }, [currentSubjects]);
 
   useEffect(() => {
     setLoading(true);
@@ -34,11 +39,19 @@ const MainPage = () => {
       <div className="main-content-container">
         {error && <NoConnection />}
         {loading && <Loading />}
-        {!loading && !error && (
+        {!loading && !error && hasSubjects && (
           <SubjectPreviewList
             title={'My subjects overview:'}
             subjects={currentSubjects}
           />
+        )}
+        {!hasSubjects && (
+          <div className="subject">
+            <span className="subject__header">{'My subjects overview:'}</span>
+            <div className="info">
+              You have no courses enrolled in this semester.
+            </div>
+          </div>
         )}
       </div>
     </main>
