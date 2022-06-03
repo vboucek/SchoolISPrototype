@@ -72,4 +72,9 @@ export class SeminarGroupController {
   ) {
     return this.seminarGroupService.getAvailableTutors(id, tutorFilterDto);
   }
+
+  @Get(PARAMS_ONLY_ID + '/student-count')
+  async countCapacity(@ParseParamsId() id: number) {
+    return this.seminarGroupService.countCapacity(id);
+  }
 }

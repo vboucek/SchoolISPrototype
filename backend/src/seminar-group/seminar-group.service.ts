@@ -234,4 +234,13 @@ export class SeminarGroupService {
       orderBy: [{ id: 'asc' }],
     });
   }
+
+  public async countCapacity(id: number) {
+    return await this.prismaService.userSeminarGroupSigned.count({
+      where: {
+        deletedAt: null,
+        seminarGroupId: id,
+      },
+    });
+  }
 }

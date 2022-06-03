@@ -46,6 +46,7 @@ export const SemGroupPage = () => {
   const [semGroup, setSemGroup] = useState<SemGroupProps>();
   const [isCreator, setIsCreator] = useState<boolean>(false);
   const [tutorAddLogo, setTutorAddLogo] = useState(add);
+  const [studentCount, setStudentCount] = useState(0);
 
   useEffect(() => {
     axios
@@ -55,6 +56,16 @@ export const SemGroupPage = () => {
         setSemGroup(semGroup);
         setIsCreator(user?.id === semGroup?.course.creatorId);
         setLoading(false);
+      })
+      .catch((error: AxiosError) => {
+        setError(error);
+      });
+
+    axios
+      .get(`/seminar-group/${id}/student-count`)
+      .then((response: AxiosResponse) => {
+        const studentCount = response.data;
+        setStudentCount(studentCount);
       })
       .catch((error: AxiosError) => {
         setError(error);
@@ -106,7 +117,9 @@ export const SemGroupPage = () => {
                 </div>
                 <div className="seminar-info__detail-row">
                   <div className="seminar-info__label">Capacity:</div>
-                  <div className="seminar-info__room">7/20</div>
+                  <div className="seminar-info__room">
+                    {studentCount} / {semGroup?.capacity}
+                  </div>
                 </div>
                 <div className="seminar-info__detail-row">
                   <div className="seminar-info__label">Sign:</div>
