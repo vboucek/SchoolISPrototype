@@ -87,6 +87,7 @@
   width: 100%;
   flex-wrap: wrap;
   padding-bottom: 2rem;
+  user-select: none;
 }
 
 .filter-tile {
