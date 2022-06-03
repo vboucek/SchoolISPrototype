@@ -25,6 +25,7 @@ const SubjectPage = () => {
   const semesters = useRecoilValue(semestersAtom);
   const [subjects, setSubjects] = useState<SubjectPreviewProps[]>([]);
   const { register, handleSubmit } = useForm<SubjectFilterFormInput>();
+  const [hasSubject, setHasSubject] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<SubjectFilterFormInput> = (
     data: SubjectFilterFormInput,
@@ -44,6 +45,7 @@ const SubjectPage = () => {
       .then((response: AxiosResponse<SubjectPreviewProps[]>) => {
         const subjects: SubjectPreviewProps[] = response.data;
         setSubjects(subjects);
+        setHasSubject(subjects.length > 0);
         setLoading(false);
       })
       .catch((error_) => {
@@ -138,8 +140,11 @@ const SubjectPage = () => {
         </form>
         {error && <NoConnection />}
         {loading && <Loading />}
-        {!loading && !error && (
+        {!loading && !error && hasSubject && (
           <SubjectPreviewList title={'Subjects:'} subjects={subjects} />
+        )}
+        {!hasSubject && (
+          <div className="info"> No courses match specified filter. </div>
         )}
       </div>
     </main>
