@@ -13,6 +13,7 @@ import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateUserDto } from './dto/user-update-user.dto';
 import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
+import { UserFilterDto } from './dto/user.filter.dto';
 
 @Injectable()
 export class UserService {
@@ -37,20 +38,68 @@ export class UserService {
     );
   }
 
-  public async getAll() {
-    const users = await this.prismaService.user.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
+  public async getUserPreviews(filter: UserFilterDto) {
+    let users;
 
-    return users.map((user) =>
-      plainToInstance<UserDto, User>(
-        UserDto,
-        { ...user },
-        { excludeExtraneousValues: true },
-      ),
-    );
+    if ('abcdefghijklmnopqrstuvwxyz'.includes(filter.lastnameLetter)) {
+      users = await this.prismaService.user.findMany({
+        where: {
+          deletedAt: null,
+          lastName: {
+            startsWith: filter.lastnameLetter,
+            mode: 'insensitive',
+          },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      });
+    } else {
+      users = await this.prismaService.user.findMany({
+        where: {
+          deletedAt: null,
+          NOT: {
+            OR: [
+              { lastName: { startsWith: 'A', mode: 'insensitive' } },
+              { lastName: { startsWith: 'B', mode: 'insensitive' } },
+              { lastName: { startsWith: 'C', mode: 'insensitive' } },
+              { lastName: { startsWith: 'D', mode: 'insensitive' } },
+              { lastName: { startsWith: 'E', mode: 'insensitive' } },
+              { lastName: { startsWith: 'F', mode: 'insensitive' } },
+              { lastName: { startsWith: 'G', mode: 'insensitive' } },
+              { lastName: { startsWith: 'H', mode: 'insensitive' } },
+              { lastName: { startsWith: 'I', mode: 'insensitive' } },
+              { lastName: { startsWith: 'J', mode: 'insensitive' } },
+              { lastName: { startsWith: 'K', mode: 'insensitive' } },
+              { lastName: { startsWith: 'L', mode: 'insensitive' } },
+              { lastName: { startsWith: 'M', mode: 'insensitive' } },
+              { lastName: { startsWith: 'N', mode: 'insensitive' } },
+              { lastName: { startsWith: 'O', mode: 'insensitive' } },
+              { lastName: { startsWith: 'P', mode: 'insensitive' } },
+              { lastName: { startsWith: 'Q', mode: 'insensitive' } },
+              { lastName: { startsWith: 'R', mode: 'insensitive' } },
+              { lastName: { startsWith: 'S', mode: 'insensitive' } },
+              { lastName: { startsWith: 'T', mode: 'insensitive' } },
+              { lastName: { startsWith: 'U', mode: 'insensitive' } },
+              { lastName: { startsWith: 'V', mode: 'insensitive' } },
+              { lastName: { startsWith: 'W', mode: 'insensitive' } },
+              { lastName: { startsWith: 'X', mode: 'insensitive' } },
+              { lastName: { startsWith: 'Y', mode: 'insensitive' } },
+              { lastName: { startsWith: 'Z', mode: 'insensitive' } },
+            ],
+          },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      });
+    }
+
+    return users;
   }
 
   public async create(createUserDto: UserCreateDto) {

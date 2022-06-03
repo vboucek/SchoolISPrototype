@@ -29,6 +29,7 @@ import { join } from 'path';
 import { of } from 'rxjs';
 import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
+import { UserFilterDto } from './dto/user.filter.dto';
 
 @Controller('users')
 @Roles(UserRole.user)
@@ -48,8 +49,8 @@ export class UserController {
 
   @Get()
   @Roles(UserRole.admin)
-  public async getAll() {
-    return await this.userservice.getAll();
+  public async getUserPreviews(@Query() filter: UserFilterDto) {
+    return await this.userservice.getUserPreviews(filter);
   }
 
   @Post()
