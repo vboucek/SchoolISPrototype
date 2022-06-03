@@ -17,6 +17,16 @@ export const AdminPage = () => {
   const [error, setError] = useState<AxiosError>();
   const [selectedLetter, setSelectedLetter] = useState<string>();
   const [foundUsers, setFoundUsers] = useState<boolean>(false);
+  const [hasFaculty, setHasFaculty] = useState<boolean>(false);
+  const [hasSemesters, setHasSemesters] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasFaculty(faculties.length > 0);
+  }, [faculties]);
+
+  useEffect(() => {
+    setHasSemesters(semesters.length > 0);
+  }, [semesters]);
 
   useEffect(() => {
     if (selectedLetter != undefined) {
@@ -47,8 +57,16 @@ export const AdminPage = () => {
   return (
     <main className="main-content">
       <div className="main-content-container">
-        <FacultyPreviewList title={'Faculties:'} faculties={faculties} />
-        <SemesterPreviewList title={'Semesters:'} semesters={semesters} />
+        <FacultyPreviewList
+          title={'Faculties:'}
+          faculties={faculties}
+          hasFaculty={hasFaculty}
+        />
+        <SemesterPreviewList
+          title={'Semesters:'}
+          semesters={semesters}
+          hasSemesters={hasSemesters}
+        />
         <UserPreviewList
           title={'Users:'}
           users={users}

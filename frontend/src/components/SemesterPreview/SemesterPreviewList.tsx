@@ -10,11 +10,13 @@ import { semesterComparator } from '../../utils/SemesterComparator';
 export interface semesterPreviewListProps {
   title: string;
   semesters: ISemesterDto[];
+  hasSemesters: boolean;
 }
 
 const SemesterPreviewList = ({
   title,
   semesters,
+  hasSemesters,
 }: semesterPreviewListProps) => {
   const [semesterAddLogo, setSemesterAddLogo] = useState(add);
   const years = [...new Set(semesters.map((s) => s.year))];
@@ -48,6 +50,9 @@ const SemesterPreviewList = ({
             <SemesterPreview key={s.id} {...s} />
           ))}
       </ul>
+      {!hasSemesters && (
+        <div className="info">No semesters have been created yet.</div>
+      )}
       <div className="add">
         <Link
           onMouseEnter={semesterAddHover}

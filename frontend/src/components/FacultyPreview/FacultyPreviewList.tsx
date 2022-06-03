@@ -9,9 +9,14 @@ import hoverAdd from '../../../public/assets/add-hover.svg';
 export interface FacultyPreviewListProps {
   title: string;
   faculties: IFacultyDto[];
+  hasFaculty: boolean;
 }
 
-const FacultyPreviewList = ({ title, faculties }: FacultyPreviewListProps) => {
+const FacultyPreviewList = ({
+  title,
+  faculties,
+  hasFaculty,
+}: FacultyPreviewListProps) => {
   const [facultyAddLogo, setFacultyAddLogo] = useState(add);
 
   function facultyAddHover() {
@@ -21,11 +26,17 @@ const FacultyPreviewList = ({ title, faculties }: FacultyPreviewListProps) => {
   return (
     <div className="faculty">
       <span className="faculty__header">{title}</span>
-      <ul className="faculty__list">
-        {faculties.map((f) => (
-          <FacultyPreview key={f.id} id={f.id} name={f.name} />
-        ))}
-      </ul>
+      {hasFaculty && (
+        <ul className="faculty__list">
+          {faculties.map((f) => (
+            <FacultyPreview key={f.id} id={f.id} name={f.name} />
+          ))}
+        </ul>
+      )}
+      {!hasFaculty && (
+        <div className="info">No faculties have been created yet.</div>
+      )}
+
       <div className="add">
         <Link
           onMouseEnter={facultyAddHover}
