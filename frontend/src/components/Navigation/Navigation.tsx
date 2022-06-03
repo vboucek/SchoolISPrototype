@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   currentSemesterIdAtom,
@@ -7,10 +7,23 @@ import {
 } from '../../state/atoms';
 import NavigationItem from './NavigationItem';
 import { UserRole } from '../../types/UserRole';
+import { ISemesterDto } from '../../types/Semester.dto';
+import { semesterComparator } from '../../utils/SemesterComparator';
 
 const Navigation = () => {
   const user = useRecoilValue(loggedInUserAtom);
   const semesters = useRecoilValue(semestersAtom);
+  const [sortedSemesters, setSortedSemesters] = useState<ISemesterDto[]>([]);
+
+  useEffect(() => {
+    const sortedSemesters = [...semesters].sort(semesterComparator);
+    setSortedSemesters(sortedSemesters);
+
+    if (sortedSemesters.length > 0) {
+      setSelectedSemesterId(sortedSemesters[0].id);
+    }
+  }, [semesters]);
+
   const setSelectedSemesterId = useSetRecoilState(currentSemesterIdAtom);
 
   const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
@@ -39,7 +52,7 @@ const Navigation = () => {
             name="semester"
             id="semester"
           >
-            {semesters.map((s) => (
+            {sortedSemesters.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.semesterType} {s.year}
               </option>
