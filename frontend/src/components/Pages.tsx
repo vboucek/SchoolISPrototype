@@ -21,6 +21,8 @@ import { SemesterFormPage } from './Semester/SemesterFormPage';
 import { SemesterDeletePage } from './Semester/SemesterDeletePage';
 import { SemGroupPage } from './SemGroup/SemGroupPage';
 import { SemGroupAddTutorPage } from './SemGroup/SemGroupAddTutorPage';
+import {TeacherPage} from "./Teacher/TeacherPage";
+import {TeacherAddCoursePage} from "./Teacher/TeacherAddCoursePage";
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -79,6 +81,9 @@ export const Pages = () => {
         path="/seminar/:id/tutors/add"
         element={<SemGroupAddTutorPage />}
       />
+
+      <Route path="/teacher" element={loggedInUser && <TeacherPage />} />
+      <Route path="/teacher/add" element={loggedInUser && <TeacherAddCoursePage />} />
 
       <Route path="/subject" element={loggedInUser && <SubjectPage />} />
       <Route
