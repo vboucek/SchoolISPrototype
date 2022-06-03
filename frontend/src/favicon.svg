@@ -1,15 +1,31 @@
-<svg width="410" height="404" viewBox="0 0 410 404" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M399.641 59.5246L215.643 388.545C211.844 395.338 202.084 395.378 198.228 388.618L10.5817 59.5563C6.38087 52.1896 12.6802 43.2665 21.0281 44.7586L205.223 77.6824C206.398 77.8924 207.601 77.8904 208.776 77.6763L389.119 44.8058C397.439 43.2894 403.768 52.1434 399.641 59.5246Z" fill="url(#paint0_linear)"/>
-<path d="M292.965 1.5744L156.801 28.2552C154.563 28.6937 152.906 30.5903 152.771 32.8664L144.395 174.33C144.198 177.662 147.258 180.248 150.51 179.498L188.42 170.749C191.967 169.931 195.172 173.055 194.443 176.622L183.18 231.775C182.422 235.487 185.907 238.661 189.532 237.56L212.947 230.446C216.577 229.344 220.065 232.527 219.297 236.242L201.398 322.875C200.278 328.294 207.486 331.249 210.492 326.603L212.5 323.5L323.454 102.072C325.312 98.3645 322.108 94.137 318.036 94.9228L279.014 102.454C275.347 103.161 272.227 99.746 273.262 96.1583L298.731 7.86689C299.767 4.27314 296.636 0.855181 292.965 1.5744Z" fill="url(#paint1_linear)"/>
-<defs>
-<linearGradient id="paint0_linear" x1="6.00017" y1="32.9999" x2="235" y2="344" gradientUnits="userSpaceOnUse">
-<stop stop-color="#41D1FF"/>
-<stop offset="1" stop-color="#BD34FE"/>
-</linearGradient>
-<linearGradient id="paint1_linear" x1="194.651" y1="8.81818" x2="236.076" y2="292.989" gradientUnits="userSpaceOnUse">
-<stop stop-color="#FFEA83"/>
-<stop offset="0.0833333" stop-color="#FFDD35"/>
-<stop offset="1" stop-color="#FFA800"/>
-</linearGradient>
-</defs>
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" version="1.0" xml:space="preserve">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <g stroke="null">
+   <g stroke="null" id="svg_7">
+    <g stroke="null" id="svg_8">
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="134.1214296221733,354.6000061035156 111.79714983701706,354.6000061035156 100.54641741514206,335.2877197265625 " class="st0" id="svg_20"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="238.63773" x2="44.82428" y1="296.57457" x1="78.31072" class="st1" id="svg_19"/>
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="33.662143886089325,219.325439453125 22.4999982714653,199.92459106445312 33.662143886089325,180.6123046875 " class="st0" id="svg_18"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="83.96232" x2="89.47286" y1="141.98774" x1="55.98643" class="st1" id="svg_17"/>
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="100.54641741514206,64.65003204345703 111.79714983701706,45.33775329589844 134.1214296221733,45.33775329589844 " class="st0" id="svg_16"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="45.33776" x2="245.65428" y1="45.33776" x1="178.77001" class="st1" id="svg_15"/>
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="267.9785768389702,45.33775329589844 290.30285662412643,45.33775329589844 301.46499651670456,64.65003204345703 " class="st0" id="svg_14"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="161.30002" x2="357.27571" y1="103.2746" x1="323.78928" class="st1" id="svg_13"/>
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="368.43786638975143,180.6123046875 379.60000628232956,199.92459106445312 368.43786638975143,219.325439453125 " class="st0" id="svg_12"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="315.97544" x2="312.62714" y1="257.95001" x1="346.11357" class="st1" id="svg_11"/>
+     <polyline stroke="#000000" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" points="301.46499651670456,335.2877197265625 290.30285662412643,354.6000061035156 267.9785768389702,354.6000061035156 " class="st0" id="svg_10"/>
+     <line stroke="#000000" stroke-dasharray="50.3781,50.3781" stroke-linejoin="round" stroke-linecap="round" stroke-width="22.9341" fill="none" y2="354.6" x2="156.44572" y1="354.6" x1="223.32999" class="st1" id="svg_9"/>
+    </g>
+   </g>
+   <g stroke="null" id="svg_5">
+    <polygon stroke="null" fill="#F9D100" points="137.5763856768608,307.2052001953125 74.14706438779831,197.26693725585938 137.5763856768608,87.32867431640625 264.5236207842827,87.32867431640625 327.9529420733452,197.26693725585938 264.5236207842827,307.2052001953125 " class="st2" id="svg_6"/>
+   </g>
+   <g stroke="null" id="svg_2">
+    <circle stroke="#000000" stroke-miterlimit="10" stroke-width="24.8589" fill="#FFFFFF" r="69.01039" cy="198.59576" cx="201.00571" class="st3" id="svg_4"/>
+    <path stroke="null" d="m288.79685,191.95163c-6.02401,-3.1006 -12.66815,-6.02401 -19.84381,-8.94743l-2.83483,22.67864c18.95793,8.15014 30.6516,15.94592 33.84078,20.55252c-9.03602,5.04954 -47.30623,7.17566 -102.93977,-5.66966c-55.63354,-12.84532 -89.03138,-31.53748 -94.96681,-40.04198c4.6066,-2.56906 16.56604,-4.34083 34.4609,-3.89789l8.23872,-21.70417c-30.29725,-1.86036 -60.5059,1.32883 -64.93533,20.37534c-8.68167,37.5615 99.92776,63.78368 112.33014,66.61851c7.08708,1.68318 45.80022,10.18767 79.28665,10.18767c25.07053,0 47.12905,-4.78378 50.84976,-20.90687c3.1006,-13.19968 -7.88437,-26.045 -33.48643,-39.24468z" id="svg_3"/>
+   </g>
+  </g>
+ </g>
+
 </svg>
