@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/userList.css';
+import '../../styles/tutorList.css';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useParams } from 'react-router-dom';
 import NoConnection from '../NoConnection/NoConnection';
