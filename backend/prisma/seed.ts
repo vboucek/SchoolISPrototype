@@ -14,14 +14,12 @@ async function main() {
   const facultyFI = await prisma.faculty.create({
     data: {
       name: 'Faculty of informatics',
-      logoPath: '',
     },
   });
 
   const facultyFL = await prisma.faculty.create({
     data: {
       name: 'Faculty of medicine',
-      logoPath: '',
     },
   });
 
@@ -40,17 +38,17 @@ async function main() {
     },
   });
 
-  const semesterW2022 = await prisma.semester.create({
-    data: {
-      year: 2022,
-      semesterType: SemesterType.winter,
-    },
-  });
-
   const semesterS2022 = await prisma.semester.create({
     data: {
       year: 2022,
       semesterType: SemesterType.summer,
+    },
+  });
+
+  const semesterW2022 = await prisma.semester.create({
+    data: {
+      year: 2022,
+      semesterType: SemesterType.winter,
     },
   });
 

@@ -5,45 +5,51 @@ import {
 } from '@nestjs/common';
 import { Semester } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
 import { SemesterDto } from './dto';
 import { SemesterCreateDto } from './dto/semester-create.dto';
 
 @Injectable()
 export class SemesterService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
+
+  public async checkAlreadyExist(semesterDto: SemesterCreateDto) {
+    const semester = await this.prismaService.semester.findFirst({
+      where: {
+        deletedAt: null,
+        semesterType: semesterDto.semesterType,
+        year: semesterDto.year,
+      },
+    });
+
+    if (semester != null) {
+      throw new ForbiddenException('Already exists');
+    }
+  }
 
   public async create(semesterDto: SemesterCreateDto) {
-    try {
-      const newSemester = await this.prismaService.semester.create({
-        data: {
-          semesterType: semesterDto.semesterType,
-          year: semesterDto.year,
-        },
-      });
+    await this.checkAlreadyExist(semesterDto);
 
-      return plainToInstance<SemesterDto, Semester>(
-        SemesterDto,
-        { ...newSemester },
-        { excludeExtraneousValues: true });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Already exists');
-        }
-        else {
-          throw new ForbiddenException();
-        }
-      }
-    }
+    const newSemester = await this.prismaService.semester.create({
+      data: {
+        semesterType: semesterDto.semesterType,
+        year: semesterDto.year,
+      },
+    });
+
+    return plainToInstance<SemesterDto, Semester>(
+      SemesterDto,
+      { ...newSemester },
+      { excludeExtraneousValues: true },
+    );
   }
 
   public async findAll() {
     const semesters = await this.prismaService.semester.findMany({
       where: {
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     });
 
     return semesters.map((semester, ind, arr) =>
@@ -59,7 +65,7 @@ export class SemesterService {
     const semester = await this.prismaService.semester.findFirst({
       where: {
         id: id,
-        deletedAt: null
+        deletedAt: null,
       },
     });
 
@@ -75,18 +81,20 @@ export class SemesterService {
   }
 
   public async update(id: number, updateSemesterDto: SemesterCreateDto) {
+    await this.checkAlreadyExist(updateSemesterDto);
+
+    const semester = await this.prismaService.semester.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+    });
+
+    if (!semester) {
+      throw new NotFoundException('Semester not found');
+    }
+
     try {
-      const semester = await this.prismaService.semester.findFirst({
-        where: {
-          id: id,
-          deletedAt: null
-        }
-      });
-
-      if (!semester) {
-        throw new NotFoundException("Semester not found");
-      }
-
       const updatedSemester = await this.prismaService.semester.update({
         where: {
           id: id,
@@ -110,25 +118,25 @@ export class SemesterService {
   }
 
   public async remove(id: number) {
+    const semester = await this.prismaService.semester.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+    });
+
+    if (!semester) {
+      throw new NotFoundException('Semester not found');
+    }
+
     try {
-      const semester = await this.prismaService.semester.findFirst({
-        where: {
-          id: id,
-          deletedAt: null
-        }
-      });
-
-      if (!semester) {
-        throw new NotFoundException("Semester not found");
-      }
-
       await this.prismaService.semester.update({
         where: {
           id: id,
         },
         data: {
-          deletedAt: new Date()
-        }
+          deletedAt: new Date(),
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

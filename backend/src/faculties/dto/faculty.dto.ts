@@ -7,11 +7,6 @@ export class FacultyDto {
   @Expose()
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @Expose()
-  logoPath: string;
-
   @IsNumber()
   @Expose()
   id: number;
