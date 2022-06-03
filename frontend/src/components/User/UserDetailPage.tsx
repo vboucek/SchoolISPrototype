@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import {
@@ -43,6 +43,16 @@ export const UserDetailPage = () => {
   const [currentTaughtSubjects, setCurrentTaughtSubjects] = useState<
     SubjectPreviewProps[]
   >([]);
+  const [hasSubject, setHasSubject] = useState<boolean>(false);
+  const [hasTaughtSubject, setHasTaughtSubject] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasTaughtSubject(currentTaughtSubjects.length > 0);
+  }, [currentTaughtSubjects]);
+
+  useEffect(() => {
+    setHasSubject(currentSubjects.length > 0);
+  }, [currentSubjects]);
 
   useEffect(() => {
     setLoading(true);
@@ -199,17 +209,38 @@ export const UserDetailPage = () => {
         )}
 
         {subjectsLoading && <Loading />}
-        {!subjectsLoading && (
+        {!subjectsLoading && hasTaughtSubject && (
           <SubjectPreviewList
             title={'Subjects taught by this person:'}
             subjects={currentTaughtSubjects}
           />
         )}
-        {!subjectsLoading && (
+        {!hasTaughtSubject && (
+          <div className="subject">
+            <span className="subject__header">
+              {'Subjects taught by this person:'}
+            </span>
+            <div className="info">
+              This person does not teach any courses in this semester.
+            </div>
+          </div>
+        )}
+
+        {!subjectsLoading && hasSubject && (
           <SubjectPreviewList
             title={'Subjects this person has:'}
             subjects={currentSubjects}
           />
+        )}
+        {!hasSubject && (
+          <div className="subject">
+            <span className="subject__header">
+              {'Subjects taught by this person:'}
+            </span>
+            <div className="info">
+              This person is not enrolled in any courses in this semester.
+            </div>
+          </div>
         )}
       </div>
     </main>
