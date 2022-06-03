@@ -12,6 +12,8 @@
   --success-green-color: #95CD41;
   --default-font-color: white;
   --dark-font-color: black;
+  --delete-backround-color: #f5444f;
+  --delete-backround-hover-color: #a70000;
   --default-font-color-hover: #FFCF00;
   --dark-font-color-hover: gray;
   --default-font-color-clicked: lightgray;
@@ -43,6 +45,7 @@ body {
 
 html, body {
   height: 100%;
+  scroll-behavior: smooth;
 }
 
 select {
@@ -208,6 +211,40 @@ ul {
 .logo-small {
   width: 10rem;
   padding: 1rem 1rem 1rem 1.5rem;
+}
+
+.add {
+  padding-top: 1rem;
+  color: var(--default-font-color);
+  display: flex;
+  flex-direction: row;
+  text-align: end;
+  justify-content: end;
+  width: 100%;
+  align-items: center;
+}
+
+.add__link:hover {
+  color: var(--default-font-color-hover);
+}
+
+.add__link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add__logo {
+  width: 4rem;
+  z-index: 950;
+  margin-right: -1rem;
+}
+
+.add__button {
+  z-index: 900;
+  width: 12rem;
+  height: 3rem;
+  background-color: var(--dark-backround-color);
 }
 
 @media only screen and (max-width: 1400px) {

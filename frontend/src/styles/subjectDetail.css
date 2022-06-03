@@ -91,32 +91,6 @@
   background-color: var(--success-green-color);
 }
 
-.add {
-  padding-top: 1rem;
-  color: var(--default-font-color);
-  display: flex;
-  flex-direction: row;
-  align-self: end;
-  align-items: center;
-}
-
-.add:hover {
-  color: var(--default-font-color-hover);
-}
-
-.add__logo {
-  width: 4rem;
-  z-index: 950;
-  margin-right: -1rem;
-}
-
-.add__button {
-  z-index: 900;
-  width: 12rem;
-  height: 3rem;
-  background-color: var(--dark-backround-color);
-}
-
 @media only screen and (max-width: 1200px) {
   .subject-info__header {
     font-size: var(--default-font-size);
@@ -132,11 +106,8 @@
     justify-content: space-evenly;
   }
 
-  .subject-controls {
-  }
-
   .subject-controls__button {
-    width: 100%;
+
   }
 }
 
@@ -156,5 +127,15 @@
     padding-top: 0.5rem;
 
     align-items: start;
+  }
+
+  .subject-controls {
+    gap: 1rem;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .subject-controls__button {
+    width: 100%;
   }
 }

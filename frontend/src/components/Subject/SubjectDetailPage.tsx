@@ -226,17 +226,19 @@ const SubjectDetailPage = () => {
               />
             )}
             {subject && (isCreator || user?.roles.includes(UserRole.admin)) && (
-              <Link
-                onMouseEnter={teacherAddHover}
-                onMouseLeave={teacherAddHover}
-                className="add"
-                to={`/subject/${id}/teachers/add`}
-              >
-                <img className="add__logo" src={teacherAddLogo} alt="add" />
-                <button type="button" className="add__button">
-                  Add teacher
-                </button>
-              </Link>
+              <div className="add">
+                <Link
+                  onMouseEnter={teacherAddHover}
+                  onMouseLeave={teacherAddHover}
+                  className="add__link"
+                  to={`/subject/${id}/teachers/add`}
+                >
+                  <img className="add__logo" src={teacherAddLogo} alt="add" />
+                  <button type="button" className="add__button">
+                    Add teacher
+                  </button>
+                </Link>
+              </div>
             )}
             {subject && (
               <SemGroupPreviewList
@@ -245,17 +247,19 @@ const SubjectDetailPage = () => {
               />
             )}
             {subject && (isCreator || user?.roles.includes(UserRole.admin)) && (
-              <Link
-                onMouseEnter={seminarAddHover}
-                onMouseLeave={seminarAddHover}
-                className="add"
-                to="/seminar/create"
-              >
-                <img className="add__logo" src={seminarAddLogo} alt="add" />
-                <button type="button" className="add__button">
-                  Add seminar
-                </button>
-              </Link>
+              <div className="add">
+                <Link
+                  onMouseEnter={seminarAddHover}
+                  onMouseLeave={seminarAddHover}
+                  className="add__link"
+                  to="/seminar/create"
+                >
+                  <img className="add__logo" src={seminarAddLogo} alt="add" />
+                  <button type="button" className="add__button">
+                    Add seminar
+                  </button>
+                </Link>
+              </div>
             )}
           </>
         )}
