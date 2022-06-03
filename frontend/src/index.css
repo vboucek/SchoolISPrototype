@@ -251,6 +251,10 @@ ul {
   margin-right: -1rem;
 }
 
+.nav-item__logo {
+  -webkit-user-drag: none;
+}
+
 .add__button {
   z-index: 900;
   width: 12rem;
