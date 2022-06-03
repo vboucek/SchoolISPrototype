@@ -64,7 +64,6 @@
 }
 
 .submit-button:active {
-  border: solid black;
   color: var(--dark-font-color)
 }
 
