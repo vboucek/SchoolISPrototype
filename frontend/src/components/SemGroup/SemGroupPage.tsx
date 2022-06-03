@@ -17,6 +17,7 @@ import hoverAdd from '../../../public/assets/add-hover.svg';
 
 interface SemGroupProps {
   id: string;
+  name: string;
   seminarGroupDay: Day;
   seminarGroupDurationStartMins: number;
   seminarGroupDurationMins: number;
@@ -79,7 +80,7 @@ export const SemGroupPage = () => {
                     <span className="subject-info__code">
                       {semGroup?.course?.code}
                     </span>
-                    <h1 className="subject-info__title">Seminar Group #XXX</h1>
+                    <h1 className="subject-info__title">{semGroup?.name}</h1>
                   </div>
                   <div className="seminar-info__row">
                     <span className="seminar-info__end-type">

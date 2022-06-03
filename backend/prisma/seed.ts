@@ -307,6 +307,7 @@ async function main() {
   // Seminar groups
   const pb138SemGroup1 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #1',
       seminarGroupDay: Day.monday,
       seminarGroupDurationStartTimeMins: 300,
       seminarGroupDurationMins: 120,
@@ -319,6 +320,7 @@ async function main() {
 
   const pb138SemGroup2 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #2',
       seminarGroupDay: Day.tuesday,
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 120,
@@ -331,6 +333,7 @@ async function main() {
 
   const pv178SemGroup1 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #1',
       seminarGroupDay: Day.tuesday,
       seminarGroupDurationStartTimeMins: 1080,
       seminarGroupDurationMins: 180,
@@ -343,6 +346,7 @@ async function main() {
 
   const pv178SemGroup2 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #2',
       seminarGroupDay: Day.monday,
       seminarGroupDurationStartTimeMins: 360,
       seminarGroupDurationMins: 180,
@@ -355,6 +359,7 @@ async function main() {
 
   const pv178SemGroup3 = await prisma.seminarGroup.create({
     data: {
+      name: 'Test Group',
       seminarGroupDay: Day.wednesday,
       seminarGroupDurationStartTimeMins: 480,
       seminarGroupDurationMins: 180,
@@ -368,6 +373,7 @@ async function main() {
   // Old seminar groups
   const pb138OldSeminarGroup1 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #1',
       seminarGroupDay: Day.wednesday,
       seminarGroupDurationStartTimeMins: 840,
       seminarGroupDurationMins: 180,
@@ -380,6 +386,7 @@ async function main() {
 
   const pb138OldSeminarGroup2 = await prisma.seminarGroup.create({
     data: {
+      name: 'Group #2',
       seminarGroupDay: Day.friday,
       seminarGroupDurationStartTimeMins: 600,
       seminarGroupDurationMins: 180,

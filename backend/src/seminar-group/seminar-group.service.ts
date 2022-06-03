@@ -61,6 +61,7 @@ export class SeminarGroupService {
       },
       select: {
         id: true,
+        name: true,
         seminarGroupDay: true,
         seminarGroupDurationStartTimeMins: true,
         seminarGroupDurationMins: true,

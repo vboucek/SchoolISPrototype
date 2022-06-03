@@ -387,6 +387,7 @@ export class CourseService {
       },
       select: {
         id: true,
+        name: true,
         seminarGroupDay: true,
         seminarGroupDurationStartTimeMins: true,
         room: true,

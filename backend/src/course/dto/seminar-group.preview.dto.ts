@@ -15,6 +15,11 @@ export class SeminarGroupPreviewDto {
   @Expose()
   id: number;
 
+  @IsString()
+  @IsNotEmpty()
+  @Expose()
+  name: string;
+
   @IsEnum(Day)
   @IsNotEmpty()
   @Expose()

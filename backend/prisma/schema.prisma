@@ -104,6 +104,7 @@ model SeminarGroup {
   seminarGroupDurationMins          Int
   room                              String
   capacity                          Int
+  name                              String
 
   deletedAt DateTime?
 

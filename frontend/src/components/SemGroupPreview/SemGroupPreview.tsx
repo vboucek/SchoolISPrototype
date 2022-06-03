@@ -4,7 +4,7 @@ import { convertTime } from '../../utils/TimeUtils';
 
 export interface SemGroupPreviewProps {
   id: number;
-  index: number;
+  name: string;
   seminarGroupDay: string;
   seminarGroupDurationStartTimeMins: number;
   room: string;
@@ -13,7 +13,7 @@ export interface SemGroupPreviewProps {
 
 const SemGroupPreview = ({
   id,
-  index,
+  name,
   seminarGroupDay,
   seminarGroupDurationStartTimeMins,
   room,
@@ -22,7 +22,7 @@ const SemGroupPreview = ({
   return (
     <Link to={`/seminar/${id}`}>
       <li className="seminar__item">
-        <div className="seminar__title">Group #{index + 1}</div>
+        <div className="seminar__title">{name}</div>
         <ul className="seminar__tutors">
           {tutors.map((tutor) => (
             <li className="seminar__tutor">{tutor}</li>

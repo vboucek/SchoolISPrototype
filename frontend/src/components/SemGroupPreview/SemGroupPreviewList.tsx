@@ -14,8 +14,8 @@ const SemGroupPreviewList = ({
   <div className="seminar">
     <span className="seminar__header">{title}</span>
     <ul className="seminar__list">
-      {seminarGroups.map((s, index) => (
-        <SemGroupPreview key={s.id} {...s} index={index} />
+      {seminarGroups.map((s) => (
+        <SemGroupPreview key={s.id} {...s} />
       ))}
     </ul>
   </div>
