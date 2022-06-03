@@ -3,15 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { loggedInUserAtom } from '../state/atoms';
 import { AdminPage } from './Admin/AdminPage';
-import { AdminPageOverview } from './Admin/AdminPageOverview';
 import { Login } from './Auth/Login';
 import { Logout } from './Auth/Logout';
-import { FacultyCreate } from './Faculty/FacultyCreate';
-import { FacultyDelete } from './Faculty/FacultyDelete';
-import { FacultyEdit } from './Faculty/FacultyEdit';
-import { SemesterCreate } from './Semester/SemesterCreate';
-import { SemesterDelete } from './Semester/SemesterDelete';
-import { SemesterEdit } from './Semester/SemesterEdit';
 import { UserDeletePage } from './User/UserDeletePage';
 import { UserDetailPage } from './User/UserDetailPage';
 import MainPage from './MainPage/MainPage';
@@ -22,6 +15,10 @@ import SubjectFormPage from './Subject/SubjectFormPage';
 import SubjectAddTeacherPage from './Subject/SubjectAddTeacherPage';
 import UserFormPage from './User/UserFormPage';
 import { SubjectDeletePage } from './Subject/SubjectDeletePage';
+import { FacultyFormPage } from './Faculty/FacultyFormPage';
+import { FacultyDeletePage } from './Faculty/FacultyDeletePage';
+import { SemesterFormPage } from './Semester/SemesterFormPage';
+import { SemesterDeletePage } from './Semester/SemesterDeletePage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -31,15 +28,33 @@ export const Pages = () => {
       <Route path="/" element={<MainPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={loggedInUser && <Logout />} />
-      <Route path="/admin" element={loggedInUser && <AdminPage />}>
-        <Route index element={<AdminPageOverview />} />
-        <Route path="/admin/createSemester" element={<SemesterCreate />} />
-        <Route path="/admin/createFaculty" element={<FacultyCreate />} />
-        <Route path="/admin/semester/:id/delete" element={<SemesterDelete />} />
-        <Route path="/admin/semester/:id/edit" element={<SemesterEdit />} />
-        <Route path="/admin/faculty/:id/delete" element={<FacultyDelete />} />
-        <Route path="/admin/faculty/:id/edit" element={<FacultyEdit />} />
-      </Route>
+
+      <Route
+        path="/admin"
+        element={
+          loggedInUser &&
+          loggedInUser.roles.includes(UserRole.admin) && <AdminPage />
+        }
+      />
+      <Route
+        path="/faculty/create"
+        element={<FacultyFormPage edit={false} />}
+      />
+      <Route path="/faculty/:id/delete" element={<FacultyDeletePage />} />
+      <Route
+        path="/faculty/:id/edit"
+        element={<FacultyFormPage edit={true} />}
+      />
+      <Route
+        path="/semester/create"
+        element={<SemesterFormPage edit={false} />}
+      />
+      <Route path="/semester/:id/delete" element={<SemesterDeletePage />} />
+      <Route
+        path="/semester/:id/edit"
+        element={<SemesterFormPage edit={true} />}
+      />
+
       <Route path="/user/:id" element={<UserDetailPage />} />
       <Route path="/user/:id/edit" element={<UserFormPage edit={true} />} />
       <Route
