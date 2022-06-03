@@ -19,6 +19,8 @@ import { FacultyFormPage } from './Faculty/FacultyFormPage';
 import { FacultyDeletePage } from './Faculty/FacultyDeletePage';
 import { SemesterFormPage } from './Semester/SemesterFormPage';
 import { SemesterDeletePage } from './Semester/SemesterDeletePage';
+import { SemGroupPage } from './SemGroup/SemGroupPage';
+import { SemGroupAddTutorPage } from './SemGroup/SemGroupAddTutorPage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -70,6 +72,12 @@ export const Pages = () => {
         element={
           loggedInUser?.roles.includes(UserRole.admin) && <UserDeletePage />
         }
+      />
+
+      <Route path="/seminar/:id" element={loggedInUser && <SemGroupPage />} />
+      <Route
+        path="/seminar/:id/tutors/add"
+        element={<SemGroupAddTutorPage />}
       />
 
       <Route path="/subject" element={loggedInUser && <SubjectPage />} />

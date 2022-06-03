@@ -1,0 +1,160 @@
+.seminar-info {
+  color: var(--dark-font-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.seminar-info__row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.seminar-info__lecture {
+  text-transform: capitalize;
+}
+
+.seminar-info__error {
+  padding-top: 0.5rem;
+  color: var(--error-color);
+}
+
+.seminar-info__label {
+  width: 8rem;
+}
+
+.seminar-info__detail {
+  padding-top: 1rem;
+}
+
+.seminar-info__detail-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.seminar-info__code {
+  font-weight: bold;
+}
+
+.seminar-info__header {
+  font-size: var(--large-font-size);
+  display: flex;
+  flex-direction: column;
+}
+
+.seminar-info__main-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.seminar-info__sub-header {
+  font-size: var(--small-font-size);
+  margin-bottom: -1rem;
+}
+
+.seminar-info__description-container {
+  padding-top: 1rem;
+}
+
+.seminar-info__description {
+  font-size: var(--small-font-size);
+}
+
+.seminar-controls {
+  padding-top: 2rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.seminar-controls__button {
+  align-self: end;
+  color: var(--dark-font-color);
+  height: 3rem;
+  width: 12rem;
+  justify-self: start;
+  background-color: var(--dark-gray-backround-color);
+}
+
+.seminar-controls__button:hover {
+  background-color: var(--gray-backround-color);
+}
+
+.seminar-controls__button:active {
+  background-color: var(--dark-gray-backround-color);
+}
+
+.seminar-controls__button:disabled {
+  background-color: var(--success-green-color);
+}
+
+.add {
+  padding-top: 1rem;
+  color: var(--default-font-color);
+  display: flex;
+  flex-direction: row;
+  align-self: end;
+  align-items: center;
+}
+
+.add:hover {
+  color: var(--default-font-color-hover);
+}
+
+.add__logo {
+  width: 4rem;
+  z-index: 950;
+  margin-right: -1rem;
+}
+
+.add__button {
+  z-index: 900;
+  width: 12rem;
+  height: 3rem;
+  background-color: var(--dark-backround-color);
+}
+
+@media only screen and (max-width: 1200px) {
+  .seminar-info__header {
+    font-size: var(--default-font-size);
+  }
+
+  .seminar-info__main-header {
+    padding-top: 0.5rem;
+  }
+
+  .seminar-controls {
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  .seminar-controls {
+  }
+
+  .seminar-controls__button {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .seminar-info__header {
+    font-size: var(--default-font-size);
+  }
+
+  .seminar-info__title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 12rem;
+    white-space: nowrap;
+  }
+
+  .seminar-info__main-header {
+    padding-top: 0.5rem;
+
+    align-items: start;
+  }
+}
