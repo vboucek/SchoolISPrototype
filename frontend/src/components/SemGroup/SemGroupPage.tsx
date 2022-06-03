@@ -91,7 +91,7 @@ export const SemGroupPage = () => {
                     <span className="subject-info__code">
                       {semGroup?.course?.code}
                     </span>
-                    <h1 className="subject-info__title">{semGroup?.name}</h1>
+                    <h1 className="seminar-info__title">{semGroup?.name}</h1>
                   </div>
                   <div className="seminar-info__row">
                     <span className="seminar-info__end-type">
@@ -113,7 +113,7 @@ export const SemGroupPage = () => {
                 </div>
                 <div className="seminar-info__detail-row">
                   <div className="seminar-info__label">Room:</div>
-                  <div className="subject-info__room">{semGroup?.room}</div>
+                  <div className="seminar-info__room">{semGroup?.room}</div>
                 </div>
                 <div className="seminar-info__detail-row">
                   <div className="seminar-info__label">Capacity:</div>
@@ -147,17 +147,19 @@ export const SemGroupPage = () => {
               />
             )}
             {semGroup && (isCreator || user?.roles.includes(UserRole.admin)) && (
-              <Link
-                onMouseEnter={() => setTutorAddLogo(hoverAdd)}
-                onMouseLeave={() => setTutorAddLogo(add)}
-                className="add"
-                to={`/seminar/${id}/tutors/add`}
-              >
-                <img className="add__logo" src={tutorAddLogo} alt="add" />
-                <button type="button" className="add__button">
-                  Add tutor
-                </button>
-              </Link>
+              <div className="add">
+                <Link
+                  onMouseEnter={() => setTutorAddLogo(hoverAdd)}
+                  onMouseLeave={() => setTutorAddLogo(add)}
+                  className="add__link"
+                  to={`/seminar/${id}/tutors/add`}
+                >
+                  <img className="add__logo" src={tutorAddLogo} alt="add" />
+                  <button type="button" className="add__button">
+                    Add tutor
+                  </button>
+                </Link>
+              </div>
             )}
             {semGroup && (
               <StudentPreviewList
