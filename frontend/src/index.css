@@ -175,6 +175,13 @@ ul {
   padding-left: 0.1em;
 }
 
+.info {
+  background: var(--light-gray-backround-color);
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  color: var(--dark-font-color);
+}
+
 @media screen and (min-width: 1201px) {
   .semester-select {
     background: black;
