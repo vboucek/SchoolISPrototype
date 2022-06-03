@@ -1,0 +1,71 @@
+.add-user {
+  width: var(--content-width);
+  padding-top: 2rem;
+}
+
+.add-user__header {
+  color: var(--dark-font-color);
+}
+
+.add-user__item {
+  margin-top: 0.25rem;
+  height: 3rem;
+  background-color: var(--dark-backround-color);
+  padding: 0 1rem 0 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 2rem;
+}
+
+.add-user__controls-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-user__form {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 2rem;
+}
+
+.add-user__add-icon {
+  width: 3.1rem;
+  margin-right: -3rem;
+}
+
+.add-user__checkbox {
+  transform : scale(200%);
+  background: var(--gray-backround-color);
+  color: var(--gray-backround-color);
+}
+
+.add-user__add-button {
+  width: 3.1rem;
+  height: 3.1rem;
+  margin-right: -3rem;
+}
+
+@media only screen and (max-width: 1200px) {
+  .add-user__item {
+    gap: 2rem;
+  }
+
+  .add-user__remove-icon {
+    width: 3rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .add-user__name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 10rem;
+    white-space: nowrap;
+  }
+}
