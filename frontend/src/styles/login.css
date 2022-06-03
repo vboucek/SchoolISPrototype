@@ -13,6 +13,7 @@
 .login-form {
   border: solid black;
   padding: 1rem;
+  background-color: var(--light-gray-backround-color);
 }
 
 .login-header {
@@ -37,7 +38,7 @@
 }
 
 .text-field {
-  border: solid black;
+  background: var(--dark-gray-backround-color);
   padding-left: 1rem;
 }
 
@@ -50,8 +51,10 @@
 }
 
 .submit-button {
-  border: solid black;
+  #border: solid black;
   padding: 0 1rem 0 1rem;
+  background-color: var(--default-font-color-hover);
+  color: var(--dark-font-color);
 }
 
 .submit-button:hover {
