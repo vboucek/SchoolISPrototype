@@ -1,48 +1,61 @@
 import React, { useState } from 'react';
 import '../../styles/userList.css';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { useParams } from 'react-router-dom';
-import NoConnection from '../NoConnection/NoConnection';
-import UserPreview, {
-  UserPreviewFormInput,
-  UserPreviewProps,
-} from './UserPreview';
+import { Link } from 'react-router-dom';
+import add from '../../../public/assets/add.svg';
+import hoverAdd from '../../../public/assets/add-hover.svg';
+import UserPreview, { UserPreviewProps } from './UserPreview';
+import UserFilterTile from './UserFilterTile';
 
 export interface UserPreviewListProps {
   title: string;
   users: UserPreviewProps[];
+  selectedLetter: string | undefined;
+  setSelectedLetter: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const UserPreviewList = ({ title, users }: UserPreviewListProps) => {
-  const { id } = useParams();
-  const [requestError, setRequestError] = useState<AxiosError>();
-  const [userList, setUserList] = useState<UserPreviewProps[]>(users);
+const UserPreviewList = ({
+  title,
+  users,
+  selectedLetter,
+  setSelectedLetter,
+}: UserPreviewListProps) => {
+  const [userAddLogo, setUserAddLogo] = useState(add);
 
-  function onAddTeacher(teacherId: number, teacherProps: UserPreviewFormInput) {
-    axios
-      .post(`subjects/${id}/teacher`, {
-        teacherId: teacherId,
-        ...teacherProps,
-      })
-      .then((response: AxiosResponse) => {
-        if (response.status === 201) {
-          setUserList(userList.filter((u) => u.id != teacherId));
-        }
-      })
-      .catch((error_) => {
-        setRequestError(error_);
-      });
+  function userAddHover() {
+    setUserAddLogo(userAddLogo === add ? hoverAdd : add);
   }
 
   return (
     <div className="user">
       <span className="user__header">{title}</span>
+      <div className="user__filter">
+        {'abcdefghijklmnopqrstuvwxyz#'.split('').map((letter, index) => (
+          <UserFilterTile
+            key={index}
+            letter={letter}
+            selectedLetter={selectedLetter}
+            setSelectedLetter={setSelectedLetter}
+          />
+        ))}
+      </div>
       <ul className="user__list">
-        {userList.map((u) => (
-          <UserPreview key={u.id} {...u} addTeacher={onAddTeacher} />
+        {users.map((u) => (
+          <UserPreview key={u.id} {...u} />
         ))}
       </ul>
-      {requestError && <NoConnection />}
+      <div className="add">
+        <Link
+          onMouseEnter={userAddHover}
+          onMouseLeave={userAddHover}
+          className="add__link"
+          to="/user/create"
+        >
+          <img className="add__logo" src={userAddLogo} alt="add" />
+          <button type="button" className="add__button">
+            Add user
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
