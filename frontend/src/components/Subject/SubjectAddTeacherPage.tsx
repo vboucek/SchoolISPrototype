@@ -5,8 +5,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import NoConnection from '../NoConnection/NoConnection';
 import Loading from '../Loading/Loading';
 import { useParams } from 'react-router-dom';
-import { UserPreviewProps } from '../UserPreview/UserPreview';
-import UserPreviewList from '../UserPreview/UserPreviewList';
+import AddUserPreviewList from '../AddUserPreview/AddUserPreviewList';
+import { AddUserPreviewProps } from '../AddUserPreview/AddUserPreview';
 
 export interface TeacherFilterFormInput {
   firstName: string;
@@ -16,7 +16,7 @@ export interface TeacherFilterFormInput {
 const SubjectAddTeacherPage = () => {
   const [error, setError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
-  const [teachers, setTeachers] = useState<UserPreviewProps[]>([]);
+  const [teachers, setTeachers] = useState<AddUserPreviewProps[]>([]);
   const { register, handleSubmit } = useForm<TeacherFilterFormInput>();
   const { id } = useParams();
 
@@ -30,8 +30,8 @@ const SubjectAddTeacherPage = () => {
           ...data,
         },
       })
-      .then((response: AxiosResponse<UserPreviewProps[]>) => {
-        const teachers: UserPreviewProps[] = response.data;
+      .then((response: AxiosResponse<AddUserPreviewProps[]>) => {
+        const teachers: AddUserPreviewProps[] = response.data;
         setTeachers(teachers);
         setLoading(false);
       })
@@ -74,7 +74,7 @@ const SubjectAddTeacherPage = () => {
         {error && <NoConnection />}
         {loading && <Loading />}
         {!loading && !error && (
-          <UserPreviewList title={'Available teachers:'} users={teachers} />
+          <AddUserPreviewList title={'Available teachers:'} users={teachers} />
         )}
       </div>
     </main>
