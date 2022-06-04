@@ -18,6 +18,7 @@ import { AuthenticatedGuard, RolesGuard } from '../auth/guard';
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 import { TutorFilterDto } from './dto/tutor.filter.dto';
+import { SeminarGroupSignUpDto } from './dto/seminar-group.signup.dto';
 
 @Controller('/seminar-group')
 @Roles(UserRole.user)
@@ -76,5 +77,15 @@ export class SeminarGroupController {
   @Get(PARAMS_ONLY_ID + '/student-count')
   async countCapacity(@ParseParamsId() id: number) {
     return this.seminarGroupService.countCapacity(id);
+  }
+
+  @Post(PARAMS_ONLY_ID + '/signup')
+  @Roles(UserRole.user)
+  async signUp(
+    @ParseParamsId() id: number,
+    @Body() signUp: SeminarGroupSignUpDto,
+    @GetUser() user: User,
+  ) {
+    return this.seminarGroupService.signUp(id, user, signUp);
   }
 }

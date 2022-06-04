@@ -41,12 +41,31 @@ interface SemGroupProps {
 export const SemGroupPage = () => {
   const { id } = useParams();
   const user = useRecoilValue(loggedInUserAtom);
+
   const [error, setError] = useState<AxiosError>();
+  const [signError, setSignError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
+
   const [semGroup, setSemGroup] = useState<SemGroupProps>();
+  const [students, setStudents] = useState<StudentPreviewProps[]>([]);
   const [isCreator, setIsCreator] = useState<boolean>(false);
   const [tutorAddLogo, setTutorAddLogo] = useState(add);
   const [studentCount, setStudentCount] = useState(0);
+  const [signedUp, setSignedUp] = useState<boolean>(false);
+
+  function signUp() {
+    axios
+      .post(`/seminar-group/${id}/signup`, {
+        studentId: user?.id,
+      })
+      .then((response: AxiosResponse) => {
+        setStudents([...students, response.data]);
+        setSignError(undefined);
+      })
+      .catch((signError) => {
+        setSignError(signError);
+      });
+  }
 
   useEffect(() => {
     axios
@@ -54,6 +73,8 @@ export const SemGroupPage = () => {
       .then((response: AxiosResponse) => {
         const semGroup: SemGroupProps = response.data;
         setSemGroup(semGroup);
+        const students = semGroup?.students?.map((student) => student.student);
+        setStudents(students ?? []);
         setIsCreator(user?.id === semGroup?.course.creatorId);
         setLoading(false);
       })
@@ -71,6 +92,10 @@ export const SemGroupPage = () => {
         setError(error);
       });
   });
+
+  useEffect(() => {
+    setSignedUp(students.find((s) => s.id === Number(user?.id)) != null);
+  }, [students]);
 
   return (
     <main className="main-content">
@@ -139,6 +164,22 @@ export const SemGroupPage = () => {
                 </div>
               </div>
             </div>
+            <div className="seminar-controls">
+              {!isCreator && (
+                <button
+                  onClick={signUp}
+                  disabled={signedUp}
+                  className="subject-controls__button"
+                >
+                  {signedUp ? 'Signed Up' : 'Sign Up'}
+                </button>
+              )}
+            </div>
+            {signError && (
+              <div className="subject-info__error">
+                {signError.response?.data.message}
+              </div>
+            )}
             {semGroup && (
               <TutorPreviewList
                 title="Tutors:"
@@ -165,7 +206,8 @@ export const SemGroupPage = () => {
               <StudentPreviewList
                 title={'Students:'}
                 canEdit={isCreator || user?.roles.includes(UserRole.admin)}
-                students={semGroup.students.map((s) => s.student)}
+                students={students}
+                setStudents={setStudents}
               />
             )}
           </>

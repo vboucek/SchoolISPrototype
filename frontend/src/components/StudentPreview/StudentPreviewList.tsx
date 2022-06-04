@@ -9,16 +9,16 @@ export interface StudentPreviewListProps {
   title: string;
   canEdit?: boolean;
   students: StudentPreviewProps[];
+  setStudents: React.Dispatch<React.SetStateAction<StudentPreviewProps[]>>;
 }
 
 const StudentPreviewList = ({
   title,
   students,
+  setStudents,
   canEdit,
 }: StudentPreviewListProps) => {
   const { id } = useParams();
-  const [studentList, setStudentList] =
-    useState<StudentPreviewProps[]>(students);
   const [deleteError, setDeleteError] = useState<AxiosError>();
 
   function onRemove(studentId: number) {
@@ -30,7 +30,7 @@ const StudentPreviewList = ({
       })
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
-          setStudentList(studentList.filter((t) => t.id != studentId));
+          setStudents(students.filter((t) => t.id != studentId));
         }
       })
       .catch((deleteError_) => {
@@ -42,7 +42,7 @@ const StudentPreviewList = ({
     <div className="teacher">
       <span className="teacher__header">{title}</span>
       <ul className="teacher__list">
-        {studentList.map((s) => (
+        {students.map((s) => (
           <StudentPreview
             key={s.id}
             student={s}

@@ -10,6 +10,7 @@ import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 import { TutorFilterDto } from './dto/tutor.filter.dto';
+import { SeminarGroupSignUpDto } from './dto/seminar-group.signup.dto';
 
 interface ValidateOptions {
   allowAdmin?: boolean;
@@ -240,6 +241,94 @@ export class SeminarGroupService {
       where: {
         deletedAt: null,
         seminarGroupId: id,
+      },
+    });
+  }
+
+  public async signUp(
+    id: number,
+    user: User,
+    groupSignUp: SeminarGroupSignUpDto,
+  ) {
+    await this.validateUser(user, id, groupSignUp.studentId, {
+      allowAffectedUser: true,
+    });
+
+    const group = await this.prismaService.seminarGroup.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      select: {
+        capacity: true,
+        course: {
+          select: {
+            id: true,
+            startSign: true,
+            endSign: true,
+          },
+        },
+      },
+    });
+
+    if (!group) throw new NotFoundException();
+
+    const occupied = await this.countCapacity(id);
+    if (occupied >= group.capacity)
+      throw new BadRequestException('Seminar group is full');
+
+    const now = new Date();
+    if (now < group.course.startSign || now > group.course.endSign) {
+      throw new BadRequestException(
+        "You can't sign up for this seminar group now",
+      );
+    }
+
+    const student = await this.prismaService.user.findFirst({
+      where: {
+        id: groupSignUp.studentId,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        coursesSigned: {
+          select: {
+            id: true,
+          },
+          where: {
+            courseId: group.course.id,
+            deletedAt: null,
+          },
+        },
+        seminarGroupSigned: {
+          select: {
+            id: true,
+          },
+          where: {
+            courseId: group.course.id,
+            deletedAt: null,
+          },
+        },
+      },
+    });
+
+    if (student == null) throw new NotFoundException('Student not found');
+    if (student.coursesSigned.length === 0) {
+      throw new BadRequestException(
+        'You have to sign up for this course first',
+      );
+    }
+    if (student.seminarGroupSigned.length > 0) {
+      throw new BadRequestException(
+        'You have already signed up for a seminar group in this course',
+      );
+    }
+
+    await this.prismaService.userSeminarGroupSigned.create({
+      data: {
+        seminarGroupId: id,
+        studentId: groupSignUp.studentId,
+        courseId: group.course.id,
       },
     });
   }
