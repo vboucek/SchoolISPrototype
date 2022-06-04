@@ -53,7 +53,7 @@ export const TeacherPage = () => {
           </div>
         )}
 
-        <Link className="add" to="/teacher/add">
+        <Link className="add" to="/subject/create">
           <img className="add__logo" src="/public/assets/add.svg" alt="add" />
           <button type="button" className="add__button">
             Add course
