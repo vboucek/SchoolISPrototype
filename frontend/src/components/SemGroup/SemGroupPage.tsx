@@ -67,6 +67,21 @@ export const SemGroupPage = () => {
       });
   }
 
+  function signOut() {
+    axios
+      .delete(`seminar-group/${id}/student`, {
+        data: {
+          studentId: user?.id,
+        },
+      })
+      .then(() => {
+        setStudents(students.filter((s) => s.id !== user?.id));
+      })
+      .catch((error) => {
+        setSignError(error);
+      });
+  }
+
   useEffect(() => {
     axios
       .get(`/seminar-group/${id}`)
@@ -166,17 +181,26 @@ export const SemGroupPage = () => {
             </div>
             <div className="seminar-controls">
               {!isCreator && (
-                <button
-                  onClick={signUp}
-                  disabled={signedUp}
-                  className="subject-controls__button"
-                >
-                  {signedUp ? 'Signed Up' : 'Sign Up'}
-                </button>
+                <>
+                  <button
+                    onClick={signUp}
+                    disabled={signedUp}
+                    className="seminar-controls__button"
+                  >
+                    Sign Up
+                  </button>
+                  <button
+                    onClick={signOut}
+                    disabled={!signedUp}
+                    className="seminar-controls__button"
+                  >
+                    Sign Out
+                  </button>
+                </>
               )}
             </div>
             {signError && (
-              <div className="subject-info__error">
+              <div className="seminar-info__error">
                 {signError.response?.data.message}
               </div>
             )}

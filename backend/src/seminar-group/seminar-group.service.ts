@@ -320,7 +320,7 @@ export class SeminarGroupService {
     }
     if (student.seminarGroupSigned.length > 0) {
       throw new BadRequestException(
-        'You have already signed up for a seminar group in this course',
+        'You have already signed up for another seminar group in this course',
       );
     }
 

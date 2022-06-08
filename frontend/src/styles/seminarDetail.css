@@ -84,7 +84,7 @@
 }
 
 .seminar-controls__button:disabled {
-  background-color: var(--success-green-color);
+  display: none;
 }
 
 @media only screen and (max-width: 1200px) {
