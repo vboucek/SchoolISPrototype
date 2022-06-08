@@ -26,8 +26,8 @@ export class SeminarGroupService {
 
   private async validateUser(
     user: User,
-    groupId: number | undefined,
     affectedId: number,
+    groupId?: number,
     options?: ValidateOptions,
   ) {
     if (options.allowAdmin && user.roles.includes(UserRole.admin)) return;
@@ -139,7 +139,7 @@ export class SeminarGroupService {
   }
 
   public async createGroup(group: SeminarGroupDto, user: User) {
-    await this.validateUser(user, undefined, user.id, {
+    await this.validateUser(user, user.id, undefined, {
       allowAdmin: true,
       allowTeacher: true,
     });
@@ -156,7 +156,7 @@ export class SeminarGroupService {
     id: number,
     tutor: SeminarGroupRemoveTutorDto,
   ) {
-    await this.validateUser(user, id, tutor.tutorId, {
+    await this.validateUser(user, tutor.tutorId, id, {
       allowAdmin: true,
       allowCourseCreator: true,
     });
@@ -188,7 +188,7 @@ export class SeminarGroupService {
     id: number,
     student: SeminarGroupRemoveStudentDto,
   ) {
-    await this.validateUser(user, id, student.studentId, {
+    await this.validateUser(user, student.studentId, id, {
       allowAdmin: true,
       allowCourseCreator: true,
       allowAffectedUser: true,
@@ -244,7 +244,7 @@ export class SeminarGroupService {
     id: number,
     tutor: SeminarGroupNewTutorDto,
   ) {
-    await this.validateUser(user, id, tutor.tutorId, {
+    await this.validateUser(user, tutor.tutorId, id, {
       allowAdmin: true,
       allowCourseCreator: true,
     });
@@ -306,7 +306,7 @@ export class SeminarGroupService {
     user: User,
     newStudent: SeminarGroupNewStudentDto,
   ) {
-    await this.validateUser(user, id, newStudent.studentId, {
+    await this.validateUser(user, newStudent.studentId, id, {
       allowAffectedUser: true,
     });
 
