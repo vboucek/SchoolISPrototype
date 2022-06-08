@@ -19,12 +19,19 @@ import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 import { TutorFilterDto } from './dto/tutor.filter.dto';
 import { SeminarGroupNewStudentDto } from './dto/seminar-group.new.student.dto';
+import { SeminarGroupDto } from './dto/seminar-group.dto';
 
 @Controller('/seminar-group')
 @Roles(UserRole.user)
 @UseGuards(AuthenticatedGuard, RolesGuard)
 export class SeminarGroupController {
   constructor(private readonly seminarGroupService: SeminarGroupService) {}
+
+  @Post()
+  @Roles(UserRole.admin, UserRole.teacher)
+  async create(@Body() semGroupDto: SeminarGroupDto, @GetUser() user: User) {
+    return await this.seminarGroupService.createGroup(semGroupDto, user);
+  }
 
   @Get(PARAMS_ONLY_ID)
   findOne(@ParseParamsId() id: number) {

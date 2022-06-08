@@ -11,9 +11,11 @@ import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 import { TutorFilterDto } from './dto/tutor.filter.dto';
 import { SeminarGroupNewStudentDto } from './dto/seminar-group.new.student.dto';
+import { SeminarGroupDto } from './dto/seminar-group.dto';
 
 interface ValidateOptions {
   allowAdmin?: boolean;
+  allowTeacher?: boolean;
   allowCourseCreator?: boolean;
   allowAffectedUser?: boolean;
 }
@@ -24,32 +26,33 @@ export class SeminarGroupService {
 
   private async validateUser(
     user: User,
-    groupId: number,
+    groupId: number | undefined,
     affectedId: number,
     options?: ValidateOptions,
   ) {
-    const group = await this.prismaService.seminarGroup.findFirst({
-      where: {
-        id: groupId,
-        deletedAt: null,
-      },
-      select: {
-        course: {
-          select: {
-            creatorId: true,
+    if (options.allowAdmin && user.roles.includes(UserRole.admin)) return;
+    if (options.allowTeacher && user.roles.includes(UserRole.teacher)) return;
+    if (options.allowAffectedUser && user.id === affectedId) return;
+
+    if (groupId) {
+      const group = await this.prismaService.seminarGroup.findFirst({
+        where: {
+          id: groupId,
+          deletedAt: null,
+        },
+        select: {
+          course: {
+            select: {
+              creatorId: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    if (group == null) {
-      throw new NotFoundException();
+      if (group == null) throw new NotFoundException();
+      if (options.allowCourseCreator && user.id === group.course.creatorId)
+        return;
     }
-
-    if (options.allowAdmin && user.roles.includes(UserRole.admin)) return;
-    if (options.allowAffectedUser && user.id === affectedId) return;
-    if (options.allowCourseCreator && user.id === group.course.creatorId)
-      return;
 
     throw new ForbiddenException();
   }
@@ -131,6 +134,19 @@ export class SeminarGroupService {
       },
       data: {
         deletedAt: new Date(),
+      },
+    });
+  }
+
+  public async createGroup(group: SeminarGroupDto, user: User) {
+    await this.validateUser(user, undefined, user.id, {
+      allowAdmin: true,
+      allowTeacher: true,
+    });
+
+    await this.prismaService.seminarGroup.create({
+      data: {
+        ...group,
       },
     });
   }
