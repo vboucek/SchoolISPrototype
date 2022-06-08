@@ -76,6 +76,7 @@ export const SemGroupPage = () => {
       })
       .then(() => {
         setStudents(students.filter((s) => s.id !== user?.id));
+        setSignError(undefined);
       })
       .catch((error) => {
         setSignError(error);

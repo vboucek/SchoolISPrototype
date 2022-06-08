@@ -169,10 +169,33 @@ export class SeminarGroupService {
       },
       select: {
         id: true,
+        seminarGroup: {
+          select: {
+            course: {
+              select: {
+                startSign: true,
+                endSign: true,
+              },
+            },
+          },
+        },
       },
     });
 
     if (studies == null) throw new NotFoundException();
+
+    if (student.studentId === user.id) {
+      const now = new Date();
+      if (
+        now < studies.seminarGroup.course.startSign ||
+        now > studies.seminarGroup.course.endSign
+      ) {
+        throw new BadRequestException(
+          "You can't sign out from this seminar group now",
+        );
+      }
+    }
+
     await this.prismaService.userSeminarGroupSigned.update({
       where: {
         id: studies.id,
