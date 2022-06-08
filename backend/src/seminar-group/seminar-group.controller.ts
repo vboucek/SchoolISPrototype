@@ -31,6 +31,12 @@ export class SeminarGroupController {
     return this.seminarGroupService.findOne(+id);
   }
 
+  @Delete(PARAMS_ONLY_ID)
+  @Roles(UserRole.admin, UserRole.teacher)
+  delete(@ParseParamsId() id: number, @GetUser() user: User) {
+    return this.seminarGroupService.deleteGroup(+id, user);
+  }
+
   @Delete(PARAMS_ONLY_ID + '/tutor')
   @Roles(UserRole.admin, UserRole.teacher)
   async removeTutor(

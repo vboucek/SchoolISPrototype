@@ -24,6 +24,7 @@ interface SemGroupProps {
   capacity: number;
   room: string;
   course: {
+    id: number;
     creatorId: number;
     code: string;
     credits: number;
@@ -198,6 +199,11 @@ export const SemGroupPage = () => {
                     Sign Out
                   </button>
                 </>
+              )}
+              {(isCreator || user?.roles.includes(UserRole.admin)) && (
+                <Link to="delete" state={{ courseId: semGroup?.course.id }}>
+                  <button className="seminar-controls__button">Delete</button>
+                </Link>
               )}
             </div>
             {signError && (

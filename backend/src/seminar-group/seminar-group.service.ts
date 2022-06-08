@@ -70,6 +70,7 @@ export class SeminarGroupService {
         room: true,
         course: {
           select: {
+            id: true,
             creatorId: true,
             code: true,
             credits: true,
@@ -116,6 +117,22 @@ export class SeminarGroupService {
 
     if (group == null) throw new NotFoundException();
     return group;
+  }
+
+  public async deleteGroup(id: number, user: User) {
+    await this.validateUser(user, id, id, {
+      allowAdmin: true,
+      allowCourseCreator: true,
+    });
+
+    await this.prismaService.seminarGroup.update({
+      where: {
+        id: id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 
   public async removeTutorFromSemGroup(
