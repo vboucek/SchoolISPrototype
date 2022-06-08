@@ -10,7 +10,7 @@ import { SeminarGroupRemoveTutorDto } from './dto/seminar-group.remove.tutor.dto
 import { SeminarGroupRemoveStudentDto } from './dto/seminar-group.remove.student.dto';
 import { SeminarGroupNewTutorDto } from './dto/seminar-group.new.tutor.dto';
 import { TutorFilterDto } from './dto/tutor.filter.dto';
-import { SeminarGroupSignUpDto } from './dto/seminar-group.signup.dto';
+import { SeminarGroupNewStudentDto } from './dto/seminar-group.new.student.dto';
 
 interface ValidateOptions {
   allowAdmin?: boolean;
@@ -245,12 +245,12 @@ export class SeminarGroupService {
     });
   }
 
-  public async signUp(
+  public async addStudent(
     id: number,
     user: User,
-    groupSignUp: SeminarGroupSignUpDto,
+    newStudent: SeminarGroupNewStudentDto,
   ) {
-    await this.validateUser(user, id, groupSignUp.studentId, {
+    await this.validateUser(user, id, newStudent.studentId, {
       allowAffectedUser: true,
     });
 
@@ -286,7 +286,7 @@ export class SeminarGroupService {
 
     const student = await this.prismaService.user.findFirst({
       where: {
-        id: groupSignUp.studentId,
+        id: newStudent.studentId,
         deletedAt: null,
       },
       select: {
@@ -327,7 +327,7 @@ export class SeminarGroupService {
     await this.prismaService.userSeminarGroupSigned.create({
       data: {
         seminarGroupId: id,
-        studentId: groupSignUp.studentId,
+        studentId: newStudent.studentId,
         courseId: group.course.id,
       },
     });

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class SeminarGroupSignUpDto {
+export class SeminarGroupNewStudentDto {
   @IsNotEmpty()
   @IsNumber()
   studentId: number;

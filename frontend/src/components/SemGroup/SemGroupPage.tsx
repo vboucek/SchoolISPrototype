@@ -55,7 +55,7 @@ export const SemGroupPage = () => {
 
   function signUp() {
     axios
-      .post(`/seminar-group/${id}/signup`, {
+      .post(`/seminar-group/${id}/student`, {
         studentId: user?.id,
       })
       .then((response: AxiosResponse) => {
