@@ -151,6 +151,22 @@ export class SeminarGroupService {
     });
   }
 
+  public async updateGroup(user: User, id: number, group: SeminarGroupDto) {
+    await this.validateUser(user, id, id, {
+      allowAdmin: true,
+      allowCourseCreator: true,
+    });
+
+    await this.prismaService.seminarGroup.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...group,
+      },
+    });
+  }
+
   public async removeTutorFromSemGroup(
     user: User,
     id: number,

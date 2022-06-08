@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -31,6 +32,16 @@ export class SeminarGroupController {
   @Roles(UserRole.admin, UserRole.teacher)
   async create(@Body() semGroupDto: SeminarGroupDto, @GetUser() user: User) {
     return await this.seminarGroupService.createGroup(semGroupDto, user);
+  }
+
+  @Put(PARAMS_ONLY_ID)
+  @Roles(UserRole.admin, UserRole.teacher)
+  async update(
+    @ParseParamsId() id: number,
+    @Body() semGroupDto: SeminarGroupDto,
+    @GetUser() user: User,
+  ) {
+    return this.seminarGroupService.updateGroup(user, id, semGroupDto);
   }
 
   @Get(PARAMS_ONLY_ID)
