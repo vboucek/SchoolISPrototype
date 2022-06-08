@@ -14,12 +14,13 @@ import { format } from 'date-fns';
 import { UserRole } from '../../types/UserRole';
 import add from '../../../public/assets/add.svg';
 import hoverAdd from '../../../public/assets/add-hover.svg';
+import { convertTime } from '../../utils/TimeUtils';
 
 interface SemGroupProps {
   id: string;
   name: string;
   seminarGroupDay: Day;
-  seminarGroupDurationStartMins: number;
+  seminarGroupDurationStartTimeMins: number;
   seminarGroupDurationMins: number;
   capacity: number;
   room: string;
@@ -150,7 +151,14 @@ export const SemGroupPage = () => {
                 <div className="seminar-info__detail-row">
                   <div className="seminar-info__label">Seminar:</div>
                   <div className="seminar-info__lecture">
-                    Monday 16:00-18:00
+                    {semGroup?.seminarGroupDay}{' '}
+                    {convertTime(semGroup?.seminarGroupDurationStartTimeMins)}-
+                    {convertTime(
+                      semGroup
+                        ? semGroup?.seminarGroupDurationStartTimeMins +
+                            semGroup?.seminarGroupDurationMins
+                        : undefined,
+                    )}
                   </div>
                 </div>
                 <div className="seminar-info__detail-row">
