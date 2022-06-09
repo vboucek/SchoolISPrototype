@@ -390,6 +390,7 @@ export class CourseService {
         name: true,
         seminarGroupDay: true,
         seminarGroupDurationStartTimeMins: true,
+        seminarGroupDurationMins: true,
         room: true,
         tutors: {
           select: {

@@ -5,8 +5,9 @@ import { convertTime } from '../../utils/TimeUtils';
 export interface SemGroupPreviewProps {
   id: number;
   name: string;
-  seminarGroupDay: string;
+  seminarGroupDay: Day;
   seminarGroupDurationStartTimeMins: number;
+  seminarGroupDurationMins: number;
   room: string;
   tutors: string[];
 }
@@ -16,6 +17,7 @@ const SemGroupPreview = ({
   name,
   seminarGroupDay,
   seminarGroupDurationStartTimeMins,
+  seminarGroupDurationMins,
   room,
   tutors,
 }: SemGroupPreviewProps) => {
@@ -30,7 +32,10 @@ const SemGroupPreview = ({
         </ul>
         <div className="seminar__room">{room}</div>
         <div className="seminar__time">
-          {seminarGroupDay} {convertTime(seminarGroupDurationStartTimeMins)}
+          {seminarGroupDay} {convertTime(seminarGroupDurationStartTimeMins)}-
+          {convertTime(
+            seminarGroupDurationStartTimeMins + seminarGroupDurationMins,
+          )}
         </div>
       </li>
     </Link>

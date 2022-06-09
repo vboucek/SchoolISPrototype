@@ -30,6 +30,11 @@ export class SeminarGroupPreviewDto {
   @Expose()
   seminarGroupDurationStartTimeMins: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+  @Expose()
+  seminarGroupDurationMins;
+
   @IsString()
   @IsNotEmpty()
   @Expose()
