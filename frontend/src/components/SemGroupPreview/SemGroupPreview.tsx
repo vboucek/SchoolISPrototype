@@ -31,8 +31,9 @@ const SemGroupPreview = ({
           ))}
         </ul>
         <div className="seminar__room">{room}</div>
+        <div className="seminar__time">{seminarGroupDay}</div>
         <div className="seminar__time">
-          {seminarGroupDay} {convertTime(seminarGroupDurationStartTimeMins)}-
+          {convertTime(seminarGroupDurationStartTimeMins)}-
           {convertTime(
             seminarGroupDurationStartTimeMins + seminarGroupDurationMins,
           )}
