@@ -144,11 +144,13 @@ export class SeminarGroupService {
       allowTeacher: true,
     });
 
-    await this.prismaService.seminarGroup.create({
+    const newGroup = await this.prismaService.seminarGroup.create({
       data: {
         ...group,
       },
     });
+
+    return newGroup.id;
   }
 
   public async updateGroup(user: User, id: number, group: SeminarGroupDto) {
@@ -157,7 +159,7 @@ export class SeminarGroupService {
       allowCourseCreator: true,
     });
 
-    await this.prismaService.seminarGroup.update({
+    return await this.prismaService.seminarGroup.update({
       where: {
         id: id,
       },
