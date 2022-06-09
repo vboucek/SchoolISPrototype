@@ -269,6 +269,7 @@ export class UserService {
         semesterId: filter.semesterId,
         students: {
           some: {
+            deletedAt: null,
             studentId: userId,
           },
         },
