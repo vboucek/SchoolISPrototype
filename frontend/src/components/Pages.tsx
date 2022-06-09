@@ -25,6 +25,7 @@ import { TeacherPage } from './Teacher/TeacherPage';
 import { TeacherAddCoursePage } from './Teacher/TeacherAddCoursePage';
 import { SemGroupDeletePage } from './SemGroup/SemGroupDeletePage';
 import { TimeTablePage } from './Timetable/TimeTablePage';
+import { SemGroupFormPage } from './SemGroup/SemGroupFormPage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -89,6 +90,24 @@ export const Pages = () => {
           (loggedInUser?.roles.includes(UserRole.teacher) ||
             loggedInUser?.roles.includes(UserRole.admin)) && (
             <SemGroupDeletePage />
+          )
+        }
+      />
+      <Route
+        path="/seminar/create"
+        element={
+          (loggedInUser?.roles.includes(UserRole.teacher) ||
+            loggedInUser?.roles.includes(UserRole.admin)) && (
+            <SemGroupFormPage edit={false} />
+          )
+        }
+      />
+      <Route
+        path="/seminar/:id/edit"
+        element={
+          (loggedInUser?.roles.includes(UserRole.teacher) ||
+            loggedInUser?.roles.includes(UserRole.admin)) && (
+            <SemGroupFormPage edit={true} />
           )
         }
       />

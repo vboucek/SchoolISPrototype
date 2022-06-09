@@ -213,6 +213,11 @@ export const SemGroupPage = () => {
                   <button className="seminar-controls__button">Delete</button>
                 </Link>
               )}
+              {(isCreator || user?.roles.includes(UserRole.admin)) && (
+                <Link to="edit" state={{ courseId: semGroup?.course.id }}>
+                  <button className="seminar-controls__button">Edit</button>
+                </Link>
+              )}
             </div>
             {signError && (
               <div className="seminar-info__error">

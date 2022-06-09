@@ -266,6 +266,7 @@ const SubjectDetailPage = () => {
                   onMouseLeave={seminarAddHover}
                   className="add__link"
                   to="/seminar/create"
+                  state={{ courseId: id }}
                 >
                   <img className="add__logo" src={seminarAddLogo} alt="add" />
                   <button type="button" className="add__button">
