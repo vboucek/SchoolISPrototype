@@ -30,6 +30,7 @@ import { of } from 'rxjs';
 import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { UserFilterDto } from './dto/user.filter.dto';
+import { UserTimetableFilterDto } from './dto/user.timetable.filter.dto';
 
 @Controller('users')
 @Roles(UserRole.user)
@@ -141,5 +142,13 @@ export class UserController {
         join(process.cwd(), 'uploads/profileimages/' + profilePicture),
       ),
     );
+  }
+
+  @Get(PARAMS_ONLY_ID + '/timetable')
+  public async getTimetable(
+    @ParseParamsId() id: number,
+    @Query() filterDto: UserTimetableFilterDto,
+  ) {
+    return await this.userservice.getUserTimetable(+id, filterDto);
   }
 }

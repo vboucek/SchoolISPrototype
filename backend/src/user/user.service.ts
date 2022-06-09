@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User, UserRole } from '@prisma/client';
+import { Day, User, UserRole } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
 import { plainToInstance } from 'class-transformer';
@@ -14,6 +14,8 @@ import { UserUpdateUserDto } from './dto/user-update-user.dto';
 import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { UserFilterDto } from './dto/user.filter.dto';
+import { UserTimetableFilterDto } from './dto/user.timetable.filter.dto';
+import { UserTimetableDto } from './dto/user.timetable.dto';
 
 @Injectable()
 export class UserService {
@@ -332,5 +334,113 @@ export class UserService {
     });
 
     return user.profilePicture;
+  }
+
+  public async getUserTimetable(id: number, filter: UserTimetableFilterDto) {
+    const courses = await this.prismaService.course.findMany({
+      where: {
+        deletedAt: null,
+        semesterId: filter.semesterId,
+        students: {
+          some: {
+            deletedAt: null,
+            studentId: id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        code: true,
+        room: true,
+        lectureDay: true,
+        lectureStartTimeMin: true,
+        lectureDurationMin: true,
+      },
+    });
+
+    const seminars = await this.prismaService.seminarGroup.findMany({
+      where: {
+        deletedAt: null,
+        course: {
+          deletedAt: null,
+          semesterId: filter.semesterId,
+        },
+        students: {
+          some: {
+            deletedAt: null,
+            studentId: id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        room: true,
+        seminarGroupDay: true,
+        seminarGroupDurationStartTimeMins: true,
+        seminarGroupDurationMins: true,
+        course: {
+          select: {
+            title: true,
+            code: true,
+          },
+        },
+      },
+    });
+
+    const timetableLectures: UserTimetableDto[] = courses.map((course) => {
+      return {
+        id: course.id,
+        name: course.title,
+        code: course.code,
+        room: course.room,
+        day: course.lectureDay,
+        startTime: course.lectureStartTimeMin,
+        duration: course.lectureDurationMin,
+      };
+    });
+
+    const timetableSeminars: UserTimetableDto[] = seminars.map((seminar) => {
+      return {
+        id: seminar.id,
+        name: seminar.course.title,
+        code: seminar.course.code,
+        room: seminar.room,
+        day: seminar.seminarGroupDay,
+        startTime: seminar.seminarGroupDurationStartTimeMins,
+        duration: seminar.seminarGroupDurationMins,
+        groupName: seminar.name,
+      };
+    });
+
+    return [...timetableLectures, ...timetableSeminars].sort((a, b) => {
+      const days = UserService.dayToInt(a.day) - UserService.dayToInt(b.day);
+      if (days !== 0) return days;
+
+      const startTime = a.startTime - b.startTime;
+      if (startTime !== 0) return startTime;
+
+      return a.duration - b.duration;
+    });
+  }
+
+  private static dayToInt(day: Day): number {
+    switch (day) {
+      case Day.monday:
+        return 1;
+      case Day.tuesday:
+        return 2;
+      case Day.wednesday:
+        return 3;
+      case Day.thursday:
+        return 4;
+      case Day.friday:
+        return 5;
+      case Day.saturday:
+        return 6;
+      case Day.sunday:
+        return 7;
+    }
   }
 }
