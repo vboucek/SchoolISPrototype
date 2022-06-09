@@ -48,6 +48,7 @@
 
 .seminar__time {
   font-size: var(--small-font-size);
+  text-transform: capitalize;
 }
 
 .seminar__tutor {
