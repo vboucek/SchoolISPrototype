@@ -1,8 +1,11 @@
 const convertTime = (minutes: number | undefined): string => {
   if (minutes == undefined) {
-    return '0:00';
+    return '00:00';
   }
-  return `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`;
+
+  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(
+    minutes % 60,
+  ).padStart(2, '0')}`;
 };
 
 const getMinFromForm = (time: string | number): number => {
