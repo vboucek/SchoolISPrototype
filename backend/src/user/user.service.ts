@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Day, User, UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
 import { plainToInstance } from 'class-transformer';
@@ -15,7 +15,6 @@ import { UserSubjectsFilterDto } from './dto/user-subjects-filter.dto';
 import { AdminUpdateUserDto } from './dto/admin-update-user.dto';
 import { UserFilterDto } from './dto/user.filter.dto';
 import { UserTimetableFilterDto } from './dto/user.timetable.filter.dto';
-import { UserTimetableDto } from './dto/user.timetable.dto';
 
 @Injectable()
 export class UserService {
@@ -389,7 +388,7 @@ export class UserService {
       },
     });
 
-    const timetableLectures: UserTimetableDto[] = courses.map((course) => {
+    const timetableLectures = courses.map((course) => {
       return {
         id: course.id,
         name: course.title,
@@ -401,7 +400,7 @@ export class UserService {
       };
     });
 
-    const timetableSeminars: UserTimetableDto[] = seminars.map((seminar) => {
+    const timetableSeminars = seminars.map((seminar) => {
       return {
         id: seminar.id,
         name: seminar.course.title,
@@ -414,33 +413,19 @@ export class UserService {
       };
     });
 
-    return [...timetableLectures, ...timetableSeminars].sort((a, b) => {
-      const days = UserService.dayToInt(a.day) - UserService.dayToInt(b.day);
-      if (days !== 0) return days;
+    const entries = [...timetableLectures, ...timetableSeminars].sort(
+      (a, b) => {
+        const startTime = a.startTime - b.startTime;
+        if (startTime !== 0) return startTime;
 
-      const startTime = a.startTime - b.startTime;
-      if (startTime !== 0) return startTime;
+        return a.duration - b.duration;
+      },
+    );
 
-      return a.duration - b.duration;
-    });
-  }
-
-  private static dayToInt(day: Day): number {
-    switch (day) {
-      case Day.monday:
-        return 1;
-      case Day.tuesday:
-        return 2;
-      case Day.wednesday:
-        return 3;
-      case Day.thursday:
-        return 4;
-      case Day.friday:
-        return 5;
-      case Day.saturday:
-        return 6;
-      case Day.sunday:
-        return 7;
-    }
+    return entries.reduce((acc, entry) => {
+      acc[entry.day] = acc[entry.day] || [];
+      acc[entry.day].push(entry);
+      return acc;
+    }, Object.create(null));
   }
 }
