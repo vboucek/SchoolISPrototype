@@ -24,6 +24,7 @@ import { SemGroupAddTutorPage } from './SemGroup/SemGroupAddTutorPage';
 import { TeacherPage } from './Teacher/TeacherPage';
 import { TeacherAddCoursePage } from './Teacher/TeacherAddCoursePage';
 import { SemGroupDeletePage } from './SemGroup/SemGroupDeletePage';
+import { TimeTablePage } from './Timetable/TimeTablePage';
 
 export const Pages = () => {
   const loggedInUser = useRecoilValue(loggedInUserAtom);
@@ -98,6 +99,7 @@ export const Pages = () => {
         element={loggedInUser && <TeacherAddCoursePage />}
       />
 
+      <Route path="/timetable" element={loggedInUser && <TimeTablePage />} />
       <Route path="/subject" element={loggedInUser && <SubjectPage />} />
       <Route
         path="/subject/:id"
