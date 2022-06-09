@@ -381,6 +381,9 @@ export class SeminarGroupService {
           where: {
             courseId: group.course.id,
             deletedAt: null,
+            seminarGroup: {
+              deletedAt: null,
+            },
           },
         },
       },
