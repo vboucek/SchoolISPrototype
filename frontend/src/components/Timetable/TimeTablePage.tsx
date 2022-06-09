@@ -1,45 +1,57 @@
 import '../../styles/timetable.css';
 import TimeTableDayPreview from './TimeTableDayPreview';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { currentSemesterIdAtom, loggedInUserAtom } from '../../state/atoms';
+import { useRecoilValue } from 'recoil';
+import { TimeTableEntryProps } from './TimeTableSubjectPreview';
+import NoConnection from '../NoConnection/NoConnection';
+import Loading from '../Loading/Loading';
 
 export const TimeTablePage = () => {
+  const user = useRecoilValue(loggedInUserAtom);
+  const semesterId = useRecoilValue(currentSemesterIdAtom);
+  const [entries, setEntries] = React.useState<
+    Record<string, TimeTableEntryProps[]>
+  >(Object.create(null));
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = React.useState();
+
+  useEffect(() => {
+    axios
+      .get(`users/${user?.id}/timetable`, {
+        params: { semesterId: semesterId },
+      })
+      .then((response: AxiosResponse) => {
+        setEntries(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [semesterId]);
+
   return (
     <div className="main-content">
       <div className="main-content-container">
-        <TimeTableDayPreview title={'Monday'} subjects={[]} />
-        <TimeTableDayPreview title={'Tuesday'} subjects={[]} />
-        <TimeTableDayPreview title={'Wednesday'} subjects={[]} />
-        <TimeTableDayPreview title={'Thursday'} subjects={[]} />
-        <TimeTableDayPreview title={'Friday'} subjects={[]} />
-
-        <TimeTableDayPreview title={'Saturday'} subjects={[]} />
-        <TimeTableDayPreview title={'Sunday'} subjects={[]} />
-
-        <div className="day">
-          <span className="timetable_header">Preview Day</span>
-          <ul className="subject__list">
-            <li className="timetable__item">
-              <div className="subject__left-container">
-                <span className="subject__code">PB138</span>
-                <span className="subject__title">Markups language</span>
-              </div>
-              <div className="subject__right-container">
-                <span className="subject__time">13:00 – 14:00</span>
-                <span className="subject__room">in D1</span>
-              </div>
-            </li>
-            <li className="timetable__item">
-              <div className="subject__left-container">
-                <span className="subject__code">PB138</span>
-                <span className="subject__title">Markups language</span>
-              </div>
-              <div className="subject__right-container">
-                <span className="subject__time">13:00 – 14:00</span>
-                <span className="subject__room">in D1</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+        {error && <NoConnection />}
+        {loading && <Loading />}
+        {!loading && !error && (
+          <>
+            {[
+              'monday',
+              'tuesday',
+              'wednesday',
+              'thursday',
+              'friday',
+              'saturday',
+              'sunday',
+            ].map((day) => (
+              <TimeTableDayPreview title={day} entries={entries[day] || []} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
