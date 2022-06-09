@@ -58,6 +58,8 @@
 .seminar__title {
   line-height: 1em;
   padding-bottom: 0.5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .seminar__time, .seminar__room {
