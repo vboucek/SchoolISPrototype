@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/teacherList.css';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useParams } from 'react-router-dom';
@@ -19,6 +19,11 @@ const TutorPreviewList = ({
   const { id } = useParams();
   const [tutorList, setTutorList] = useState<TutorPreviewProps[]>(tutors);
   const [deleteError, setDeleteError] = useState<AxiosError>();
+  const [hasTutors, setHasTutors] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasTutors(tutorList.length > 0);
+  }, [tutorList]);
 
   function onRemove(tutorId: number) {
     axios
@@ -40,16 +45,19 @@ const TutorPreviewList = ({
   return (
     <div className="teacher">
       <span className="teacher__header">{title}</span>
-      <ul className="teacher__list">
-        {tutorList.map((t) => (
-          <TutorPreview
-            key={t.id}
-            tutor={t}
-            canEdit={canEdit}
-            onRemove={onRemove}
-          />
-        ))}
-      </ul>
+      {hasTutors && (
+        <ul className="teacher__list">
+          {tutorList.map((t) => (
+            <TutorPreview
+              key={t.id}
+              tutor={t}
+              canEdit={canEdit}
+              onRemove={onRemove}
+            />
+          ))}
+        </ul>
+      )}
+      {!hasTutors && <div className="info">This seminar has no tutors.</div>}
       {deleteError && <NoConnection />}
     </div>
   );

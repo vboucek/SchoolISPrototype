@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/teacherList.css';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useParams } from 'react-router-dom';
@@ -20,6 +20,11 @@ const StudentPreviewList = ({
 }: StudentPreviewListProps) => {
   const { id } = useParams();
   const [deleteError, setDeleteError] = useState<AxiosError>();
+  const [hasStudents, setHasStudents] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasStudents(students.length > 0);
+  }, [students]);
 
   function onRemove(studentId: number) {
     axios
@@ -41,16 +46,22 @@ const StudentPreviewList = ({
   return (
     <div className="teacher">
       <span className="teacher__header">{title}</span>
-      <ul className="teacher__list">
-        {students.map((s) => (
-          <StudentPreview
-            key={s.id}
-            student={s}
-            canEdit={canEdit}
-            onRemove={onRemove}
-          />
-        ))}
-      </ul>
+      {hasStudents && (
+        <ul className="teacher__list">
+          {students.map((s) => (
+            <StudentPreview
+              key={s.id}
+              student={s}
+              canEdit={canEdit}
+              onRemove={onRemove}
+            />
+          ))}
+        </ul>
+      )}
+      {!hasStudents && (
+        <div className="info">This seminar has no students.</div>
+      )}
+
       {deleteError && <NoConnection />}
     </div>
   );
