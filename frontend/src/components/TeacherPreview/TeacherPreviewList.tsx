@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/teacherList.css';
 import TeacherPreview, { TeacherPreviewProps } from './TeacherPreview';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -20,6 +20,11 @@ const TeacherPreviewList = ({
   const [teachersList, setTeachersList] =
     useState<TeacherPreviewProps[]>(teachers);
   const [deleteError, setDeleteError] = useState<AxiosError>();
+  const [hasTeachers, setHasTeachers] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasTeachers(teachersList.length > 0);
+  }, [teachersList]);
 
   function onRemove(teacherId: number) {
     axios
@@ -43,16 +48,19 @@ const TeacherPreviewList = ({
   return (
     <div className="teacher">
       <span className="teacher__header">{title}</span>
-      <ul className="teacher__list">
-        {teachersList.map((t) => (
-          <TeacherPreview
-            key={t.teacher.id}
-            {...t}
-            canEdit={canEdit}
-            onRemove={onRemove}
-          />
-        ))}
-      </ul>
+      {hasTeachers && (
+        <ul className="teacher__list">
+          {teachersList.map((t) => (
+            <TeacherPreview
+              key={t.teacher.id}
+              {...t}
+              canEdit={canEdit}
+              onRemove={onRemove}
+            />
+          ))}
+        </ul>
+      )}
+      {!hasTeachers && <div className="info"> No teachers available. </div>}
       {deleteError && <NoConnection />}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/userList.css';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useParams } from 'react-router-dom';
@@ -17,6 +17,11 @@ const AddUserPreviewList = ({ title, users }: UserPreviewListProps) => {
   const { id } = useParams();
   const [requestError, setRequestError] = useState<AxiosError>();
   const [userList, setUserList] = useState<AddUserPreviewProps[]>(users);
+  const [hasTeachers, setHasTeachers] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasTeachers(userList.length > 0);
+  }, [userList]);
 
   function onAddTeacher(
     teacherId: number,
@@ -40,11 +45,14 @@ const AddUserPreviewList = ({ title, users }: UserPreviewListProps) => {
   return (
     <div className="user">
       <span className="user__header">{title}</span>
-      <ul className="user__list">
-        {userList.map((u) => (
-          <AddUserPreview key={u.id} {...u} addTeacher={onAddTeacher} />
-        ))}
-      </ul>
+      {hasTeachers && (
+        <ul className="user__list">
+          {userList.map((u) => (
+            <AddUserPreview key={u.id} {...u} addTeacher={onAddTeacher} />
+          ))}
+        </ul>
+      )}
+      {!hasTeachers && <div className="info"> No teachers available. </div>}
       {requestError && <NoConnection />}
     </div>
   );
