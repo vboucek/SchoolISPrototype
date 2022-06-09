@@ -207,7 +207,7 @@ export const SemGroupFormPage = ({ edit }: SemGroupFormProps) => {
             <div className="form__error">Seminar end is required</div>
           )}
           <button className="form__submit-button" type="submit">
-            {edit ? 'Edit' : 'Create'} subject
+            {edit ? 'Edit' : 'Create'} seminar group
           </button>
         </form>
         {requestError && <NoConnection />}
