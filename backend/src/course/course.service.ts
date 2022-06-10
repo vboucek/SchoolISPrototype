@@ -327,13 +327,11 @@ export class CourseService {
       where: {
         courseId: id,
         teacherId: newTeacher.teacherId,
-        deletedAt: {
-          not: null,
-        },
+        deletedAt: null,
       },
     });
 
-    if (courseTeaches != null) {
+    if (courseTeaches) {
       throw new ForbiddenException('This teacher already teaches this course');
     }
 
