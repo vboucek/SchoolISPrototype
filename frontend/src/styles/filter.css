@@ -1,0 +1,70 @@
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: var(--small-font-size);
+}
+
+.filter-header {
+  font-size: var(--default-font-size);
+  color: var(--dark-font-color);
+}
+
+.filter {
+  display: flex;
+  flex-direction: row;
+  color: var(--dark-font-color);
+  width: 100%;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.filter__input-container {
+  width: 100%;
+}
+
+.filter__select {
+  width: 100%;
+  padding: 0.5rem;
+  height: 2.5rem;
+  background-color: var(--gray-backround-color);
+}
+
+.filter__field {
+  width: 100%;
+  padding-left: 0.5rem;
+  height: 2.5rem;
+  background-color: var(--gray-backround-color);
+}
+
+.filter__submit {
+  align-self: end;
+  height: 2.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  justify-self: start;
+  background-color: var(--dark-backround-color);
+}
+
+.filter__submit:hover {
+  color: var(--default-font-color-hover);
+}
+
+.filter__submit:active {
+  color: var(--default-font-color-clicked);
+}
+
+@media only screen and (max-width: 1200px) {
+  .filter {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-field-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .filter__submit {
+    width: 100%;
+  }
+}

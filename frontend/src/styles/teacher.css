@@ -1,0 +1,13 @@
+
+.text {
+    color: black;
+}
+
+.button {
+    margin-top: 0.5em;
+    color: white;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background: black;
+    align-self: end;
+}

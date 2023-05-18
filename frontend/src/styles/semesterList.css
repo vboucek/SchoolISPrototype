@@ -1,0 +1,77 @@
+.semester {
+  padding-top: 2rem;
+  width: 100%;
+}
+
+.semester__header {
+  color: var(--dark-font-color);
+}
+
+.semester__list {
+  max-height: 10.5rem;
+}
+
+.semester__select {
+  background-color: var(--gray-backround-color);
+  height: 4rem;
+  width: 8rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  color: var(--dark-font-color)
+}
+
+.semester__item {
+  text-transform: capitalize;
+  margin-top: 0.25rem;
+  background-color: var(--dark-backround-color);
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.semester__controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.semester__edit {
+  color: var(--dark-font-color);
+  background-color: var(--gray-backround-color);
+  padding: 0 1rem 0 1rem;
+}
+
+.semester__edit:hover {
+  background-color: var(--dark-gray-backround-color);
+}
+
+.semester__edit:active {
+  background-color: var(--gray-backround-color);
+}
+
+.semester__delete {
+  background-color: var(--delete-backround-color);
+  padding: 0 1rem 0 1rem;
+}
+
+.semester__delete:hover {
+  background-color: var(--delete-backround-hover-color);
+}
+
+.semester__delete:active {
+  background-color: var(--gray-backround-color);
+}
+
+@media only screen and (max-width: 1200px) {
+  .semester__item {
+    height: 4rem;
+    gap: 2rem;
+  }
+
+  .semester__select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,46 @@
+
+.main-content {
+
+}
+
+.timetable-container {
+    width: 100%;
+}
+
+.timetable-container {
+    background: var(--light-gray-backround-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 10em;
+    margin-bottom: 2em;
+}
+
+.timetable_header {
+    font-family: PrimerPrint, sans-serif;
+    text-transform: capitalize;
+    color: white;
+    background: var(--dark-font-color-hover);
+    padding-left: 1em;
+    font-weight: bold;
+    display: flex;
+}
+
+.timetable_header--today {
+    color: #383636;
+    background: var(--default-font-color-hover);
+}
+
+.day {
+    padding-bottom: 2em;
+    width: available;
+}
+
+.timetable__item {
+    margin-top: 0.25rem;
+    background-color: var(--dark-backround-color);
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

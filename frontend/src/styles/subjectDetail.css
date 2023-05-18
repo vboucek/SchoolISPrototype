@@ -1,0 +1,141 @@
+.subject-info {
+  color: var(--dark-font-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.subject-info__row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.subject-info__lecture {
+  text-transform: capitalize;
+}
+
+.subject-info__error {
+  padding-top: 0.5rem;
+  color: var(--error-color);
+}
+
+.subject-info__label {
+  width: 8rem;
+}
+
+.subject-info__detail {
+  padding-top: 1rem;
+}
+
+.subject-info__detail-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.subject-info__code {
+  font-weight: bold;
+}
+
+.subject-info__header {
+  font-size: var(--large-font-size);
+  display: flex;
+  flex-direction: column;
+}
+
+.subject-info__main-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-info__sub-header {
+  font-size: var(--small-font-size);
+  margin-bottom: -1rem;
+}
+
+.subject-info__description-container {
+  padding-top: 1rem;
+}
+
+.subject-info__description {
+  font-size: var(--small-font-size);
+}
+
+.subject-controls {
+  padding-top: 2rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.subject-controls__button {
+  align-self: end;
+  color: var(--dark-font-color);
+  height: 3rem;
+  width: 12rem;
+  justify-self: start;
+  background-color: var(--dark-gray-backround-color);
+}
+
+.subject-controls__button:hover {
+  background-color: var(--gray-backround-color);
+}
+
+.subject-controls__button:active {
+  background-color: var(--dark-gray-backround-color);
+}
+
+.subject-controls__button:disabled {
+  background-color: var(--success-green-color);
+}
+
+@media only screen and (max-width: 1200px) {
+  .subject-info__header {
+    font-size: var(--default-font-size);
+  }
+
+  .subject-info__main-header {
+    padding-top: 0.5rem;
+  }
+
+  .subject-controls {
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  .subject-controls__button {
+
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .subject-info__header {
+    font-size: var(--default-font-size);
+  }
+
+  .subject-info__title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 12rem;
+    white-space: nowrap;
+  }
+
+  .subject-info__main-header {
+    padding-top: 0.5rem;
+
+    align-items: start;
+  }
+
+  .subject-controls {
+    gap: 1rem;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .subject-controls__button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,88 @@
+.seminar {
+  width: var(--content-width);
+  padding-top: 2rem;
+
+}
+
+.seminar__list {
+  background-color: var(--light-gray-backround-color);
+  margin-top: 0.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.seminar__header {
+  color: var(--dark-font-color);
+}
+
+.seminar__name {
+
+}
+
+.seminar__item {
+  color: var(--dark-font-color);
+  background-color: var(--gray-backround-color);
+  width: 10rem;
+  margin-top: 0.25rem;
+  padding: 1rem;
+  flex-direction: column;
+  min-height: 100%;
+  display: flex;
+}
+
+.seminar__item:hover {
+  background-color: var(--dark-gray-backround-color);
+}
+
+.seminar__item:active {
+  background-color: var(--gray-backround-color);
+}
+
+.seminar__tutors {
+  font-size: var(--small-font-size);
+}
+
+.seminar__room {
+  padding-top: 0.5em;
+  margin-top: auto;
+}
+
+.seminar__time {
+  padding-top: 0.3em;
+}
+
+.seminar__title {
+  line-height: 1em;
+  padding-bottom: 0.5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.seminar__time, .seminar__room {
+  font-size: var(--small-font-size);
+  text-transform: capitalize;
+  line-height: 1em;
+}
+
+.seminar__tutor {
+  margin-top: -0.5rem;
+}
+
+@media only screen and (max-width: 1200px) {
+  .seminar__list {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .seminar__item {
+    width: 9rem;
+  }
+
+  .seminar__title {
+    font-size: var(--medium-font-size);
+  }
+}

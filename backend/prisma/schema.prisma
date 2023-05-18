@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  firstName  String
+  lastName   String
+  email      String     @unique
+  passwdHash String
+  roles      UserRole[]
+  profilePicture String?
+
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  coursesCreated Course[]
+
+  coursesSigned  UserCourseSigned[]
+  coursesTeaches UserCourseTeaches[]
+
+  seminarGroupSigned  UserSeminarGroupSigned[]
+  seminarGroupTeaches UserSeminarGroupTeaches[]
+
+  evaluationsGiven Evaluation[]
+}
+
+model Course {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  code        String
+  endType     EndType
+  room        String
+
+  deletedAt DateTime?
+
+  capacity Int
+  credits  Int
+
+  startSign DateTime
+  endSign   DateTime
+
+  lectureDay          Day
+  lectureStartTimeMin Int
+  lectureDurationMin  Int
+
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
+
+  creatorId Int
+  creator   User @relation(fields: [creatorId], references: [id])
+
+  facultyId Int
+  faculty   Faculty @relation(fields: [facultyId], references: [id])
+
+  students UserCourseSigned[]
+  teachers UserCourseTeaches[]
+
+  seminarGroups SeminarGroup[]
+}
+
+model Faculty {
+  id       Int    @id @default(autoincrement())
+  name     String
+
+  deletedAt DateTime?
+
+  courses Course[]
+  people  User[]
+}
+
+model Semester {
+  id           Int          @id @default(autoincrement())
+  year         Int
+  semesterType SemesterType
+
+  deletedAt DateTime?
+
+  courses Course[]
+  users   User[]
+}
+
+model SeminarGroup {
+  id Int @id @default(autoincrement())
+
+  seminarGroupDay                   Day
+  seminarGroupDurationStartTimeMins Int
+  seminarGroupDurationMins          Int
+  room                              String
+  capacity                          Int
+  name                              String
+
+  deletedAt DateTime?
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  students UserSeminarGroupSigned[]
+  tutors   UserSeminarGroupTeaches[]
+}
+
+model Evaluation {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime?
+
+  markId Int?
+  mark   Mark? @relation(fields: [markId], references: [id], onDelete: SetNull)
+
+  teacherSubmittedId Int?
+  teacher            User? @relation(fields: [teacherSubmittedId], references: [id], onDelete: SetNull)
+
+  userId     Int
+  courseId   Int
+  userCourse UserCourseSigned @relation(fields: [id], references: [id], onDelete: SetNull)
+}
+
+model Mark {
+  id               Int    @id @default(autoincrement())
+  charRepresent    String
+  numericRepresent Float
+
+  deletedAt DateTime?
+
+  evaluations Evaluation[]
+
+  @@unique([charRepresent])
+  @@unique([numericRepresent])
+}
+
+// Connection tables
+// Courses
+
+model UserCourseSigned {
+  id Int @id @default(autoincrement())
+
+  deletedAt DateTime?
+
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  isFavourite Boolean  @default(false)
+  signedAt    DateTime @default(now())
+
+  evaluationId Int?
+  evaluation   Evaluation? @relation()
+}
+
+model UserCourseTeaches {
+  id Int @id @default(autoincrement())
+
+  deletedAt DateTime?
+
+  teacherId Int
+  teacher   User @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  isHelper   Boolean
+  isLecturer Boolean
+}
+
+// Seminar groups
+
+model UserSeminarGroupSigned {
+  id Int @id @default(autoincrement())
+
+  deletedAt DateTime?
+
+  studentId Int
+  student   User @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
+
+  courseId Int
+}
+
+model UserSeminarGroupTeaches {
+  id Int @id @default(autoincrement())
+
+  deletedAt DateTime?
+
+  tutorId Int
+  tutor   User @relation(fields: [tutorId], references: [id], onDelete: SetNull)
+
+  seminarGroupId Int
+  seminarGroup   SeminarGroup @relation(fields: [seminarGroupId], references: [id], onDelete: SetNull)
+}
+
+enum SemesterType {
+  summer
+  winter
+}
+
+enum UserRole {
+  user
+  admin
+  teacher
+}
+
+enum Day {
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+  sunday
+}
+
+enum EndType {
+  z
+  k
+  zk
+}
