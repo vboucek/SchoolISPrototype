@@ -1,5 +1,7 @@
 # PB138 Team Project
 
+Team project created as a semestral project in course PB138 - Web dev and markup languages.
+
 The main purpose of this project was to go through the entire development of a compact web application in a scope of the PB138 subject.
 Starting with creating a database in PostgreSQL via Prisma in a seperate docker image, programming the backend Rest API in NestJS, and also creating a frontend in React.
 
