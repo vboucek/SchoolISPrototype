@@ -16,6 +16,4 @@ The basic functionality includes:
 
 Team: Vladimír Bouček, Matej Dipčár, Kristína Fuchsová, Martin Šepeľa
 
-
-
-
+![example](https://github.com/vboucek/SchoolISPrototype/assets/72857024/07e173ba-f628-402e-9a98-f05b818ed9db)
